@@ -65,6 +65,8 @@ export const Route = createFileRoute("/sitemap.xml")({
             [`/ur/${country.slug}`, LEGAL_EDIT],
             [`/jobs/${country.slug}`, LEGAL_EDIT],
           ]),
+          ["/questions/uae", LEGAL_EDIT],
+          ["/questions/saudi-arabia", LEGAL_EDIT],
           ...pairs.flatMap((pair) => [
             [`/rates/${pair.slug}`, rateDate],
             [`/ur/rates/${pair.slug}`, rateDate],

@@ -2,8 +2,11 @@
 import { A, Crumb, Page } from "@/components/shell";
 import { Rich } from "@/components/rich-text";
 import { jobSections, jobTitles } from "@/lib/content/job-hubs";
+import { saudiQa } from "@/lib/content/qa-saudi";
+import { QA_CHECKED, type QaPage } from "@/lib/content/qa-types";
+import { uaeQa } from "@/lib/content/qa-uae";
 import type { Block } from "@/lib/content/types";
-import { breadcrumbLd, pageMeta } from "@/lib/seo";
+import { breadcrumbLd, ld, pageMeta } from "@/lib/seo";
 import { countries, type Country, type Locale } from "@/lib/site";
 const QUESTION_TITLES: Record<string, string> = {
   uae: "Working in the UAE: Questions Pakistanis Ask | Apna Ghar",
@@ -13,6 +16,28 @@ const QUESTION_TITLES: Record<string, string> = {
   oman: "Working in Oman: Questions Pakistanis Ask | Apna Ghar",
   bahrain: "Working in Bahrain: Questions Pakistanis Ask | Apna Ghar",
 };
+
+const QA_PAGES: Record<string, QaPage> = {
+  uae: uaeQa,
+  "saudi-arabia": saudiQa,
+};
+
+function faqLd(pack: QaPage) {
+  return ld({
+    "@context": "https://schema.org",
+    "@type": "FAQPage",
+    mainEntity: pack.groups.flatMap((group) =>
+      group.items.map((item) => ({
+        "@type": "Question",
+        name: item.q,
+        acceptedAnswer: {
+          "@type": "Answer",
+          text: `${item.a} Source: ${item.sourceName}. Checked on ${QA_CHECKED}.`,
+        },
+      })),
+    ),
+  });
+}
 
 type Qa = { q: string; a: string };
 
@@ -185,20 +210,24 @@ export function jobHead(country: Country, _locale: Locale) {
 
 export function questionHead(country: Country, _locale: Locale) {
   const path = `/questions/${country.slug}`;
-  const title = QUESTION_TITLES[country.slug];
-  const description = `Short answers Pakistanis ask before working in ${country.short}. These pages repeat a template and are kept out of search until each answer is sourced.`;
+  const pack = QA_PAGES[country.slug];
+  const title = pack?.title ?? QUESTION_TITLES[country.slug];
+  const description =
+    pack?.description ??
+    `Short answers Pakistanis ask before working in ${country.short}. These pages repeat a template and are kept out of search until each answer is sourced.`;
   const base = pageMeta({
     title,
     description,
     path,
     locale: "en",
     urAlternate: false,
-    robots: "noindex, follow",
+    ...(pack ? {} : { robots: "noindex, follow" }),
   });
   return {
     ...base,
     meta: [
       ...base.meta,
+      ...(pack ? [faqLd(pack)] : []),
       breadcrumbLd([
         { name: "Home", path: "/" },
         { name: country.short, path: `/${country.slug}` },
@@ -269,6 +298,8 @@ export function JobsView({ country, blocks }: { country: Country; locale: Locale
 }
 
 export function QuestionsView({ country }: { country: Country; locale: Locale }) {
+  const pack = QA_PAGES[country.slug];
+  if (pack) return <SourcedQuestions country={country} pack={pack} />;
   const groups = qa(country);
   return (
     <Page
@@ -277,13 +308,7 @@ export function QuestionsView({ country }: { country: Country; locale: Locale })
       lede="These answers are a shared template with the country name swapped. They stay on the site for readers, and they are marked noindex until each country has its own sourced set."
     >
       <Crumb items={[{ href: "/", label: "Home" }, { href: `/${country.slug}`, label: country.short }, { label: "Q&A" }]} />
-      <div className="mt-6 flex flex-wrap gap-2">
-        {countries.map((item) => (
-          <A key={item.slug} href={`/questions/${item.slug}`} className={`inline-flex min-h-11 items-center rounded-full px-3 text-sm ${item.slug === country.slug ? "bg-green text-on-green" : "bg-gold-soft"}`}>
-            {item.short}
-          </A>
-        ))}
-      </div>
+      <CountryPills current={country.slug} />
       {groups.map((group) => (
         <section key={group.heading} className="mt-8 max-w-3xl">
           <h2 className="font-display text-2xl text-green">{group.heading}</h2>
@@ -301,6 +326,56 @@ export function QuestionsView({ country }: { country: Country; locale: Locale })
         <A href={`/jobs/${country.slug}`} className="font-semibold text-green underline">Jobs in {country.short}</A>
       </p>
     </Page>
+  );
+}
+
+function SourcedQuestions({ country, pack }: { country: Country; pack: QaPage }) {
+  return (
+    <Page kicker={country.short} title={pack.title} lede={pack.lede}>
+      <Crumb items={[{ href: "/", label: "Home" }, { href: `/${country.slug}`, label: country.short }, { label: "Q&A" }]} />
+      <CountryPills current={country.slug} />
+      {pack.groups.map((group) => (
+        <section key={group.heading} className="mt-8 max-w-3xl">
+          <h2 className="font-display text-2xl text-green">{group.heading}</h2>
+          <div className="mt-3 grid gap-3">
+            {group.items.map((item) => (
+              <details key={item.q} className="rounded-xl border border-line bg-surface px-4 py-3">
+                <summary className="cursor-pointer font-semibold">{item.q}</summary>
+                <p className="mt-2">{item.a}</p>
+                <p className="mt-2 text-sm text-muted">
+                  Source:{" "}
+                  <a href={item.sourceUrl} className="font-semibold text-green underline" target="_blank" rel="noopener noreferrer">
+                    {item.sourceName}
+                  </a>
+                  . Checked on {QA_CHECKED}.
+                </p>
+                {item.links?.length ? (
+                  <p className="mt-2 text-sm">
+                    {item.links.map((link) => (
+                      <A key={link.href} href={link.href} className="me-3 inline-block font-semibold text-green underline">
+                        {link.label}
+                      </A>
+                    ))}
+                  </p>
+                ) : null}
+              </details>
+            ))}
+          </div>
+        </section>
+      ))}
+    </Page>
+  );
+}
+
+function CountryPills({ current }: { current: string }) {
+  return (
+    <div className="mt-6 flex flex-wrap gap-2">
+      {countries.map((item) => (
+        <A key={item.slug} href={`/questions/${item.slug}`} className={`inline-flex min-h-11 items-center rounded-full px-3 text-sm ${item.slug === current ? "bg-green text-on-green" : "bg-gold-soft"}`}>
+          {item.short}
+        </A>
+      ))}
+    </div>
   );
 }
 
