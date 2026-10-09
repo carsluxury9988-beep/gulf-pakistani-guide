@@ -17,7 +17,7 @@ export const guides: GuideMeta[] = [
     toolLabel: "Compare two remittance quotes",
     urTitle: "یو اے ای سے پاکستان پیسے بھیجنے کے سستے طریقے",
     urDescription:
-      "فیس اور ریٹ ملا کر دیکھیں کتنے روپے بنتے ہیں۔ لائسنس شدہ چینل کہاں چیک کریں۔",
+      "یو اے ای سے پاکستان پیسے بھیجنے سے پہلے فیس اور ریٹ ملا کر دیکھیں کتنے روپے گھر پہنچتے ہیں۔ لائسنس شدہ چینل سرکاری صفحے سے چیک کریں، اشتہار سے نہیں۔",
     featured: true,
   },
   {
@@ -33,7 +33,7 @@ export const guides: GuideMeta[] = [
     toolHref: "/tools/remittance",
     toolLabel: "Compare two remittance quotes",
     urTitle: "سعودی عرب سے پاکستان پیسے بھیجنے کے سستے طریقے",
-    urDescription: "بینک یا ایکسچینج سے پوچھیں کتنے روپے ملیں گے۔ سرکاری ذرائع کے لنک۔",
+    urDescription: "سعودی عرب سے پاکستان بھیجنے سے پہلے بینک یا ایکسچینج سے پوچھیں کتنے روپے ملیں گے۔ رسید رکھیں، اور سرکاری ذرائع کے لنک اسی رہنما میں ہیں۔",
     featured: true,
   },
   {
@@ -49,7 +49,7 @@ export const guides: GuideMeta[] = [
     toolHref: "/tools/salary-converter",
     toolLabel: "Salary converter",
     urTitle: "پاکستان سے دبئی میں اصلی نوکری کیسے ڈھونڈیں",
-    urDescription: "اصلی آفر سے محرے کنٹریکٹ تک، اور فیس پہلے مانگنے والے ایجنٹ سے بچاؤ۔",
+    urDescription: "پاکستان سے دبئی کی اصلی نوکری اصل آفر اور محرے کنٹریکٹ سے شروع ہوتی ہے۔ فیس پہلے مانگنے والے ایجنٹ سے بچیں، اور او ای پی لائسنس خود دیکھیں۔",
     featured: true,
   },
   {
@@ -65,7 +65,7 @@ export const guides: GuideMeta[] = [
     toolHref: "/tools/gratuity-calculator",
     toolLabel: "UAE gratuity calculator",
     urTitle: "پاکستانیوں کے لیے یو اے ای ویزٹ ویزا بمقابلہ ورک ویزا",
-    urDescription: "وزٹ ویزا کس کام کے لیے ہے، ورک ویزا کس کے لیے، اور سرکاری لنک۔",
+    urDescription: "پاکستانیوں کے لیے یو اے ای ویزٹ ویزا ملنے کے لیے ہے اور ورک ویزا نوکری کے لیے۔ دونوں کا فرق، اور موجودہ قاعدہ کہاں پڑھیں، اس رہنما میں ہے۔",
     featured: true,
   },
   {
@@ -81,7 +81,7 @@ export const guides: GuideMeta[] = [
     toolHref: "/tools/salary-converter",
     toolLabel: "Salary converter",
     urTitle: "پاکستانی کارکنوں کے لیے سعودی اقامہ گائیڈ",
-    urDescription: "اقامہ کیا ہے، تجدید کون کرتا ہے، اور میعاد کہاں دیکھیں۔",
+    urDescription: "سعودی اقامہ کیا ہے، تجدید آجر کرتا ہے، اور میعاد ابشر پر کیسے دیکھیں۔ فیس کا اندازہ نہیں، ادائیگی کی اسکرین ہی اصل عدد ہے۔",
     featured: true,
   },
   {
@@ -97,7 +97,7 @@ export const guides: GuideMeta[] = [
     toolHref: "/tools/salary-converter",
     toolLabel: "Salary converter",
     urTitle: "دبئی میں اکیلی زندگی کا ماہانہ خرچ",
-    urDescription: "کرایہ، کھانا اور سفر کی منصوبہ بندی۔ اعداد مثال ہیں، سرکاری سروے نہیں۔",
+    urDescription: "دبئی میں اکیلی زندگی کا منصوبہ: کرایہ، کھانا اور سفر۔ یہ اعداد مثال ہیں جنہیں تنخواہ کے آلے میں بدلا جا سکتا ہے، سرکاری سروے نہیں۔",
     featured: true,
   },
   {
@@ -113,7 +113,7 @@ export const guides: GuideMeta[] = [
     toolHref: "/tools/salary-converter",
     toolLabel: "Salary converter",
     urTitle: "ریاض میں پاکستانی خاندان کا ماہانہ خرچ",
-    urDescription: "کرایہ، سکول اور گاڑی۔ سکول فیس خود سکول سے پوچھیں۔",
+    urDescription: "ریاض میں پاکستانی خاندان کے بجٹ میں کرایہ، سکول اور گاڑی سب سے زیادہ وزن رکھتے ہیں۔ سکول کی فیس خود سکول سے لکھوا کر دیکھیں۔",
     featured: true,
   },
   {
@@ -129,7 +129,7 @@ export const guides: GuideMeta[] = [
     toolHref: "/tools/gratuity-calculator",
     toolLabel: "Gratuity calculator",
     urTitle: "یو اے ای گریچویٹی کے قواعد",
-    urDescription: "پہلے پانچ سال ۲۱ دن، اس کے بعد ۳۰ دن، اور دو سال کی حد۔ یہ اندازہ ہے۔",
+    urDescription: "یو اے ای گریچویٹی: پہلے پانچ سال ۲۱ دن، اس کے بعد ۳۰ دن، اور دو سال کی تنخواہ کی حد۔ یہ اندازہ ہے، محرہ کا فیصلہ نہیں۔",
     featured: true,
   },
   {
@@ -145,7 +145,7 @@ export const guides: GuideMeta[] = [
     toolHref: "/gold-rates",
     toolLabel: "Today's gold rates",
     urTitle: "دبئی یا سعودی سے پاکستان کتنا سونا لے جا سکتے ہیں",
-    urDescription: "سوشل میڈیا کی حد پر بھروسہ نہ کریں۔ کسٹمز اور اسٹیٹ بینک کے لنک۔",
+    urDescription: "دبئی یا سعودی عرب سے پاکستان سونا لے جانے کی سوشل میڈیا حد پر بھروسہ نہ کریں۔ کسٹمز اور اسٹیٹ بینک کے اصل صفحات اس رہنما میں جڑے ہیں۔",
     featured: true,
   },
   {
@@ -161,7 +161,7 @@ export const guides: GuideMeta[] = [
     toolHref: "/rates",
     toolLabel: "Today's currency rates",
     urTitle: "روشن ڈیجیٹل اکاؤنٹ: بیرون ملک پاکستانیوں کے لیے",
-    urDescription: "اکاؤنٹ کس کے لیے ہے، اور منافع کی شرح بینک کی ویب سائٹ پر دیکھیں۔",
+    urDescription: "روشن ڈیجیٹل اکاؤنٹ بیرون ملک پاکستانیوں کے لیے ہے۔ کون کھول سکتا ہے اسٹیٹ بینک بتاتا ہے، اور منافع کی شرح اپنے بینک کے صفحے پر پڑھیں۔",
     featured: true,
   },
   {
@@ -619,7 +619,8 @@ export const guides: GuideMeta[] = [
     toolHref: "/rates/sar-to-pkr",
     toolLabel: "SAR to PKR rate",
     urTitle: "خلیج سے پاکستان کی سرکاری حج اسکیم",
-    urDescription: "وزارت مذہبی امور کی اسکیم نسک نہیں۔ ادائیگی صرف سرکاری پورٹل پر۔",
+    urDescription:
+      "وزارت مذہبی امور کی سرکاری حج اسکیم نسک نہیں۔ ادائیگی صرف سرکاری پورٹل پر کریں، اور پالیسی پی ڈی ایف کے اعداد کو اشتہار سے نہ بدلیں۔",
   },
   {
     slug: "umrah-from-uae-on-nusuk",
@@ -634,7 +635,8 @@ export const guides: GuideMeta[] = [
     toolHref: "/rates/sar-to-pkr",
     toolLabel: "SAR to PKR rate",
     urTitle: "یو اے ای سے نسک پر عمرہ",
-    urDescription: "دبئی یا ابوظہبی سے عمرہ نسک پر۔ پاکستان کی حج قطار الگ ہے۔",
+    urDescription:
+      "دبئی یا ابوظہبی سے عمرہ نسک پر بک ہوتا ہے۔ پاکستان کی حج قطار الگ ہے، اور فیس وہی ہے جو نسک کی اسکرین اُس دن دکھائے۔",
   },
 ];
 

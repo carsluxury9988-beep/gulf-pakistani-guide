@@ -20,9 +20,11 @@ The sitemap picks up new guides automatically. Set `VITE_SITE_URL=https://apnaag
 
 Live currency and the world gold spot come from the public [fawazahmed0 currency-api](https://github.com/fawazahmed0/currency-api) (no key). The server caches them for three hours. Home, `/rates` and `/gold-rates` send `Cache-Control: s-maxage=10800, stale-while-revalidate=10800`.
 
-A Vercel cron hits `/api/cron/market` every three hours (`0 */3 * * *`) and stores the last good payload in Vercel KV (`KV_REST_API_URL` + `KV_REST_API_TOKEN`) or Vercel Blob (`BLOB_READ_WRITE_TOKEN`). If the live feed fails, that store is the fallback. The JSON in `src/data/` is only the first-run seed.
+A Vercel cron hits `/api/cron/market` once a day at 03:00 UTC (`0 3 * * *`). Hobby plans reject a cron that runs more often than once a day. The pages also refresh when someone visits and the in-memory copy is older than three hours.
 
-Pakistan Sarafa and Dubai retail are fetched when the public pages respond, or set by the editor:
+Store the last good payload in Vercel KV (`KV_REST_API_URL` + `KV_REST_API_TOKEN`) or Vercel Blob (`BLOB_READ_WRITE_TOKEN`). If neither is connected, the fallback is the JSON seed in `src/data/`, and a failed live fetch is marked stale. Set `CRON_SECRET` in the Vercel project. The cron route returns 401 until that variable exists, and Vercel sends `Authorization: Bearer …`.
+
+Pakistan Sarafa is read from PakGold (`https://www.pakgold.net/gold-rate-cities`), a third-party board, not a government site. The source name and link stay on the page. Dubai retail is read from the Khaleej Times gold page when that fetch succeeds. If it fails, the last saved board is shown with its time and a delayed note. You can override either board with:
 
 - `GOLD_PK_TOLA_24`, `GOLD_PK_TOLA_22`, optional `GOLD_PK_SOURCE`, `GOLD_PK_SOURCE_URL`, `GOLD_PK_ASOF`
 - `GOLD_DXB_GRAM_24`, `GOLD_DXB_GRAM_22`, optional `GOLD_DXB_GRAM_21`, `GOLD_DXB_GRAM_18`, `GOLD_DXB_SOURCE`, `GOLD_DXB_SOURCE_URL`, `GOLD_DXB_ASOF`

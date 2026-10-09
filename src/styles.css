@@ -90,6 +90,19 @@
   }
 }
 
+html[dir="rtl"] .font-display,
+html[lang="ur"] .font-display {
+  font-family: var(--font-urdu);
+  letter-spacing: normal;
+  line-height: 1.9;
+}
+
+.hero-panel {
+  background:
+    radial-gradient(900px 280px at 8% -20%, rgba(198, 161, 90, 0.28), transparent 55%),
+    linear-gradient(165deg, #0f3d2e 0%, #12382b 60%, #1b5c45 100%);
+}
+
 @media (prefers-reduced-motion: reduce) {
   *, *::before, *::after {
     animation-duration: 0.01ms !important;

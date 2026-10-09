@@ -10,6 +10,7 @@ const CODES = ["aed", "sar", "qar", "kwd", "omr", "bhd", "pkr"] as const;
 const TTL_MS = 3 * 60 * 60 * 1000;
 
 let cache: { at: number; data: Market } | null = null;
+let pending: Promise<Market> | null = null;
 
 function pickUsd(raw: Record<string, number> | undefined) {
   if (!raw) return null;
@@ -100,7 +101,11 @@ async function fetchText(url: string) {
   try {
     const res = await fetch(url, {
       signal: ctrl.signal,
-      headers: { accept: "text/html,application/json", "user-agent": "ApnaGharRates/1.0" },
+      headers: {
+        accept: "text/html,application/json",
+        "accept-language": "en",
+        "user-agent": "Mozilla/5.0 (compatible; ApnaGharRates/1.0; +https://apnaaghar.pk)",
+      },
     });
     if (!res.ok) throw new Error(String(res.status));
     return await res.text();
@@ -109,14 +114,48 @@ async function fetchText(url: string) {
   }
 }
 
+function labelledTola(html: string, id: string) {
+  const match = html.match(new RegExp(`id="${id}"[^>]*>([\\d,]+)`));
+  return match ? parseBoardNumber(match[1]) : null;
+}
+
+function dubaiStamp(label: string) {
+  const match = label.match(/([A-Za-z]+) (\d{1,2}), (\d{4}) (\d{2}):(\d{2}):(\d{2})/);
+  if (!match) return null;
+  const months = ["January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"];
+  const month = months.indexOf(match[1]);
+  if (month < 0) return null;
+  return new Date(Date.UTC(
+    Number(match[3]),
+    month,
+    Number(match[2]),
+    Number(match[4]) - 4,
+    Number(match[5]),
+    Number(match[6]),
+  )).toISOString();
+}
+
+function dubaiKarat(html: string, karat: string) {
+  const match = html.match(new RegExp(`"type"\\s*:\\s*"${karat}"[\\s\\S]{0,240}?"evening"\\s*:\\s*"([\\d.]+)"`));
+  if (!match) return null;
+  const value = Number(match[1]);
+  return Number.isFinite(value) && value > 200 && value < 900 ? value : null;
+}
+
 async function fetchPakistanBoard(): Promise<PakistanGold | null> {
   try {
     const html = await fetchText("https://www.pakgold.net/gold-rate-cities");
-    const row24 = html.match(/24K[\s\S]{0,80}?(\d{3},\d{3}|\d{6})/);
-    const row22 = html.match(/22K[\s\S]{0,80}?(\d{3},\d{3}|\d{6})/);
-    const tola24 = row24 ? parseBoardNumber(row24[1]) : null;
-    const tola22 = row22 ? parseBoardNumber(row22[1]) : null;
-    if (!tola24 || !tola22 || tola24 < 100000 || tola22 < 100000 || tola22 >= tola24) return null;
+    let tola24 = labelledTola(html, "lbl_ssr_24k_tola");
+    let tola22 = labelledTola(html, "lbl_ssr_22k_tola");
+    if (!tola24 || !tola22) {
+      const described = html.match(/24K\s*Rs\s*(\d{3},\d{3})\/tola,\s*22K\s*Rs\s*(\d{3},\d{3})/i);
+      tola24 = tola24 ?? (described ? parseBoardNumber(described[1]) : null);
+      tola22 = tola22 ?? (described ? parseBoardNumber(described[2]) : null);
+    }
+    if (!tola24 || !tola22 || tola24 < 100000 || tola22 < 100000 || tola22 >= tola24) {
+      console.error("[gold] Pakistan Sarafa parse missed a 22K/24K tola");
+      return null;
+    }
     return {
       asOf: new Date().toISOString(),
       source: "Rawalpindi–Islamabad Sarafa benchmark (PakGold)",
@@ -125,32 +164,37 @@ async function fetchPakistanBoard(): Promise<PakistanGold | null> {
       tola22,
       stale: false,
     };
-  } catch {
+  } catch (error) {
+    console.error("[gold] Pakistan Sarafa fetch failed", error instanceof Error ? error.message : error);
     return null;
   }
 }
 
 async function fetchDubaiBoard(): Promise<DubaiGold | null> {
   try {
-    const html = await fetchText("https://www.khaleejtimes.com/gold-forex");
-    const block = html.match(/24K[\s\S]{0,400}?22K[\s\S]{0,200}/i);
-    if (!block) return null;
-    const nums = [...block[0].matchAll(/(\d{3}(?:\.\d{1,2})?)/g)].map((item) => Number(item[1]));
-    const grams = nums.filter((value) => value > 300 && value < 800);
-    const gram24 = grams[0];
-    const gram22 = grams.find((value) => value < gram24 && value > gram24 * 0.85);
-    if (!gram24 || !gram22) return null;
+    const raw = await fetchText("https://www.khaleejtimes.com/gold-forex");
+    const html = raw.replace(/\u0026quot;/g, '"');
+    const gram24 = dubaiKarat(html, "24K");
+    const gram22 = dubaiKarat(html, "22K");
+    const gram21 = dubaiKarat(html, "21K");
+    const gram18 = dubaiKarat(html, "18K");
+    if (!gram24 || !gram22 || gram22 >= gram24) {
+      console.error("[gold] Dubai board parse missed published 24K/22K evening grams");
+      return null;
+    }
+    const dated = html.match(/goldRates"\s*:\s*\{\s*"date"\s*:\s*"([^"]+)"/);
     return {
-      asOf: new Date().toISOString(),
+      asOf: (dated && dubaiStamp(dated[1])) || new Date().toISOString(),
       source: "Khaleej Times UAE gold retail board",
       sourceUrl: "https://www.khaleejtimes.com/gold-forex",
       gram24,
       gram22,
-      gram21: gram24 * (21 / 24),
-      gram18: gram24 * (18 / 24),
+      gram21: gram21 ?? gram24 * (21 / 24),
+      gram18: gram18 ?? gram24 * (18 / 24),
       stale: false,
     };
-  } catch {
+  } catch (error) {
+    console.error("[gold] Dubai board fetch failed", error instanceof Error ? error.message : error);
     return null;
   }
 }
@@ -224,6 +268,15 @@ function historyDates(today: Date) {
 }
 
 export async function loadMarket(opts?: { refresh?: boolean }): Promise<Market> {
+  if (!opts?.refresh && cache && Date.now() - cache.at < TTL_MS) return cache.data;
+  if (!opts?.refresh && pending) return pending;
+  pending = loadFresh(opts).finally(() => {
+    pending = null;
+  });
+  return pending;
+}
+
+async function loadFresh(opts?: { refresh?: boolean }): Promise<Market> {
   if (!opts?.refresh && cache && Date.now() - cache.at < TTL_MS) return cache.data;
   const saved = snapshotMarket();
   try {

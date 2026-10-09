@@ -1,4 +1,5 @@
-import { A, Crumb, hrefFor, Page } from "@/components/shell";
+/* eslint-disable react-refresh/only-export-components */
+import { A, Crumb, Page } from "@/components/shell";
 import { AdSlot } from "@/components/monetize";
 import { MiniChart } from "@/components/mini-chart";
 import { Rich } from "@/components/rich-text";
@@ -12,7 +13,7 @@ import {
   formatMoney,
   formatRate,
   formatWhen,
-  goldRows,
+  gramLines,
   historyFor,
   pkrPer,
   type Market,
@@ -24,6 +25,7 @@ import {
   CONTACT_EMAIL,
   countries,
   goldPlaces,
+  hrefFor,
   OWNER_CITY,
   OWNER_NAME,
   pairs,
@@ -73,131 +75,148 @@ export function homeHead(locale: Locale): { meta: any[]; links: any[] } {
   };
 }
 
+const FLAGS: Record<string, string> = {
+  uae: "🇦🇪",
+  "saudi-arabia": "🇸🇦",
+  qatar: "🇶🇦",
+  kuwait: "🇰🇼",
+  oman: "🇴🇲",
+  bahrain: "🇧🇭",
+};
+
 export function HomeView({ market, locale }: { market: Market; locale: Locale }) {
   const ur = locale === "ur";
   const h = (path: string) => hrefFor(ur, path);
-  const featured = guides.filter((guide) => guide.featured).slice(0, 6);
+  const featured = guides.filter((guide) => guide.featured).slice(0, 4);
   const board = boardCompare(market);
-  const dubaiGold = goldRows(market, "AED").find((row) => row.karat === 22);
-  const pakGold = goldRows(market, "PKR").find((row) => row.karat === 22);
+  const dubaiLines = gramLines(market, "dubai", "AED");
+  const gram24 = dubaiLines.find((line) => line.karat === 24);
+  const gram22 = dubaiLines.find((line) => line.karat === 22);
+  const move = (code: string) => {
+    const points = historyFor(market, code);
+    if (points.length < 2) return 0;
+    return points[points.length - 1].value - points[points.length - 2].value;
+  };
   return (
     <main>
-      <section className="border-b border-line bg-surface">
-        <div className="mx-auto grid max-w-6xl gap-8 px-4 py-8 lg:grid-cols-[1.2fr_0.8fr] lg:py-12">
-          <div>
-            <p className="text-sm font-semibold text-gold-ink">
-              {ur ? "آج کا ڈیسک" : "Today’s desk"} · <span className="num">{formatDay(market.asOf)}</span>
-            </p>
-            <h1 className="mt-2 max-w-xl font-display text-4xl text-green sm:text-5xl">
-              {ur ? "درہم، ریال اور تولہ آج کتنے کے ہیں۔" : "What a dirham, a riyal and a tola are worth today."}
-            </h1>
-            <p className="mt-4 max-w-xl text-lg text-muted">
-              {ur
-                ? "خلیج میں کام کرنے والے پاکستانیوں کے لیے درمیانی ریٹ، سونا، اور نوکری، ویزا اور پیسے بھیجنے کی سیدھی بات۔"
-                : "Mid-market rates, gold, and straight guides on jobs, visas and sending money home for Pakistanis working in the Gulf."}
-            </p>
-            <div className="mt-6 flex flex-wrap gap-3">
-              <A href={h("/rates")} className="inline-flex min-h-11 items-center rounded-md bg-green px-4 font-semibold text-on-green">
-                {ur ? "آج کے ریٹ" : "Today’s rates"}
+      <section className="hero-panel text-on-green">
+        <div className="mx-auto max-w-6xl px-4 py-10 sm:py-14">
+          <p className="text-sm font-semibold text-gold">
+            {ur ? "آج کا ڈیسک" : "Today’s desk"} · <span className="num">{formatWhen(market.fetchedAt, locale)}</span>
+          </p>
+          <h1 className="mt-3 max-w-3xl font-display text-4xl leading-tight sm:text-5xl">
+            {ur ? "خلیج میں پاکستانیوں کے لیے سب کچھ، ایک جگہ۔" : "Everything Pakistanis in the Gulf need, in one place."}
+          </h1>
+          <p className="mt-4 max-w-2xl text-lg text-on-green/85">
+            {ur
+              ? "ریٹ، سونا، نوکری، ویزا اور پیسے بھیجنے کے سوال۔ ذرائع سرکاری صفحے ہیں، اندازے نہیں۔"
+              : "Rates, gold, jobs, visas and the money you send home. Sources are official pages, not guesses."}
+          </p>
+          <div className="mt-6 grid grid-cols-2 gap-2 sm:grid-cols-3 lg:grid-cols-6">
+            {countries.map((country) => (
+              <A
+                key={country.slug}
+                href={h(`/${country.slug}`)}
+                className="flex min-h-11 items-center gap-2 rounded-xl bg-white/10 px-3 py-2 text-sm font-semibold backdrop-blur hover:bg-white/15"
+              >
+                <span aria-hidden>{FLAGS[country.slug]}</span>
+                {country.short}
               </A>
-              <A href={h("/guides")} className="inline-flex min-h-11 items-center rounded-md border border-green px-4 font-semibold text-green">
-                {ur ? "رہنما پڑھیں" : "Read the guides"}
-              </A>
-            </div>
-          </div>
-          <div className="rounded-xl border border-line bg-bg p-4">
-            <div className="flex items-baseline justify-between gap-3">
-              <h2 className="font-display text-2xl text-green">{ur ? "سونا، بورڈ ریٹ" : "Gold, board rates"}</h2>
-              <span className="text-sm text-muted">22K / {ur ? "تولہ" : "tola"}</span>
-            </div>
-            <dl className="mt-3 grid grid-cols-2 gap-3">
-              <div className="rounded-lg bg-surface p-3">
-                <dt className="text-sm text-muted">{ur ? "دبئی ریٹیل" : "Dubai retail"}</dt>
-                <dd className="num text-2xl font-semibold text-ink">
-                  AED {board ? formatMoney(board.dubaiTola22) : dubaiGold ? formatMoney(dubaiGold.tolaLocal) : "—"}
-                </dd>
-              </div>
-              <div className="rounded-lg bg-surface p-3">
-                <dt className="text-sm text-muted">{ur ? "پاکستان سرفہ" : "Pakistan Sarafa"}</dt>
-                <dd className="num text-2xl font-semibold text-ink">
-                  Rs {board ? formatMoney(board.pakistanTola22, 0) : pakGold ? formatMoney(pakGold.tolaPkr, 0) : "—"}
-                </dd>
-              </div>
-            </dl>
-            {board ? (
-              <p className="mt-3 text-sm text-muted">
-                {ur
-                  ? board.cheaper === "pakistan"
-                    ? `سرفہ تولہ دبئی کے ریٹیل سے تقریباً ${formatMoney(board.gapPkr, 0)} روپے سستا ہے۔`
-                    : `دبئی کا ریٹیل تولہ سرفہ سے تقریباً ${formatMoney(board.gapPkr, 0)} روپے سستا ہے۔`
-                  : board.cheaper === "pakistan"
-                    ? `The Sarafa tola is about Rs ${formatMoney(board.gapPkr, 0)} under Dubai retail.`
-                    : `Dubai retail is about Rs ${formatMoney(board.gapPkr, 0)} under the Sarafa tola.`}
-              </p>
-            ) : null}
-            <A href={h("/gold-rates")} className="mt-3 inline-flex min-h-11 items-center font-semibold text-green">
-              {ur ? "سونا کہاں سستا ہے" : "Where gold is cheaper"}
-            </A>
+            ))}
           </div>
         </div>
       </section>
       <section className="mx-auto max-w-6xl px-4 py-8">
         {staleNote(market, locale)}
-        <div className="mt-4 flex items-end justify-between gap-3">
+        <div className="mt-2 flex items-end justify-between gap-3">
           <h2 className="font-display text-3xl text-green">{ur ? "آج کے ریٹ" : "Today’s rates"}</h2>
-          <p className="text-sm text-muted num">{formatWhen(market.fetchedAt, locale)}</p>
+          <p className="text-sm text-muted">{market.stale ? (ur ? "تاخیر ہو سکتی ہے" : "May be delayed") : ur ? "تازہ" : "Updated"}</p>
         </div>
-        <div className="mt-4 grid grid-cols-2 gap-3 md:grid-cols-3">
-          {pairs.map((pair) => (
-            <A key={pair.slug} href={h(`/rates/${pair.slug}`)} className="rounded-xl border border-line bg-surface p-4 hover:border-green">
-              <p className="text-sm text-muted">{pair.code} → PKR</p>
-              <p className="num mt-1 text-2xl font-semibold">{formatRate(pkrPer(market, pair.code))}</p>
-              <p className="text-sm text-gold-ink">{ur ? "روپے فی 1" : "rupees per 1"}</p>
-            </A>
-          ))}
-        </div>
-        <div className="mt-10">
-          <h2 className="font-display text-3xl text-green">{ur ? "ملک چنیں" : "Pick a country"}</h2>
-          <div className="mt-4 grid gap-3 sm:grid-cols-2 lg:grid-cols-3">
-            {countries.map((country) => (
-              <A key={country.slug} href={h(`/${country.slug}`)} className="rounded-xl border border-line bg-surface p-4 hover:border-green">
-                <p className="font-display text-2xl text-green">{country.short}</p>
-                <p className="mt-1 text-sm text-muted">{ur ? country.blurbUr : country.blurb}</p>
-                <p className="num mt-3 font-semibold">{country.currency} {formatRate(pkrPer(market, country.currency))}</p>
+        <div className="mt-4 grid grid-cols-2 gap-3 lg:grid-cols-3">
+          {pairs.map((pair) => {
+            const delta = move(pair.code);
+            return (
+              <A key={pair.slug} href={h(`/rates/${pair.slug}`)} className="rounded-2xl border border-line bg-surface p-4 shadow-sm transition hover:-translate-y-0.5 hover:border-green">
+                <p className="text-sm text-muted">{pair.code} → PKR</p>
+                <p className="num mt-1 text-3xl font-semibold text-green">{formatRate(pkrPer(market, pair.code))}</p>
+                <p className={`num text-sm ${delta < 0 ? "text-danger" : "text-green-2"}`}>
+                  {delta === 0 ? "—" : `${delta > 0 ? "▲" : "▼"} ${formatMoney(Math.abs(delta), 2)}`}
+                </p>
               </A>
-            ))}
-          </div>
+            );
+          })}
         </div>
-        <div className="mt-10 grid gap-3 sm:grid-cols-2 lg:grid-cols-4">
+        <div className="mt-4 grid gap-3 sm:grid-cols-2">
+          <A href={h("/gold-rates/dubai")} className="rounded-2xl border border-line bg-surface p-4 shadow-sm">
+            <p className="text-sm text-muted">{ur ? "دبئی سونا، فی گرام" : "Dubai gold, per gram"}</p>
+            <p className="num mt-1 text-2xl font-semibold">24K AED {gram24 ? formatMoney(gram24.gram) : "—"}</p>
+            <p className="num text-lg">22K AED {gram22 ? formatMoney(gram22.gram) : "—"}</p>
+            <p className="mt-1 text-sm text-muted">{dxbNote(market, ur)}</p>
+          </A>
+          <A href={h("/gold-rates/pakistan")} className="rounded-2xl border border-line bg-surface p-4 shadow-sm">
+            <p className="text-sm text-muted">{ur ? "پاکستان سرفہ" : "Pakistan Sarafa"}</p>
+            <p className="num mt-1 text-2xl font-semibold">22K Rs {board ? formatMoney(board.pakistanTola22, 0) : "—"}</p>
+            <p className="text-sm text-muted">{ur ? "فی تولہ" : "per tola"} · {board ? formatWhen(market.localGold.pakistan?.asOf || market.fetchedAt, locale) : ""}</p>
+          </A>
+        </div>
+        <h2 className="mt-10 font-display text-3xl text-green">{ur ? "اوزار" : "Tools"}</h2>
+        <div className="mt-4 grid gap-3 sm:grid-cols-2 lg:grid-cols-4">
           {[
-            ["/tools/salary-converter", ur ? "تنخواہ" : "Salary", ur ? "روپے اور بچت" : "Rupees and what’s left"],
-            ["/tools/gratuity-calculator", ur ? "گریچویٹی" : "Gratuity", ur ? "یو اے ای اور سعودی" : "UAE and Saudi"],
-            ["/tools/remittance", ur ? "ترسیل" : "Remittance", ur ? "دو کوٹ کا حساب" : "Compare two quotes"],
-            ["/gold-rates", ur ? "سونا" : "Gold", ur ? "گرام اور تولہ" : "Gram and tola"],
+            ["/rates", ur ? "کرنسی" : "Currency converter", ur ? "درہم اور ریال سے روپیہ" : "Dirham and riyal into rupees"],
+            ["/gold-rates", ur ? "سونا" : "Gold rates", ur ? "فی گرام، مقامی کرنسی" : "Per gram, in local money"],
+            ["/tools/salary-converter", ur ? "تنخواہ" : "Salary converter", ur ? "روپے اور بچت" : "Rupees and what is left"],
+            ["/tools/gratuity-calculator", ur ? "گریچویٹی" : "Gratuity calculator", ur ? "یو اے ای اور سعودی" : "UAE and Saudi estimate"],
           ].map(([href, title, lede]) => (
-            <A key={href} href={h(href)} className="rounded-xl bg-green p-4 text-on-green">
+            <A key={href} href={h(href)} className="rounded-2xl bg-green p-4 text-on-green shadow-sm">
               <p className="font-display text-2xl">{title}</p>
               <p className="mt-1 text-on-green/85">{lede}</p>
             </A>
           ))}
         </div>
-        <div className="mt-10">
-          <h2 className="font-display text-3xl text-green">{ur ? "تازہ رہنما" : "Latest guides"}</h2>
-          <ul className="mt-4 divide-y divide-line rounded-xl border border-line bg-surface">
-            {featured.map((guide) => (
-              <li key={guide.slug}>
-                <A href={h(`/guides/${guide.slug}`)} className="block px-4 py-4 hover:bg-gold-soft">
-                  <p className="text-sm font-semibold text-gold-ink">{ur ? categoryBySlug(guide.category)?.ur : categoryBySlug(guide.category)?.en}</p>
-                  <p className="mt-1 text-lg font-semibold text-ink">{ur && guide.urTitle ? guide.urTitle : guide.title}</p>
-                </A>
-              </li>
-            ))}
-          </ul>
+        <h2 className="mt-10 font-display text-3xl text-green">{ur ? "مشہور رہنما" : "Popular guides"}</h2>
+        <div className="mt-4 grid gap-3 sm:grid-cols-2">
+          {featured.map((guide) => (
+            <A key={guide.slug} href={h(`/guides/${guide.slug}`)} className="rounded-2xl border border-line bg-surface p-4 shadow-sm hover:border-green">
+              <p className="text-sm font-semibold text-gold-ink">{ur ? categoryBySlug(guide.category)?.ur : categoryBySlug(guide.category)?.en}</p>
+              <p className="mt-1 text-lg font-semibold">{ur && guide.urTitle ? guide.urTitle : guide.title}</p>
+            </A>
+          ))}
         </div>
+        <h2 className="mt-10 font-display text-3xl text-green">{ur ? "ملک کے لحاظ سے نوکریاں" : "Jobs by country"}</h2>
+        <div className="mt-4 grid gap-3 sm:grid-cols-2 lg:grid-cols-3">
+          {countries.map((country) => (
+            <A key={country.slug} href={h(`/jobs/${country.slug}`)} className="rounded-2xl border border-line bg-surface p-4 shadow-sm hover:border-green">
+              <p className="font-display text-2xl text-green">
+                <span aria-hidden>{FLAGS[country.slug]} </span>
+                {country.short}
+              </p>
+              <p className="mt-1 text-sm text-muted">{ur ? "نوکری، ویزا اور تنخواہ کا معاہدہ" : "Jobs, the visa path, and what the contract should say"}</p>
+            </A>
+          ))}
+        </div>
+        <h2 className="mt-10 font-display text-3xl text-green">{ur ? "ملک کے لحاظ سے سوال" : "Questions by country"}</h2>
+        <div className="mt-4 flex flex-wrap gap-2">
+          {countries.map((country) => (
+            <A key={country.slug} href={h(`/questions/${country.slug}`)} className="inline-flex min-h-11 items-center rounded-full border border-line bg-surface px-4 text-sm font-semibold">
+              {FLAGS[country.slug]} {country.short}
+            </A>
+          ))}
+        </div>
+        <p className="mt-10 rounded-2xl border border-gold bg-gold-soft px-4 py-3 text-sm">
+          {ur
+            ? "ذرائع: سرکاری ویب سائٹس، باقاعدہ اپڈیٹ۔ اپنا گھر سلیم خان چلاتے ہیں، اسلام آباد۔"
+            : "Sources: official government websites, updated regularly. Apna Ghar is run by Salim Khan, Islamabad."}
+        </p>
         <AdSlot />
       </section>
     </main>
   );
+}
+
+function dxbNote(market: Market, ur: boolean) {
+  const dxb = market.localGold?.dubai;
+  if (!dxb) return ur ? "بورڈ نہیں ملا" : "Board unavailable";
+  return `${formatWhen(dxb.asOf, ur ? "ur" : "en")}${dxb.stale ? (ur ? " · تاخیر ہو سکتی ہے" : " · may be delayed") : ""}`;
 }
 
 const countryTitles: Record<string, string> = {
@@ -218,13 +237,29 @@ const countryDescriptions: Record<string, string> = {
   bahrain: "Bahraini dinar to rupee, gold, and visa and job notes for Pakistanis in Bahrain. Indicative rates, with the country guides linked below. Check.",
 };
 
+const countryUrTitles: Record<string, string> = {
+  uae: "متحدہ عرب امارات: ریٹ، سونا اور رہنما | اپنا گھر",
+  "saudi-arabia": "سعودی عرب: ریٹ، سونا اور نوکری رہنما | اپنا گھر",
+  qatar: "قطر: ریال، سونا اور ویزا رہنما | اپنا گھر",
+  kuwait: "کویت: دینار، سونا اور نوکری رہنما | اپنا گھر",
+  oman: "عمان: ریال، سونا اور ویزا رہنما | اپنا گھر",
+  bahrain: "بحرین: دینار، سونا اور رہنما | اپنا گھر",
+};
+
+const countryUrDescriptions: Record<string, string> = {
+  uae: "متحدہ عرب امارات میں پاکستانیوں کے لیے درہم کا درمیانی ریٹ، دبئی کا سونا فی گرام، اور نوکری، ویزا، گریچویٹی اور گھر پیسے بھیجنے کی عملی رہنما۔",
+  "saudi-arabia": "سعودی عرب میں پاکستانی کارکنوں کے لیے ریال کا ریٹ، سونا، اقامہ اور ورک ویزا۔ اعداد درمیانی ہیں، بینک کا کوٹ نہیں، اور ذرائع صفحے پر ہیں۔",
+  qatar: "قطر میں پاکستانیوں کے لیے قطری ریال، سونے کا اسپاٹ ریٹ، اور ویزا و نوکری کے نوٹس۔ زیورات پر میکنگ الگ ہے، اور فیس سرکاری صفحے سے دیکھیں۔",
+  kuwait: "کویت میں پاکستانی کارکنوں کے لیے کویتی دینار، سونا، اور عملی نوٹس۔ پیسے بھیجنے یا سونا خریدنے سے پہلے اپنی رسید خود دیکھیں۔",
+  oman: "عمان میں پاکستانیوں کے لیے عمانی ریال، سونا، اور ویزا و نوکری کے نوٹس۔ یہ درمیانی ریٹ ہیں، بینک ہمیشہ یہی عدد نہیں دیتا۔",
+  bahrain: "بحرین میں پاکستانیوں کے لیے بحرینی دینار، سونا، اور ویزا و نوکری کے نوٹس۔ ریٹ اشاراتی ہیں، اور ملک کی رہنما نیچے جڑی ہیں۔",
+};
+
 export function countryHead(country: Country, locale: Locale) {
   const ur = locale === "ur";
   const path = hrefFor(ur, `/${country.slug}`);
-  const title = ur ? `${country.short}: ریٹ، سونا اور رہنما` : (countryTitles[country.slug] ?? `${country.short} rates and guides`);
-  const description = ur
-    ? country.blurbUr
-    : countryDescriptions[country.slug];
+  const title = ur ? countryUrTitles[country.slug] : (countryTitles[country.slug] ?? `${country.short} rates and guides`);
+  const description = ur ? countryUrDescriptions[country.slug] : countryDescriptions[country.slug];
   const base = pageMeta({ title, description, path, locale });
   return {
     ...base,
@@ -242,11 +277,11 @@ export function CountryView({ country, market, locale }: { country: Country; mar
   const ur = locale === "ur";
   const h = (path: string) => hrefFor(ur, path);
   const list = guides.filter((guide) => guide.countries.includes(country.slug)).slice(0, 8);
-  const gold = goldRows(market, country.currency).find((row) => row.karat === 22);
+  const gold = gramLines(market, country.goldSlug, country.currency).find((row) => row.karat === 22);
   return (
     <Page
       kicker={country.currency}
-      title={ur ? `${country.short} میں پاکستانی` : `Pakistanis in ${country.short}`}
+      title={ur ? `${country.nameUr} میں پاکستانی` : `Pakistanis in ${country.short}`}
       lede={ur ? country.blurbUr : country.blurb}
     >
       <Crumb
@@ -262,12 +297,20 @@ export function CountryView({ country, market, locale }: { country: Country; mar
           <p className="num text-3xl font-semibold">Rs {formatRate(pkrPer(market, country.currency))}</p>
         </A>
         <A href={h(`/gold-rates/${country.goldSlug}`)} className="rounded-xl border border-line bg-surface p-4">
-          <p className="text-sm text-muted">22K {ur ? "تولہ" : "tola"}</p>
-          <p className="num text-3xl font-semibold">{country.currency} {gold ? formatMoney(gold.tolaLocal) : "—"}</p>
+          <p className="text-sm text-muted">22K {ur ? "فی گرام" : "per gram"}</p>
+          <p className="num text-3xl font-semibold">{country.currency} {gold ? formatMoney(gold.gram) : "—"}</p>
         </A>
         <A href={h("/tools/salary-converter")} className="rounded-xl bg-green p-4 text-on-green">
           <p className="font-display text-2xl">{ur ? "تنخواہ بدلیں" : "Convert a salary"}</p>
           <p className="text-sm text-on-green/85">{ur ? "روپے اور بچت" : "See rupees and savings"}</p>
+        </A>
+        <A href={h(`/jobs/${country.slug}`)} className="rounded-xl border border-line bg-surface p-4">
+          <p className="font-display text-2xl text-green">{ur ? "نوکریاں" : "Jobs"}</p>
+          <p className="text-sm text-muted">{ur ? "۲۰۲۶ میں کیسے اپلائی کریں" : "How to apply in 2026"}</p>
+        </A>
+        <A href={h(`/questions/${country.slug}`)} className="rounded-xl border border-line bg-surface p-4">
+          <p className="font-display text-2xl text-green">{ur ? "سوالات" : "Q&A"}</p>
+          <p className="text-sm text-muted">{ur ? "مختصر جواب" : "Short answers"}</p>
         </A>
       </div>
       <h2 className="mt-8 font-display text-2xl text-green">{ur ? "رہنما" : "Guides"}</h2>
@@ -509,13 +552,13 @@ export function PairView({ pair, market, locale }: { pair: Pair; market: Market;
 }
 
 const goldTitles: Record<string, string> = {
-  dubai: "Dubai Gold Rate Today: 22K and 24K Retail | Apna Ghar",
-  "saudi-arabia": "Saudi Arabia Gold Rate Today: 22K and 24K | Apna Ghar",
-  qatar: "Qatar Gold Rate Today: 22K and 24K Price | Apna Ghar",
-  kuwait: "Kuwait Gold Rate Today: 22K and 24K Board | Apna Ghar",
-  oman: "Oman Gold Rate Today: 22K and 24K Price | Apna Ghar",
-  bahrain: "Bahrain Gold Rate Today: 22K and 24K Board | Apna Ghar",
-  pakistan: "Pakistan Gold Rate Today: Sarafa 22K Tola | Apna Ghar",
+  dubai: "Gold Rate Today in Dubai: 24K, 22K, 21K, 18K per Gram (AED)",
+  "saudi-arabia": "Gold Rate Today in Saudi Arabia per Gram (SAR)",
+  qatar: "Gold Rate Today in Qatar per Gram in Riyals (QAR)",
+  kuwait: "Gold Rate Today in Kuwait per Gram in Dinars (KWD)",
+  oman: "Gold Rate Today in Oman per Gram in Rials (OMR)",
+  bahrain: "Gold Rate Today in Bahrain per Gram in Dinars (BHD)",
+  pakistan: "Pakistan Gold Rate Today: Sarafa per Gram and Tola",
 };
 
 function goldAppLd(name: string, path: string) {
@@ -559,21 +602,21 @@ export function GoldIndex({ market, locale }: { market: Market; locale: Locale }
   const pk = market.localGold?.pakistan;
   const dxb = market.localGold?.dubai;
   const rows = goldPlaces.map((place) => {
-    const row = goldRows(market, place.code).find((item) => item.karat === 22);
-    let pkr = row?.tolaPkr ?? 0;
-    let local = row?.tolaLocal ?? 0;
+    const line = gramLines(market, place.slug, place.code).find((item) => item.karat === 22);
+    let pkr = (line?.tola ?? 0) * pkrPer(market, place.code);
+    let gram = line?.gram ?? 0;
     let kind = ur ? "اسپاٹ" : "Spot";
     if (place.slug === "pakistan" && pk) {
       pkr = pk.tola22;
-      local = pk.tola22;
+      gram = pk.tola22 / 11.6638;
       kind = ur ? "سرفہ" : "Sarafa";
     }
     if (place.slug === "dubai" && board) {
-      local = board.dubaiTola22;
+      gram = board.dubaiGram22;
       pkr = board.dubaiTola22Pkr;
       kind = ur ? "ریٹیل" : "Retail";
     }
-    return { place, pkr, local, kind };
+    return { place, pkr, gram, kind };
   });
   return (
     <Page
@@ -603,14 +646,29 @@ export function GoldIndex({ market, locale }: { market: Market; locale: Locale }
               : `A 22K tola is about Rs ${formatMoney(board.gapPkr, 0)} cheaper on Dubai’s published retail board than the Pakistan Sarafa rate.`}
         </p>
       ) : null}
-      <div className="mt-4 overflow-x-auto rounded-xl border border-line bg-surface">
-        <table className="w-full min-w-[22rem] text-left">
+      <ul className="mt-4 grid gap-3 md:hidden">
+        {rows.map((row) => (
+          <li key={row.place.slug}>
+            <A href={h(`/gold-rates/${row.place.slug}`)} className="block rounded-xl border border-line bg-surface p-4 shadow-sm">
+              <p className="font-semibold text-green">{ur ? row.place.nameUr : row.place.name}</p>
+              <p className="mt-1 inline-flex rounded-full bg-gold-soft px-2 py-0.5 text-xs font-semibold">{row.kind}</p>
+              <p className="num mt-2 text-2xl font-semibold">
+                {row.place.slug === "pakistan" ? "Rs" : row.place.code} {formatMoney(row.gram, row.place.slug === "pakistan" ? 0 : 2)}
+              </p>
+              <p className="text-sm text-muted">{ur ? "۲۲ قیراط فی گرام" : "22K per gram"}</p>
+              <p className="num mt-1 text-sm">Rs {formatMoney(row.pkr, 0)} {ur ? "فی تولہ" : "per tola"}</p>
+            </A>
+          </li>
+        ))}
+      </ul>
+      <div className="mt-4 hidden overflow-hidden rounded-xl border border-line bg-surface md:block">
+        <table className="w-full text-left">
           <thead className="bg-gold-soft text-sm">
             <tr>
               <th className="px-4 py-3">{ur ? "جگہ" : "Place"}</th>
               <th className="px-4 py-3">{ur ? "قسم" : "Kind"}</th>
-              <th className="px-4 py-3">22K {ur ? "تولہ" : "tola"}</th>
-              <th className="px-4 py-3">{ur ? "روپوں میں" : "In PKR"}</th>
+              <th className="px-4 py-3">22K {ur ? "فی گرام" : "per gram"}</th>
+              <th className="px-4 py-3">{ur ? "روپے / تولہ" : "PKR / tola"}</th>
             </tr>
           </thead>
           <tbody>
@@ -618,12 +676,12 @@ export function GoldIndex({ market, locale }: { market: Market; locale: Locale }
               <tr key={row.place.slug} className="border-t border-line">
                 <td className="px-4 py-3">
                   <A href={h(`/gold-rates/${row.place.slug}`)} className="font-semibold text-green underline decoration-gold">
-                    {row.place.name}
+                    {ur ? row.place.nameUr : row.place.name}
                   </A>
                 </td>
                 <td className="px-4 py-3 text-sm">{row.kind}</td>
                 <td className="num px-4 py-3">
-                  {row.place.slug === "pakistan" ? "Rs" : row.place.code} {formatMoney(row.local, row.place.slug === "pakistan" ? 0 : 2)}
+                  {row.place.slug === "pakistan" ? "Rs" : row.place.code} {formatMoney(row.gram, row.place.slug === "pakistan" ? 0 : 2)}
                 </td>
                 <td className="num px-4 py-3">Rs {formatMoney(row.pkr, 0)}</td>
               </tr>
@@ -663,10 +721,10 @@ export function GoldIndex({ market, locale }: { market: Market; locale: Locale }
 export function goldPlaceHead(place: GoldPlace, locale: Locale) {
   const ur = locale === "ur";
   const path = hrefFor(ur, `/gold-rates/${place.slug}`);
-  const title = ur ? `${place.name} میں سونے کا ریٹ آج` : goldTitles[place.slug];
+  const title = ur ? `${place.nameUr} میں آج سونے کا ریٹ فی گرام | اپنا گھر` : goldTitles[place.slug];
   const description = ur
-    ? `${place.name} میں ۲۴، ۲۲، ۲۱ اور ۱۸ قیراط، فی گرام اور فی تولہ۔ بورڈ ریٹ جہاں شائع ہو، ورنہ اسپاٹ۔`
-    : `${place.name} 24K, 22K, 21K and 18K gold per gram and per tola, in local money and rupees. Indicative, and making charges are extra. Not a shop invoice.`;
+    ? `${place.name} میں ۲۴، ۲۲، ۲۱ اور ۱۸ قیراط فی گرام، مقامی کرنسی میں۔ آخری اپڈیٹ کا وقت درج ہے۔ زیورات پر میکنگ الگ ہے۔`
+    : `${place.name} gold per gram in ${place.code}: 24K, 22K, 21K and 18K, and the price of 10 grams. The update time is on the page. Making charges are extra.`;
   const base = pageMeta({ title, description, path, locale });
   return {
     ...base,
@@ -685,7 +743,6 @@ export function goldPlaceHead(place: GoldPlace, locale: Locale) {
 export function GoldPlaceView({ place, market, locale }: { place: GoldPlace; market: Market; locale: Locale }) {
   const ur = locale === "ur";
   const h = (path: string) => hrefFor(ur, path);
-  const rows = goldRows(market, place.code);
   const pk = place.slug === "pakistan" ? market.localGold?.pakistan : null;
   const dxb = place.slug === "dubai" ? market.localGold?.dubai : null;
   const aed = pkrPer(market, "AED");
@@ -725,30 +782,93 @@ export function GoldPlaceView({ place, market, locale }: { place: GoldPlace; mar
           </p>
         </div>
       ) : null}
-      <h2 className="mt-6 font-display text-2xl text-green">{ur ? "عالمی اسپاٹ" : "World spot"}</h2>
-      <p className="mt-2 text-sm text-muted num">{formatWhen(market.fetchedAt, locale)}</p>
-      <div className="mt-4 overflow-x-auto rounded-xl border border-line bg-surface">
-        <table className="w-full min-w-[24rem] text-left">
+      <h2 className="mt-6 font-display text-2xl text-green">
+        {place.slug === "pakistan"
+          ? ur
+            ? "سرفہ، روپے میں"
+            : "Sarafa rate in rupees"
+          : ur
+            ? `فی گرام، ${place.code}`
+            : `Per gram in ${place.code}`}
+      </h2>
+      <p className="mt-2 max-w-2xl text-sm text-muted">
+        {place.slug === "pakistan"
+          ? ur
+            ? "۲۲ اور ۲۴ قیراط سرفہ بورڈ سے ہیں۔ ۲۱ اور ۱۸ قیراط ۲۴ قیراط تولے سے نکالے گئے ہیں۔"
+            : "22K and 24K are the Sarafa board. 21K and 18K are scaled from the 24K tola, not a separate shop quote."
+          : place.slug === "dubai"
+            ? ur
+              ? "دبئی کا شائع شدہ ریٹیل بورڈ: ۲۴، ۲۲، ۲۱ اور ۱۸ قیراط فی گرام، درہم میں۔ میکنگ الگ ہے۔"
+              : "Dubai’s published retail board: 24K, 22K, 21K and 18K per gram in dirhams. Making charges are extra."
+            : ur
+              ? "یہ عالمی اسپاٹ ہے، دکان کا بورڈ نہیں۔ قیمت مقامی کرنسی میں فی گرام ہے۔"
+              : "This is the world spot price in the local currency, not a shop board. Making charges are extra."}
+        {dxb?.stale || pk?.stale ? (ur ? " ریٹ تاخیر کا شکار ہو سکتا ہے۔" : " The figure may be delayed.") : ""}
+      </p>
+      <ul className="mt-4 grid gap-3 md:hidden">
+        {gramLines(market, place.slug, place.code).map((line) => (
+          <li key={line.karat} className="rounded-xl border border-line bg-surface p-4 shadow-sm">
+            <p className="text-sm font-semibold text-gold-ink">{line.karat}K</p>
+            <p className="num mt-1 text-2xl font-semibold">
+              {place.slug === "pakistan" ? "Rs" : place.code} {formatMoney(line.gram, place.slug === "pakistan" ? 0 : 2)}
+            </p>
+            <p className="text-sm text-muted">{ur ? "فی گرام" : "per gram"}</p>
+            <p className="num mt-1 text-sm">
+              10 g · {place.slug === "pakistan" ? "Rs" : place.code} {formatMoney(line.ten, place.slug === "pakistan" ? 0 : 2)}
+              {place.slug === "pakistan" ? ` · ${ur ? "تولہ" : "tola"} ${formatMoney(line.tola, 0)}` : ""}
+            </p>
+          </li>
+        ))}
+      </ul>
+      <div className="mt-4 hidden overflow-x-auto rounded-xl border border-line bg-surface md:block">
+        <table className="w-full text-left">
           <thead className="bg-gold-soft text-sm">
             <tr>
-              <th className="px-3 py-3">{ur ? "قیراط" : "Karat"}</th>
-              <th className="px-3 py-3">{ur ? "فی گرام" : "Per gram"}</th>
-              <th className="px-3 py-3">{ur ? "فی تولہ" : "Per tola"}</th>
-              <th className="px-3 py-3">{ur ? "تولہ، روپے" : "Tola in PKR"}</th>
+              <th className="px-4 py-3">{ur ? "قیراط" : "Karat"}</th>
+              <th className="px-4 py-3">{ur ? "فی گرام" : "Price per gram"}</th>
+              <th className="px-4 py-3">{ur ? "دس گرام" : "Price per 10 g"}</th>
+              {place.slug === "pakistan" ? <th className="px-4 py-3">{ur ? "فی تولہ" : "Per tola"}</th> : null}
             </tr>
           </thead>
           <tbody>
-            {rows.map((row) => (
-              <tr key={row.karat} className="border-t border-line">
-                <td className="px-3 py-3 font-semibold">{row.karat}K</td>
-                <td className="num px-3 py-3">{formatMoney(row.gramLocal)}</td>
-                <td className="num px-3 py-3">{formatMoney(row.tolaLocal)}</td>
-                <td className="num px-3 py-3">{formatMoney(row.tolaPkr, 0)}</td>
+            {gramLines(market, place.slug, place.code).map((line) => (
+              <tr key={line.karat} className="border-t border-line">
+                <td className="px-4 py-3 font-semibold">{line.karat}K</td>
+                <td className="num px-4 py-3">
+                  {place.slug === "pakistan" ? "Rs" : place.code} {formatMoney(line.gram, place.slug === "pakistan" ? 0 : 2)}
+                </td>
+                <td className="num px-4 py-3">
+                  {place.slug === "pakistan" ? "Rs" : place.code} {formatMoney(line.ten, place.slug === "pakistan" ? 0 : 2)}
+                </td>
+                {place.slug === "pakistan" ? <td className="num px-4 py-3">Rs {formatMoney(line.tola, 0)}</td> : null}
               </tr>
             ))}
           </tbody>
         </table>
       </div>
+      {place.slug !== "pakistan" ? (
+        <aside className="mt-4 rounded-xl border border-gold bg-gold-soft p-4">
+          <p className="font-semibold">{ur ? "پاکستان سے موازنہ" : "Compare with Pakistan"}</p>
+          <p className="mt-2 text-sm text-muted">
+            {ur
+              ? "اصل قیمت اوپر مقامی کرنسی میں ہے۔ یہ خانہ صرف سرفہ تولے سے روپے کا موازنہ ہے۔"
+              : "The prices above stay in the local currency. This box is only a rupee comparison with the Sarafa tola."}
+          </p>
+          <p className="num mt-2">
+            22K {ur ? "فی گرام" : "per gram"}: {place.code}{" "}
+            {formatMoney(gramLines(market, place.slug, place.code).find((line) => line.karat === 22)?.gram ?? 0)}
+            {" · Rs "}
+            {formatMoney(
+              (gramLines(market, place.slug, place.code).find((line) => line.karat === 22)?.gram ?? 0) *
+                pkrPer(market, place.code),
+              0,
+            )}
+            {market.localGold?.pakistan
+              ? ` · ${ur ? "سرفہ تولہ" : "Sarafa tola"} Rs ${formatMoney(market.localGold.pakistan.tola22, 0)}`
+              : ""}
+          </p>
+        </aside>
+      ) : null}
       <p className="mt-4">
         <A href={h("/guides/gold-carry-dubai-saudi-pakistan")} className="font-semibold text-green underline">
           {ur ? "پاکستان کتنا سونا لے جا سکتے ہیں" : "How much gold you can carry to Pakistan"}
@@ -817,8 +937,14 @@ export function guideHead(payload: GuidePayload, updated: string): { meta: any[]
   const canonicalPath = ur && !translated ? `/guides/${payload.slug}` : publicPath;
   const meta = guideBySlug(payload.slug);
   const seo = guideSeo[payload.slug];
-  const title = seo?.title ?? meta?.seoTitle ?? payload.title;
-  const description = seo?.description ?? meta?.description ?? payload.description;
+  const title =
+    ur && translated
+      ? `${meta?.urTitle ?? payload.title} | اپنا گھر`
+      : (seo?.title ?? meta?.seoTitle ?? payload.title);
+  const description =
+    ur && translated
+      ? (meta?.urDescription ?? payload.description)
+      : (seo?.description ?? meta?.description ?? payload.description);
   const base = pageMeta({
     title,
     description,
@@ -873,7 +999,7 @@ export function GuideArticle({ payload }: { payload: GuidePayload }) {
         ]}
       />
       <p className="mt-4 text-sm text-muted">
-        {ur ? "آخری اپڈیٹ" : "Last updated"}: <time dateTime={meta.updated}>{formatDay(meta.updated)}</time>
+        {ur ? "آخری جائزہ" : "Last reviewed"}: <time dateTime={meta.updated}>{formatDay(meta.updated)}</time>
       </p>
       {!payload.translated ? (
         <p className="mt-3 rounded-lg bg-gold-soft px-3 py-2 text-sm">
@@ -1098,7 +1224,7 @@ export function legalHead(slug: string, locale: Locale) {
             name: SITE_NAME,
             url: "https://apnaaghar.pk",
             email: CONTACT_EMAIL,
-            logo: "https://apnaaghar.pk/favicon.svg",
+            logo: "https://apnaaghar.pk/logo-512.png",
             founder: { "@type": "Person", name: OWNER_NAME },
             address: { "@type": "PostalAddress", addressLocality: "Islamabad", addressCountry: "PK" },
             description: `Apna Ghar is run by ${OWNER_NAME}, based in ${OWNER_CITY}. ${SITE_TAGLINE}`,

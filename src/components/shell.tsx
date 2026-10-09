@@ -1,20 +1,15 @@
 import { Link, useRouterState } from "@tanstack/react-router";
 import { Menu, X } from "lucide-react";
 import { useEffect, useState } from "react";
-import { categories, countries, isUrduPath, SITE_NAME, switchPath, urduPath } from "@/lib/site";
+import { categories, countries, hrefFor, isUrduPath, SITE_NAME, switchPath } from "@/lib/site";
 
 const nav = [
   { href: "/rates", en: "Rates", ur: "ریٹس" },
   { href: "/gold-rates", en: "Gold", ur: "سونا" },
-  { href: "/tools/salary-converter", en: "Salary", ur: "تنخواہ" },
-  { href: "/tools/gratuity-calculator", en: "Gratuity", ur: "گریچویٹی" },
+  { href: "/jobs/uae", en: "Jobs", ur: "نوکری" },
+  { href: "/questions/uae", en: "Q&A", ur: "سوال" },
   { href: "/guides", en: "Guides", ur: "رہنما" },
 ];
-
-export function hrefFor(ur: boolean, path: string) {
-  if (!ur) return path;
-  return urduPath(path);
-}
 
 export function A({
   href,

@@ -41,6 +41,7 @@ export const categories: { slug: CategorySlug; en: string; ur: string }[] = [
 export type Country = {
   slug: string;
   name: string;
+  nameUr: string;
   short: string;
   currency: string;
   currencyName: string;
@@ -54,6 +55,7 @@ export const countries: Country[] = [
   {
     slug: "uae",
     name: "United Arab Emirates",
+    nameUr: "متحدہ عرب امارات",
     short: "UAE",
     currency: "AED",
     currencyName: "UAE dirham",
@@ -67,6 +69,7 @@ export const countries: Country[] = [
   {
     slug: "saudi-arabia",
     name: "Saudi Arabia",
+    nameUr: "سعودی عرب",
     short: "Saudi Arabia",
     currency: "SAR",
     currencyName: "Saudi riyal",
@@ -80,6 +83,7 @@ export const countries: Country[] = [
   {
     slug: "qatar",
     name: "Qatar",
+    nameUr: "قطر",
     short: "Qatar",
     currency: "QAR",
     currencyName: "Qatari riyal",
@@ -91,6 +95,7 @@ export const countries: Country[] = [
   {
     slug: "kuwait",
     name: "Kuwait",
+    nameUr: "کویت",
     short: "Kuwait",
     currency: "KWD",
     currencyName: "Kuwaiti dinar",
@@ -102,6 +107,7 @@ export const countries: Country[] = [
   {
     slug: "oman",
     name: "Oman",
+    nameUr: "عمان",
     short: "Oman",
     currency: "OMR",
     currencyName: "Omani rial",
@@ -113,6 +119,7 @@ export const countries: Country[] = [
   {
     slug: "bahrain",
     name: "Bahrain",
+    nameUr: "بحرین",
     short: "Bahrain",
     currency: "BHD",
     currencyName: "Bahraini dinar",
@@ -191,6 +198,7 @@ export type GoldPlace = {
   slug: string;
   code: string;
   name: string;
+  nameUr: string;
   countrySlug: string | null;
   note: string;
   noteUr: string;
@@ -201,6 +209,7 @@ export const goldPlaces: GoldPlace[] = [
     slug: "dubai",
     code: "AED",
     name: "Dubai",
+    nameUr: "دبئی",
     countrySlug: "uae",
     note: "Dubai’s published retail board (22K and 24K per gram) is shown separately from the world spot price. Shops still add making charges. Ask for the all-in price per gram.",
     noteUr:
@@ -210,6 +219,7 @@ export const goldPlaces: GoldPlace[] = [
     slug: "saudi-arabia",
     code: "SAR",
     name: "Saudi Arabia",
+    nameUr: "سعودی عرب",
     countrySlug: "saudi-arabia",
     note: "This is the world spot price in riyals. A shop price includes making charges. Compare the rupee figure with the Pakistan Sarafa rate before you buy.",
     noteUr: "یہ ریال میں عالمی اسپاٹ قیمت ہے۔ دکان کی قیمت میں میکنگ شامل ہوتی ہے۔ خریدنے سے پہلے پاکستان کے سرفہ ریٹ سے موازنہ کریں۔",
@@ -218,6 +228,7 @@ export const goldPlaces: GoldPlace[] = [
     slug: "qatar",
     code: "QAR",
     name: "Qatar",
+    nameUr: "قطر",
     countrySlug: "qatar",
     note: "This is the world spot price in Qatari riyals. Shop prices are higher once making charges are added.",
     noteUr: "یہ قطری ریال میں عالمی اسپاٹ قیمت ہے۔ میکنگ چارجز کے بعد دکان کی قیمت زیادہ ہوتی ہے۔",
@@ -226,6 +237,7 @@ export const goldPlaces: GoldPlace[] = [
     slug: "kuwait",
     code: "KWD",
     name: "Kuwait",
+    nameUr: "کویت",
     countrySlug: "kuwait",
     note: "This is the world spot price in Kuwaiti dinars. Confirm the shop’s per-gram price, including making, before you compare it with Pakistan.",
     noteUr: "یہ کویتی دینار میں عالمی اسپاٹ قیمت ہے۔ پاکستان سے موازنہ کرنے سے پہلے دکان کی فی گرام قیمت، میکنگ سمیت، پوچھیں۔",
@@ -234,6 +246,7 @@ export const goldPlaces: GoldPlace[] = [
     slug: "oman",
     code: "OMR",
     name: "Oman",
+    nameUr: "عمان",
     countrySlug: "oman",
     note: "This is the world spot price in Omani rials. Making charges are extra. The figure is indicative, not a shop quote.",
     noteUr: "یہ عمانی ریال میں عالمی اسپاٹ قیمت ہے۔ میکنگ الگ ہے۔ یہ دکان کا کوٹ نہیں۔",
@@ -242,6 +255,7 @@ export const goldPlaces: GoldPlace[] = [
     slug: "bahrain",
     code: "BHD",
     name: "Bahrain",
+    nameUr: "بحرین",
     countrySlug: "bahrain",
     note: "This is the world spot price in Bahraini dinars. Ask the shop for the full price per gram before you decide.",
     noteUr: "یہ بحرینی دینار میں عالمی اسپاٹ قیمت ہے۔ فیصلے سے پہلے دکان سے فی گرام مکمل قیمت پوچھیں۔",
@@ -250,6 +264,7 @@ export const goldPlaces: GoldPlace[] = [
     slug: "pakistan",
     code: "PKR",
     name: "Pakistan",
+    nameUr: "پاکستان",
     countrySlug: null,
     note: "The Pakistan figure used for comparison is the Sarafa market rate per tola, not the world spot price converted into rupees. Jewellers still add making charges on jewellery.",
     noteUr:
@@ -450,6 +465,10 @@ export function englishPath(pathname: string) {
 export function urduPath(pathname: string) {
   const en = englishPath(pathname);
   return en === "/" ? "/ur" : `/ur${en}`;
+}
+
+export function hrefFor(ur: boolean, path: string) {
+  return ur ? urduPath(path) : path;
 }
 
 export function switchPath(pathname: string) {

@@ -39,8 +39,13 @@ export type Market = {
   };
 };
 
+export function isFxCode(code: string): code is FxCode {
+  return (CODES as readonly string[]).includes(code);
+}
+
 export function pkrPer(market: Market, code: string) {
-  const c = code.toLowerCase() as FxCode;
+  const c = code.toLowerCase();
+  if (!isFxCode(c)) return 0;
   const unit = market.usd[c];
   if (!unit) return 0;
   return market.usd.pkr / unit;
@@ -85,6 +90,35 @@ export function formatDay(isoDate: string) {
     month: "short",
     year: "numeric",
   }).format(date);
+}
+
+export type GramLine = { karat: number; gram: number; ten: number; tola: number };
+
+/** Per-gram quotes in the place's own money. Dubai uses the retail board. Pakistan uses Sarafa. Others use world spot. */
+export function gramLines(market: Market, placeSlug: string, code: string): GramLine[] {
+  const line = (karat: number, gram: number): GramLine => ({
+    karat,
+    gram,
+    ten: gram * 10,
+    tola: gram * TOLA_GRAMS,
+  });
+  if (placeSlug === "dubai" && market.localGold?.dubai) {
+    const board = market.localGold.dubai;
+    const published: Record<number, number> = {
+      24: board.gram24,
+      22: board.gram22,
+      21: board.gram21,
+      18: board.gram18,
+    };
+    return KARATS.map((karat) => line(karat, published[karat]));
+  }
+  if (placeSlug === "pakistan" && market.localGold?.pakistan) {
+    const board = market.localGold.pakistan;
+    const gram24 = board.tola24 / TOLA_GRAMS;
+    const gram22 = board.tola22 / TOLA_GRAMS;
+    return KARATS.map((karat) => line(karat, karat === 22 ? gram22 : gram24 * (karat / 24)));
+  }
+  return goldRows(market, code).map((row) => line(row.karat, row.gramLocal));
 }
 
 export type GoldRow = {

@@ -823,7 +823,7 @@ export const bodiesB: Record<string, ArticleBody> = {
     [
       {
         t: "p",
-        text: "Iqama renewal is normally done by the employer on Muqeem or Absher before the expiry date. You should still watch the date yourself on Absher. A late renewal can bring a fine, and that fine is on the official payment screen, not in a group chat. People ask for one fee. The bill has separate lines: the residency renewal fee, the employer work-permit levy, and a monthly dependent levy. The figures on the Absher or Muqeem payment screen are the ones that count. Checked on 9 October 2026, this page does not copy a WhatsApp fee table and will not say the fee is SAR anything.",
+        text: "Iqama renewal is normally done by the employer on Muqeem or Absher before the expiry date. You should still watch the date yourself on Absher. A late renewal can bring a fine, and that fine is on the official payment screen, not in a group chat. People ask for one fee. The bill has separate lines: the residency renewal fee, the employer work-permit levy, and a monthly dependent levy. The Saudi National Platform service for [renewal of the residence permit](https://my.gov.sa/en/services/112096) lists the service cost as variable, not one SAR total for every worker. Checked on 10 October 2026, that page does not publish a single company-worker fee or a late-fine table. The figures on the Absher or Muqeem payment screen are the ones that count.",
       },
       {
         t: "h2",
@@ -882,7 +882,7 @@ export const bodiesB: Record<string, ArticleBody> = {
     five([
       {
         q: "What is the Iqama renewal fee?",
-        a: "There is no single number this page can print. The bill on Absher or Muqeem can include the residency renewal fee, the employer work-permit levy and a monthly dependent levy as separate lines. Copy the figures from the payment screen when the employer opens it. A WhatsApp table is not that screen.",
+        a: "There is no single number on a public fee table this page can copy. The National Platform renewal service lists the cost as variable. The bill on Absher or Muqeem can include the residency renewal fee, the employer work-permit levy and a monthly dependent levy as separate lines. Copy the figures from the payment screen when the employer opens it.",
       },
       {
         q: "What is the late fine per day?",
@@ -905,7 +905,15 @@ export const bodiesB: Record<string, ArticleBody> = {
         a: "No. Each dependent has an Iqama and an expiry. The monthly dependent levy is a separate line on the bill, and the amount is the one on the payment screen. Check their dates on Absher the same way you check yours.",
       },
     ]),
-    [S.absher, S.muqeem, S.hrsd],
+    [
+      S.absher,
+      S.muqeem,
+      S.hrsd,
+      {
+        label: "National Platform: Renewal of Iqama",
+        href: "https://my.gov.sa/en/services/112096",
+      },
+    ],
   ),
 
   "check-iqama-status": art(

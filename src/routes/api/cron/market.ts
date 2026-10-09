@@ -6,11 +6,8 @@ export const Route = createFileRoute("/api/cron/market")({
     handlers: {
       GET: async ({ request }) => {
         const secret = process.env.CRON_SECRET;
-        if (secret) {
-          const auth = request.headers.get("authorization");
-          if (auth !== `Bearer ${secret}`) {
-            return new Response("Unauthorized", { status: 401 });
-          }
+        if (!secret || request.headers.get("authorization") !== `Bearer ${secret}`) {
+          return new Response("Unauthorized", { status: 401 });
         }
         const market = await loadMarket({ refresh: true });
         return Response.json({

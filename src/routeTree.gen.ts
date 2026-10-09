@@ -10,6 +10,7 @@
 
 import { Route as rootRouteImport } from './routes/__root'
 import { Route as IndexRouteImport } from './routes/index'
+import { Route as SplatRouteImport } from './routes/$'
 import { Route as AboutRouteImport } from './routes/about'
 import { Route as BahrainRouteImport } from './routes/bahrain'
 import { Route as ContactRouteImport } from './routes/contact'
@@ -33,12 +34,14 @@ import { Route as GoldRatesIndexRouteImport } from './routes/gold-rates/index'
 import { Route as GoldRatesPlaceRouteImport } from './routes/gold-rates/$place'
 import { Route as GuidesIndexRouteImport } from './routes/guides/index'
 import { Route as GuidesSlugRouteImport } from './routes/guides/$slug'
+import { Route as JobsCountryRouteImport } from './routes/jobs/$country'
 import { Route as ListingsIndexRouteImport } from './routes/listings/index'
 import { Route as ListingsSplatRouteImport } from './routes/listings/$'
 import { Route as PropertiesIndexRouteImport } from './routes/properties/index'
 import { Route as PropertiesSplatRouteImport } from './routes/properties/$'
 import { Route as PropertyIndexRouteImport } from './routes/property/index'
 import { Route as PropertySplatRouteImport } from './routes/property/$'
+import { Route as QuestionsCountryRouteImport } from './routes/questions/$country'
 import { Route as RatesIndexRouteImport } from './routes/rates/index'
 import { Route as RatesPairRouteImport } from './routes/rates/$pair'
 import { Route as ToolsFlightsRouteImport } from './routes/tools/flights'
@@ -63,6 +66,8 @@ import { Route as UrGoldRatesIndexRouteImport } from './routes/ur/gold-rates/ind
 import { Route as UrGoldRatesPlaceRouteImport } from './routes/ur/gold-rates/$place'
 import { Route as UrGuidesIndexRouteImport } from './routes/ur/guides/index'
 import { Route as UrGuidesSlugRouteImport } from './routes/ur/guides/$slug'
+import { Route as UrJobsCountryRouteImport } from './routes/ur/jobs/$country'
+import { Route as UrQuestionsCountryRouteImport } from './routes/ur/questions/$country'
 import { Route as UrRatesIndexRouteImport } from './routes/ur/rates/index'
 import { Route as UrRatesPairRouteImport } from './routes/ur/rates/$pair'
 import { Route as UrToolsFlightsRouteImport } from './routes/ur/tools/flights'
@@ -73,6 +78,11 @@ import { Route as UrToolsSalaryConverterRouteImport } from './routes/ur/tools/sa
 const IndexRoute = IndexRouteImport.update({
   id: '/',
   path: '/',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const SplatRoute = SplatRouteImport.update({
+  id: '/$',
+  path: '/$',
   getParentRoute: () => rootRouteImport,
 } as any)
 const AboutRoute = AboutRouteImport.update({
@@ -190,6 +200,11 @@ const GuidesSlugRoute = GuidesSlugRouteImport.update({
   path: '/guides/$slug',
   getParentRoute: () => rootRouteImport,
 } as any)
+const JobsCountryRoute = JobsCountryRouteImport.update({
+  id: '/jobs/$country',
+  path: '/jobs/$country',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const ListingsIndexRoute = ListingsIndexRouteImport.update({
   id: '/listings/',
   path: '/listings/',
@@ -218,6 +233,11 @@ const PropertyIndexRoute = PropertyIndexRouteImport.update({
 const PropertySplatRoute = PropertySplatRouteImport.update({
   id: '/property/$',
   path: '/property/$',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const QuestionsCountryRoute = QuestionsCountryRouteImport.update({
+  id: '/questions/$country',
+  path: '/questions/$country',
   getParentRoute: () => rootRouteImport,
 } as any)
 const RatesIndexRoute = RatesIndexRouteImport.update({
@@ -340,6 +360,16 @@ const UrGuidesSlugRoute = UrGuidesSlugRouteImport.update({
   path: '/guides/$slug',
   getParentRoute: () => UrRoute,
 } as any)
+const UrJobsCountryRoute = UrJobsCountryRouteImport.update({
+  id: '/jobs/$country',
+  path: '/jobs/$country',
+  getParentRoute: () => UrRoute,
+} as any)
+const UrQuestionsCountryRoute = UrQuestionsCountryRouteImport.update({
+  id: '/questions/$country',
+  path: '/questions/$country',
+  getParentRoute: () => UrRoute,
+} as any)
 const UrRatesIndexRoute = UrRatesIndexRouteImport.update({
   id: '/rates/',
   path: '/rates/',
@@ -374,6 +404,7 @@ const UrToolsSalaryConverterRoute = UrToolsSalaryConverterRouteImport.update({
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
+  '/$': typeof SplatRoute
   '/about': typeof AboutRoute
   '/bahrain': typeof BahrainRoute
   '/contact': typeof ContactRoute
@@ -394,9 +425,11 @@ export interface FileRoutesByFullPath {
   '/cities/$': typeof CitiesSplatRoute
   '/gold-rates/$place': typeof GoldRatesPlaceRoute
   '/guides/$slug': typeof GuidesSlugRoute
+  '/jobs/$country': typeof JobsCountryRoute
   '/listings/$': typeof ListingsSplatRoute
   '/properties/$': typeof PropertiesSplatRoute
   '/property/$': typeof PropertySplatRoute
+  '/questions/$country': typeof QuestionsCountryRoute
   '/rates/$pair': typeof RatesPairRoute
   '/tools/flights': typeof ToolsFlightsRoute
   '/tools/gratuity-calculator': typeof ToolsGratuityCalculatorRoute
@@ -425,6 +458,8 @@ export interface FileRoutesByFullPath {
   '/api/cron/market': typeof ApiCronMarketRoute
   '/ur/gold-rates/$place': typeof UrGoldRatesPlaceRoute
   '/ur/guides/$slug': typeof UrGuidesSlugRoute
+  '/ur/jobs/$country': typeof UrJobsCountryRoute
+  '/ur/questions/$country': typeof UrQuestionsCountryRoute
   '/ur/rates/$pair': typeof UrRatesPairRoute
   '/ur/tools/flights': typeof UrToolsFlightsRoute
   '/ur/tools/gratuity-calculator': typeof UrToolsGratuityCalculatorRoute
@@ -436,6 +471,7 @@ export interface FileRoutesByFullPath {
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
+  '/$': typeof SplatRoute
   '/about': typeof AboutRoute
   '/bahrain': typeof BahrainRoute
   '/contact': typeof ContactRoute
@@ -455,9 +491,11 @@ export interface FileRoutesByTo {
   '/cities/$': typeof CitiesSplatRoute
   '/gold-rates/$place': typeof GoldRatesPlaceRoute
   '/guides/$slug': typeof GuidesSlugRoute
+  '/jobs/$country': typeof JobsCountryRoute
   '/listings/$': typeof ListingsSplatRoute
   '/properties/$': typeof PropertiesSplatRoute
   '/property/$': typeof PropertySplatRoute
+  '/questions/$country': typeof QuestionsCountryRoute
   '/rates/$pair': typeof RatesPairRoute
   '/tools/flights': typeof ToolsFlightsRoute
   '/tools/gratuity-calculator': typeof ToolsGratuityCalculatorRoute
@@ -486,6 +524,8 @@ export interface FileRoutesByTo {
   '/api/cron/market': typeof ApiCronMarketRoute
   '/ur/gold-rates/$place': typeof UrGoldRatesPlaceRoute
   '/ur/guides/$slug': typeof UrGuidesSlugRoute
+  '/ur/jobs/$country': typeof UrJobsCountryRoute
+  '/ur/questions/$country': typeof UrQuestionsCountryRoute
   '/ur/rates/$pair': typeof UrRatesPairRoute
   '/ur/tools/flights': typeof UrToolsFlightsRoute
   '/ur/tools/gratuity-calculator': typeof UrToolsGratuityCalculatorRoute
@@ -498,6 +538,7 @@ export interface FileRoutesByTo {
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/': typeof IndexRoute
+  '/$': typeof SplatRoute
   '/about': typeof AboutRoute
   '/bahrain': typeof BahrainRoute
   '/contact': typeof ContactRoute
@@ -518,9 +559,11 @@ export interface FileRoutesById {
   '/cities/$': typeof CitiesSplatRoute
   '/gold-rates/$place': typeof GoldRatesPlaceRoute
   '/guides/$slug': typeof GuidesSlugRoute
+  '/jobs/$country': typeof JobsCountryRoute
   '/listings/$': typeof ListingsSplatRoute
   '/properties/$': typeof PropertiesSplatRoute
   '/property/$': typeof PropertySplatRoute
+  '/questions/$country': typeof QuestionsCountryRoute
   '/rates/$pair': typeof RatesPairRoute
   '/tools/flights': typeof ToolsFlightsRoute
   '/tools/gratuity-calculator': typeof ToolsGratuityCalculatorRoute
@@ -549,6 +592,8 @@ export interface FileRoutesById {
   '/api/cron/market': typeof ApiCronMarketRoute
   '/ur/gold-rates/$place': typeof UrGoldRatesPlaceRoute
   '/ur/guides/$slug': typeof UrGuidesSlugRoute
+  '/ur/jobs/$country': typeof UrJobsCountryRoute
+  '/ur/questions/$country': typeof UrQuestionsCountryRoute
   '/ur/rates/$pair': typeof UrRatesPairRoute
   '/ur/tools/flights': typeof UrToolsFlightsRoute
   '/ur/tools/gratuity-calculator': typeof UrToolsGratuityCalculatorRoute
@@ -562,6 +607,7 @@ export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
   fullPaths:
     | '/'
+    | '/$'
     | '/about'
     | '/bahrain'
     | '/contact'
@@ -582,9 +628,11 @@ export interface FileRouteTypes {
     | '/cities/$'
     | '/gold-rates/$place'
     | '/guides/$slug'
+    | '/jobs/$country'
     | '/listings/$'
     | '/properties/$'
     | '/property/$'
+    | '/questions/$country'
     | '/rates/$pair'
     | '/tools/flights'
     | '/tools/gratuity-calculator'
@@ -613,6 +661,8 @@ export interface FileRouteTypes {
     | '/api/cron/market'
     | '/ur/gold-rates/$place'
     | '/ur/guides/$slug'
+    | '/ur/jobs/$country'
+    | '/ur/questions/$country'
     | '/ur/rates/$pair'
     | '/ur/tools/flights'
     | '/ur/tools/gratuity-calculator'
@@ -624,6 +674,7 @@ export interface FileRouteTypes {
   fileRoutesByTo: FileRoutesByTo
   to:
     | '/'
+    | '/$'
     | '/about'
     | '/bahrain'
     | '/contact'
@@ -643,9 +694,11 @@ export interface FileRouteTypes {
     | '/cities/$'
     | '/gold-rates/$place'
     | '/guides/$slug'
+    | '/jobs/$country'
     | '/listings/$'
     | '/properties/$'
     | '/property/$'
+    | '/questions/$country'
     | '/rates/$pair'
     | '/tools/flights'
     | '/tools/gratuity-calculator'
@@ -674,6 +727,8 @@ export interface FileRouteTypes {
     | '/api/cron/market'
     | '/ur/gold-rates/$place'
     | '/ur/guides/$slug'
+    | '/ur/jobs/$country'
+    | '/ur/questions/$country'
     | '/ur/rates/$pair'
     | '/ur/tools/flights'
     | '/ur/tools/gratuity-calculator'
@@ -685,6 +740,7 @@ export interface FileRouteTypes {
   id:
     | '__root__'
     | '/'
+    | '/$'
     | '/about'
     | '/bahrain'
     | '/contact'
@@ -705,9 +761,11 @@ export interface FileRouteTypes {
     | '/cities/$'
     | '/gold-rates/$place'
     | '/guides/$slug'
+    | '/jobs/$country'
     | '/listings/$'
     | '/properties/$'
     | '/property/$'
+    | '/questions/$country'
     | '/rates/$pair'
     | '/tools/flights'
     | '/tools/gratuity-calculator'
@@ -736,6 +794,8 @@ export interface FileRouteTypes {
     | '/api/cron/market'
     | '/ur/gold-rates/$place'
     | '/ur/guides/$slug'
+    | '/ur/jobs/$country'
+    | '/ur/questions/$country'
     | '/ur/rates/$pair'
     | '/ur/tools/flights'
     | '/ur/tools/gratuity-calculator'
@@ -748,6 +808,7 @@ export interface FileRouteTypes {
 }
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
+  SplatRoute: typeof SplatRoute
   AboutRoute: typeof AboutRoute
   BahrainRoute: typeof BahrainRoute
   ContactRoute: typeof ContactRoute
@@ -768,9 +829,11 @@ export interface RootRouteChildren {
   CitiesSplatRoute: typeof CitiesSplatRoute
   GoldRatesPlaceRoute: typeof GoldRatesPlaceRoute
   GuidesSlugRoute: typeof GuidesSlugRoute
+  JobsCountryRoute: typeof JobsCountryRoute
   ListingsSplatRoute: typeof ListingsSplatRoute
   PropertiesSplatRoute: typeof PropertiesSplatRoute
   PropertySplatRoute: typeof PropertySplatRoute
+  QuestionsCountryRoute: typeof QuestionsCountryRoute
   RatesPairRoute: typeof RatesPairRoute
   ToolsFlightsRoute: typeof ToolsFlightsRoute
   ToolsGratuityCalculatorRoute: typeof ToolsGratuityCalculatorRoute
@@ -793,6 +856,13 @@ declare module '@tanstack/react-router' {
       path: '/'
       fullPath: '/'
       preLoaderRoute: typeof IndexRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/$': {
+      id: '/$'
+      path: '/$'
+      fullPath: '/$'
+      preLoaderRoute: typeof SplatRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/about': {
@@ -956,6 +1026,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof GuidesSlugRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/jobs/$country': {
+      id: '/jobs/$country'
+      path: '/jobs/$country'
+      fullPath: '/jobs/$country'
+      preLoaderRoute: typeof JobsCountryRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/listings/': {
       id: '/listings/'
       path: '/listings'
@@ -996,6 +1073,13 @@ declare module '@tanstack/react-router' {
       path: '/property/$'
       fullPath: '/property/$'
       preLoaderRoute: typeof PropertySplatRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/questions/$country': {
+      id: '/questions/$country'
+      path: '/questions/$country'
+      fullPath: '/questions/$country'
+      preLoaderRoute: typeof QuestionsCountryRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/rates/': {
@@ -1166,6 +1250,20 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof UrGuidesSlugRouteImport
       parentRoute: typeof UrRoute
     }
+    '/ur/jobs/$country': {
+      id: '/ur/jobs/$country'
+      path: '/jobs/$country'
+      fullPath: '/ur/jobs/$country'
+      preLoaderRoute: typeof UrJobsCountryRouteImport
+      parentRoute: typeof UrRoute
+    }
+    '/ur/questions/$country': {
+      id: '/ur/questions/$country'
+      path: '/questions/$country'
+      fullPath: '/ur/questions/$country'
+      preLoaderRoute: typeof UrQuestionsCountryRouteImport
+      parentRoute: typeof UrRoute
+    }
     '/ur/rates/': {
       id: '/ur/rates/'
       path: '/rates'
@@ -1227,6 +1325,8 @@ interface UrRouteChildren {
   UrIndexRoute: typeof UrIndexRoute
   UrGoldRatesPlaceRoute: typeof UrGoldRatesPlaceRoute
   UrGuidesSlugRoute: typeof UrGuidesSlugRoute
+  UrJobsCountryRoute: typeof UrJobsCountryRoute
+  UrQuestionsCountryRoute: typeof UrQuestionsCountryRoute
   UrRatesPairRoute: typeof UrRatesPairRoute
   UrToolsFlightsRoute: typeof UrToolsFlightsRoute
   UrToolsGratuityCalculatorRoute: typeof UrToolsGratuityCalculatorRoute
@@ -1253,6 +1353,8 @@ const UrRouteChildren: UrRouteChildren = {
   UrIndexRoute: UrIndexRoute,
   UrGoldRatesPlaceRoute: UrGoldRatesPlaceRoute,
   UrGuidesSlugRoute: UrGuidesSlugRoute,
+  UrJobsCountryRoute: UrJobsCountryRoute,
+  UrQuestionsCountryRoute: UrQuestionsCountryRoute,
   UrRatesPairRoute: UrRatesPairRoute,
   UrToolsFlightsRoute: UrToolsFlightsRoute,
   UrToolsGratuityCalculatorRoute: UrToolsGratuityCalculatorRoute,
@@ -1267,6 +1369,7 @@ const UrRouteWithChildren = UrRoute._addFileChildren(UrRouteChildren)
 
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
+  SplatRoute: SplatRoute,
   AboutRoute: AboutRoute,
   BahrainRoute: BahrainRoute,
   ContactRoute: ContactRoute,
@@ -1287,9 +1390,11 @@ const rootRouteChildren: RootRouteChildren = {
   CitiesSplatRoute: CitiesSplatRoute,
   GoldRatesPlaceRoute: GoldRatesPlaceRoute,
   GuidesSlugRoute: GuidesSlugRoute,
+  JobsCountryRoute: JobsCountryRoute,
   ListingsSplatRoute: ListingsSplatRoute,
   PropertiesSplatRoute: PropertiesSplatRoute,
   PropertySplatRoute: PropertySplatRoute,
+  QuestionsCountryRoute: QuestionsCountryRoute,
   RatesPairRoute: RatesPairRoute,
   ToolsFlightsRoute: ToolsFlightsRoute,
   ToolsGratuityCalculatorRoute: ToolsGratuityCalculatorRoute,

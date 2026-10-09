@@ -1,6 +1,5 @@
 import { createRootRoute, HeadContent, Outlet, Scripts } from "@tanstack/react-router";
 import { useRouterState } from "@tanstack/react-router";
-import { AuthProvider } from "@/lib/auth/provider";
 import { PreviewHostBridge } from "@/components/preview-host-bridge";
 import { SiteFooter, SiteHeader } from "@/components/shell";
 import { CONTACT_EMAIL, isUrduPath, SITE_NAME, SITE_TAGLINE, SITE_URL } from "@/lib/site";
@@ -28,7 +27,7 @@ export const Route = createRootRoute({
         "@type": "Organization",
         name: SITE_NAME,
         url: SITE_URL || "https://apnaaghar.pk",
-        logo: `${SITE_URL || "https://apnaaghar.pk"}/favicon.svg`,
+        logo: `${SITE_URL || "https://apnaaghar.pk"}/logo-512.png`,
         email: CONTACT_EMAIL,
         description: SITE_TAGLINE,
       }),
@@ -76,7 +75,7 @@ function RootShell({ children }: { children: React.ReactNode }) {
       </head>
       <body>
         <PreviewHostBridge />
-        <AuthProvider>{children}</AuthProvider>
+        {children}
         <Scripts />
       </body>
     </html>

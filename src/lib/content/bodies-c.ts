@@ -465,7 +465,7 @@ export const bodiesC: Record<string, ArticleBody> = {
     [
       {
         t: "p",
-        text: "The GAMCA medical test, now booked as Wafid, is the Gulf-approved health check many work and residence visas ask for before a Pakistani worker flies. You book it on the official Wafid portal, on the [book appointment](https://wafid.com/book-appointment/) page, using the passport you will travel on. You do not book it by paying a clinic, a token shop, or a WhatsApp number that promises to “arrange GAMCA”. Apna Ghar checked the public Wafid pages on 9 October 2026. Those pages do not authorise a fixed Pakistan clinic price in rupees. The slip fee is whatever the official payment screen shows on the day you book. Quote that screen. Do not print a rupee total you cannot see on wafid.com.",
+        text: "The GAMCA medical test, now booked as Wafid, is the Gulf-approved health check many work and residence visas ask for before a Pakistani worker flies. You book it on the official Wafid portal, on the [book appointment](https://wafid.com/book-appointment/) page, using the passport you will travel on. You do not book it by paying a clinic, a token shop, or a WhatsApp number that promises to “arrange GAMCA”. Checked on 10 October 2026, that booking page lists a Standard appointment at $10 and a Premium appointment at $25. Standard is the basic slot. Premium is the option that lets you choose the centre and the date. The payment screen is still the bill if those figures move. The medical centre named on the slip collects its own examination fee in person. Wafid does not publish one Pakistan-wide rupee price for that centre fee.",
       },
       {
         t: "h2",
@@ -474,7 +474,7 @@ export const bodiesC: Record<string, ArticleBody> = {
       },
       {
         t: "p",
-        text: "There are two different payments, and mixing them up is how people overpay. The first is the Wafid slip fee. You pay it on the official portal. The amount is the one on that payment screen, in the currency the screen uses, on that day. A third-party “token” shop that takes your passport and books the slip for you adds its own charge. That extra charge is not the government fee. It is the shop’s commission, and you do not need the shop to press the button. The second payment is the examination fee. The medical centre named on your slip collects its own examination fee in person, when you attend. That centre fee is not printed as a Pakistan-wide rupee total on the public Wafid pages we use. Ask the centre what it charges when you arrive, and take a receipt in the centre’s name.",
+        text: "There are two different payments, and mixing them up is how people overpay. The first is the Wafid slip fee on [wafid.com/book-appointment](https://wafid.com/book-appointment/). Checked on 10 October 2026, the page shows Standard at $10 and Premium at $25. Pay the figure on the payment screen that day, in the currency the screen uses. A third-party “token” shop that takes your passport and books the slip for you adds its own charge. That extra charge is not the government fee. The second payment is the examination fee. The medical centre named on your slip collects it in person. That centre fee is not printed as a Pakistan-wide rupee total on the public Wafid pages. Ask the centre, and take a receipt in the centre’s name.",
       },
       {
         t: "ol",
@@ -528,7 +528,7 @@ export const bodiesC: Record<string, ArticleBody> = {
     [
       {
         q: "What is the GAMCA fee in Pakistan?",
-        a: "Checked on 9 October 2026, the public Wafid pages do not authorise a fixed Pakistan clinic price. The slip fee is whatever the official payment screen shows on the day you book. The medical centre collects its own examination fee in person. A token shop’s rupee total is not the government fee. Quote the screen, not a poster.",
+        a: "Checked on 10 October 2026, the official booking page at wafid.com/book-appointment/ lists a Standard appointment at $10 and a Premium appointment at $25. The medical centre collects a separate examination fee in person, and Wafid does not publish one Pakistan-wide rupee total for that. A token shop’s package is not the slip fee.",
       },
       {
         q: "Can I choose the medical centre?",

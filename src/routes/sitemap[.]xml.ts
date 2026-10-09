@@ -13,47 +13,67 @@ export const Route = createFileRoute("/sitemap.xml")({
     handlers: {
       GET: async () => {
         const translated = new Set(Object.keys(urduArticles));
-        const paths = [
-          "/",
-          "/ur",
-          "/rates",
-          "/ur/rates",
-          "/gold-rates",
-          "/ur/gold-rates",
-          "/guides",
-          "/ur/guides",
-          "/tools/salary-converter",
-          "/ur/tools/salary-converter",
-          "/tools/gratuity-calculator",
-          "/ur/tools/gratuity-calculator",
-          "/tools/remittance",
-          "/ur/tools/remittance",
-          "/tools/flights",
-          "/ur/tools/flights",
-          "/about",
-          "/ur/about",
-          "/contact",
-          "/ur/contact",
-          "/privacy",
-          "/ur/privacy",
-          "/terms",
-          "/ur/terms",
-          "/disclaimer",
-          "/ur/disclaimer",
-          "/editorial",
-          "/ur/editorial",
-          ...countries.flatMap((country) => [`/${country.slug}`, `/ur/${country.slug}`]),
-          ...pairs.flatMap((pair) => [`/rates/${pair.slug}`, `/ur/rates/${pair.slug}`]),
-          ...goldPlaces.flatMap((place) => [`/gold-rates/${place.slug}`, `/ur/gold-rates/${place.slug}`]),
+        const today = "2026-10-10";
+        const entries: { path: string; lastmod: string }[] = [
+          ["/", today],
+          ["/ur", today],
+          ["/rates", today],
+          ["/ur/rates", today],
+          ["/gold-rates", today],
+          ["/ur/gold-rates", today],
+          ["/guides", today],
+          ["/ur/guides", today],
+          ["/tools/salary-converter", today],
+          ["/ur/tools/salary-converter", today],
+          ["/tools/gratuity-calculator", today],
+          ["/ur/tools/gratuity-calculator", today],
+          ["/tools/remittance", today],
+          ["/ur/tools/remittance", today],
+          ["/tools/flights", today],
+          ["/ur/tools/flights", today],
+          ["/about", today],
+          ["/ur/about", today],
+          ["/contact", today],
+          ["/ur/contact", today],
+          ["/privacy", today],
+          ["/ur/privacy", today],
+          ["/terms", today],
+          ["/ur/terms", today],
+          ["/disclaimer", today],
+          ["/ur/disclaimer", today],
+          ["/editorial", today],
+          ["/ur/editorial", today],
+          ...countries.flatMap((country) => [
+            [`/${country.slug}`, today],
+            [`/ur/${country.slug}`, today],
+            [`/jobs/${country.slug}`, today],
+            [`/ur/jobs/${country.slug}`, today],
+            [`/questions/${country.slug}`, today],
+            [`/ur/questions/${country.slug}`, today],
+          ]),
+          ...pairs.flatMap((pair) => [
+            [`/rates/${pair.slug}`, today],
+            [`/ur/rates/${pair.slug}`, today],
+          ]),
+          ...goldPlaces.flatMap((place) => [
+            [`/gold-rates/${place.slug}`, today],
+            [`/ur/gold-rates/${place.slug}`, today],
+          ]),
           ...guides.flatMap((guide) =>
-            translated.has(guide.slug)
+            (translated.has(guide.slug)
               ? [`/guides/${guide.slug}`, `/ur/guides/${guide.slug}`]
-              : [`/guides/${guide.slug}`],
+              : [`/guides/${guide.slug}`]
+            ).map((path) => [path, guide.updated]),
           ),
-        ];
+        ].map(([path, lastmod]) => ({ path, lastmod }));
         const body = `<?xml version="1.0" encoding="UTF-8"?>
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
-${paths.map((path) => `  <url><loc>${loc(path)}</loc></url>`).join("\n")}
+${entries
+  .map(
+    (entry) =>
+      `  <url><loc>${loc(entry.path)}</loc><lastmod>${entry.lastmod}</lastmod></url>`,
+  )
+  .join("\n")}
 </urlset>`;
         return new Response(body, {
           headers: {
