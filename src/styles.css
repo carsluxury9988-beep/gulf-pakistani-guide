@@ -1,0 +1,89 @@
+@import "tailwindcss";
+
+@theme {
+  --color-bg: #f7f6f2;
+  --color-surface: #fffcf7;
+  --color-ink: #14241c;
+  --color-muted: #4e5e56;
+  --color-line: #e3ddd0;
+  --color-green: #0f3d2e;
+  --color-green-2: #1b5c45;
+  --color-on-green: #f6f3ea;
+  --color-gold: #c6a15a;
+  --color-gold-ink: #6e5320;
+  --color-gold-soft: #f4ecd9;
+  --color-danger: #7c2d2d;
+  --color-on-danger: #fff7f4;
+  --font-sans: "Source Sans 3", "Segoe UI", sans-serif;
+  --font-display: "Fraunces", Georgia, serif;
+  --font-urdu: "Noto Nastaliq Urdu", "Noto Naskh Arabic", serif;
+  --radius-md: 0.5rem;
+  --radius-lg: 0.75rem;
+  --radius-xl: 1rem;
+}
+
+@layer base {
+  html {
+    -webkit-font-smoothing: antialiased;
+    text-rendering: optimizeLegibility;
+  }
+
+  body {
+    margin: 0;
+    background: var(--color-bg);
+    color: var(--color-ink);
+    font-family: var(--font-sans);
+    font-size: 1.0625rem;
+    line-height: 1.55;
+  }
+
+  h1, h2, h3 {
+    text-wrap: balance;
+  }
+
+  p {
+    text-wrap: pretty;
+  }
+
+  button:not(:disabled),
+  [role="button"]:not(:disabled) {
+    cursor: pointer;
+  }
+
+  :focus-visible {
+    outline: 2px solid var(--color-green);
+    outline-offset: 2px;
+  }
+
+  html[dir="rtl"] body {
+    font-family: var(--font-urdu);
+    line-height: 2.15;
+    font-size: 1.125rem;
+  }
+
+  html[dir="rtl"] h1,
+  html[dir="rtl"] h2,
+  html[dir="rtl"] h3 {
+    line-height: 1.9;
+  }
+}
+
+@layer components {
+  .num {
+    direction: ltr;
+    unicode-bidi: isolate;
+    font-family: var(--font-sans);
+    font-variant-numeric: tabular-nums;
+  }
+
+  .prose-guide p + p {
+    margin-top: 0.85rem;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after {
+    animation-duration: 0.01ms !important;
+    transition-duration: 0.01ms !important;
+  }
+}
