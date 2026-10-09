@@ -2,7 +2,7 @@ import { createRootRoute, HeadContent, Outlet, Scripts } from "@tanstack/react-r
 import { useRouterState } from "@tanstack/react-router";
 import { PreviewHostBridge } from "@/components/preview-host-bridge";
 import { SiteFooter, SiteHeader } from "@/components/shell";
-import { CONTACT_EMAIL, isUrduPath, SITE_NAME, SITE_TAGLINE, SITE_URL } from "@/lib/site";
+import { isUrduPath, SITE_NAME, SITE_TAGLINE, SITE_URL } from "@/lib/site";
 import { gaId, gscToken, ld } from "@/lib/seo";
 import appCss from "../styles.css?url";
 
@@ -28,7 +28,6 @@ export const Route = createRootRoute({
         name: SITE_NAME,
         url: SITE_URL || "https://apnaaghar.pk",
         logo: `${SITE_URL || "https://apnaaghar.pk"}/logo-512.png`,
-        email: CONTACT_EMAIL,
         description: SITE_TAGLINE,
       }),
       ld({

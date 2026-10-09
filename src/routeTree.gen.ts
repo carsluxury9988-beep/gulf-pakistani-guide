@@ -28,7 +28,6 @@ import { Route as TermsRouteImport } from './routes/terms'
 import { Route as UaeRouteImport } from './routes/uae'
 import { Route as UrRouteImport } from './routes/ur'
 import { Route as AboutIndexRouteImport } from './routes/about/index'
-import { Route as AboutSalimKhanRouteImport } from './routes/about/salim-khan'
 import { Route as CitiesIndexRouteImport } from './routes/cities/index'
 import { Route as CitiesSplatRouteImport } from './routes/cities/$'
 import { Route as GoldRatesIndexRouteImport } from './routes/gold-rates/index'
@@ -63,7 +62,6 @@ import { Route as UrTermsRouteImport } from './routes/ur/terms'
 import { Route as UrUaeRouteImport } from './routes/ur/uae'
 import { Route as ApiCronMarketRouteImport } from './routes/api/cron/market'
 import { Route as UrAboutIndexRouteImport } from './routes/ur/about/index'
-import { Route as UrAboutSalimKhanRouteImport } from './routes/ur/about/salim-khan'
 import { Route as UrGoldRatesIndexRouteImport } from './routes/ur/gold-rates/index'
 import { Route as UrGoldRatesPlaceRouteImport } from './routes/ur/gold-rates/$place'
 import { Route as UrGuidesIndexRouteImport } from './routes/ur/guides/index'
@@ -170,11 +168,6 @@ const UrRoute = UrRouteImport.update({
 const AboutIndexRoute = AboutIndexRouteImport.update({
   id: '/about/',
   path: '/about/',
-  getParentRoute: () => rootRouteImport,
-} as any)
-const AboutSalimKhanRoute = AboutSalimKhanRouteImport.update({
-  id: '/about/salim-khan',
-  path: '/about/salim-khan',
   getParentRoute: () => rootRouteImport,
 } as any)
 const CitiesIndexRoute = CitiesIndexRouteImport.update({
@@ -347,11 +340,6 @@ const UrAboutIndexRoute = UrAboutIndexRouteImport.update({
   path: '/about/',
   getParentRoute: () => UrRoute,
 } as any)
-const UrAboutSalimKhanRoute = UrAboutSalimKhanRouteImport.update({
-  id: '/about/salim-khan',
-  path: '/about/salim-khan',
-  getParentRoute: () => UrRoute,
-} as any)
 const UrGoldRatesIndexRoute = UrGoldRatesIndexRouteImport.update({
   id: '/gold-rates/',
   path: '/gold-rates/',
@@ -433,7 +421,6 @@ export interface FileRoutesByFullPath {
   '/terms': typeof TermsRoute
   '/uae': typeof UaeRoute
   '/ur': typeof UrRouteWithChildren
-  '/about/salim-khan': typeof AboutSalimKhanRoute
   '/cities/$': typeof CitiesSplatRoute
   '/gold-rates/$place': typeof GoldRatesPlaceRoute
   '/guides/$slug': typeof GuidesSlugRoute
@@ -468,7 +455,6 @@ export interface FileRoutesByFullPath {
   '/rates/': typeof RatesIndexRoute
   '/ur/': typeof UrIndexRoute
   '/api/cron/market': typeof ApiCronMarketRoute
-  '/ur/about/salim-khan': typeof UrAboutSalimKhanRoute
   '/ur/gold-rates/$place': typeof UrGoldRatesPlaceRoute
   '/ur/guides/$slug': typeof UrGuidesSlugRoute
   '/ur/jobs/$country': typeof UrJobsCountryRoute
@@ -501,7 +487,6 @@ export interface FileRoutesByTo {
   '/sitemap.xml': typeof SitemapDotxmlRoute
   '/terms': typeof TermsRoute
   '/uae': typeof UaeRoute
-  '/about/salim-khan': typeof AboutSalimKhanRoute
   '/cities/$': typeof CitiesSplatRoute
   '/gold-rates/$place': typeof GoldRatesPlaceRoute
   '/guides/$slug': typeof GuidesSlugRoute
@@ -536,7 +521,6 @@ export interface FileRoutesByTo {
   '/rates': typeof RatesIndexRoute
   '/ur': typeof UrIndexRoute
   '/api/cron/market': typeof ApiCronMarketRoute
-  '/ur/about/salim-khan': typeof UrAboutSalimKhanRoute
   '/ur/gold-rates/$place': typeof UrGoldRatesPlaceRoute
   '/ur/guides/$slug': typeof UrGuidesSlugRoute
   '/ur/jobs/$country': typeof UrJobsCountryRoute
@@ -571,7 +555,6 @@ export interface FileRoutesById {
   '/terms': typeof TermsRoute
   '/uae': typeof UaeRoute
   '/ur': typeof UrRouteWithChildren
-  '/about/salim-khan': typeof AboutSalimKhanRoute
   '/cities/$': typeof CitiesSplatRoute
   '/gold-rates/$place': typeof GoldRatesPlaceRoute
   '/guides/$slug': typeof GuidesSlugRoute
@@ -606,7 +589,6 @@ export interface FileRoutesById {
   '/rates/': typeof RatesIndexRoute
   '/ur/': typeof UrIndexRoute
   '/api/cron/market': typeof ApiCronMarketRoute
-  '/ur/about/salim-khan': typeof UrAboutSalimKhanRoute
   '/ur/gold-rates/$place': typeof UrGoldRatesPlaceRoute
   '/ur/guides/$slug': typeof UrGuidesSlugRoute
   '/ur/jobs/$country': typeof UrJobsCountryRoute
@@ -642,7 +624,6 @@ export interface FileRouteTypes {
     | '/terms'
     | '/uae'
     | '/ur'
-    | '/about/salim-khan'
     | '/cities/$'
     | '/gold-rates/$place'
     | '/guides/$slug'
@@ -677,7 +658,6 @@ export interface FileRouteTypes {
     | '/rates/'
     | '/ur/'
     | '/api/cron/market'
-    | '/ur/about/salim-khan'
     | '/ur/gold-rates/$place'
     | '/ur/guides/$slug'
     | '/ur/jobs/$country'
@@ -710,7 +690,6 @@ export interface FileRouteTypes {
     | '/sitemap.xml'
     | '/terms'
     | '/uae'
-    | '/about/salim-khan'
     | '/cities/$'
     | '/gold-rates/$place'
     | '/guides/$slug'
@@ -745,7 +724,6 @@ export interface FileRouteTypes {
     | '/rates'
     | '/ur'
     | '/api/cron/market'
-    | '/ur/about/salim-khan'
     | '/ur/gold-rates/$place'
     | '/ur/guides/$slug'
     | '/ur/jobs/$country'
@@ -779,7 +757,6 @@ export interface FileRouteTypes {
     | '/terms'
     | '/uae'
     | '/ur'
-    | '/about/salim-khan'
     | '/cities/$'
     | '/gold-rates/$place'
     | '/guides/$slug'
@@ -814,7 +791,6 @@ export interface FileRouteTypes {
     | '/rates/'
     | '/ur/'
     | '/api/cron/market'
-    | '/ur/about/salim-khan'
     | '/ur/gold-rates/$place'
     | '/ur/guides/$slug'
     | '/ur/jobs/$country'
@@ -849,7 +825,6 @@ export interface RootRouteChildren {
   TermsRoute: typeof TermsRoute
   UaeRoute: typeof UaeRoute
   UrRoute: typeof UrRouteWithChildren
-  AboutSalimKhanRoute: typeof AboutSalimKhanRoute
   CitiesSplatRoute: typeof CitiesSplatRoute
   GoldRatesPlaceRoute: typeof GoldRatesPlaceRoute
   GuidesSlugRoute: typeof GuidesSlugRoute
@@ -1007,13 +982,6 @@ declare module '@tanstack/react-router' {
       path: '/about'
       fullPath: '/about/'
       preLoaderRoute: typeof AboutIndexRouteImport
-      parentRoute: typeof rootRouteImport
-    }
-    '/about/salim-khan': {
-      id: '/about/salim-khan'
-      path: '/about/salim-khan'
-      fullPath: '/about/salim-khan'
-      preLoaderRoute: typeof AboutSalimKhanRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/cities/': {
@@ -1254,13 +1222,6 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof UrAboutIndexRouteImport
       parentRoute: typeof UrRoute
     }
-    '/ur/about/salim-khan': {
-      id: '/ur/about/salim-khan'
-      path: '/about/salim-khan'
-      fullPath: '/ur/about/salim-khan'
-      preLoaderRoute: typeof UrAboutSalimKhanRouteImport
-      parentRoute: typeof UrRoute
-    }
     '/ur/gold-rates/': {
       id: '/ur/gold-rates/'
       path: '/gold-rates'
@@ -1361,7 +1322,6 @@ interface UrRouteChildren {
   UrTermsRoute: typeof UrTermsRoute
   UrUaeRoute: typeof UrUaeRoute
   UrIndexRoute: typeof UrIndexRoute
-  UrAboutSalimKhanRoute: typeof UrAboutSalimKhanRoute
   UrGoldRatesPlaceRoute: typeof UrGoldRatesPlaceRoute
   UrGuidesSlugRoute: typeof UrGuidesSlugRoute
   UrJobsCountryRoute: typeof UrJobsCountryRoute
@@ -1390,7 +1350,6 @@ const UrRouteChildren: UrRouteChildren = {
   UrTermsRoute: UrTermsRoute,
   UrUaeRoute: UrUaeRoute,
   UrIndexRoute: UrIndexRoute,
-  UrAboutSalimKhanRoute: UrAboutSalimKhanRoute,
   UrGoldRatesPlaceRoute: UrGoldRatesPlaceRoute,
   UrGuidesSlugRoute: UrGuidesSlugRoute,
   UrJobsCountryRoute: UrJobsCountryRoute,
@@ -1427,7 +1386,6 @@ const rootRouteChildren: RootRouteChildren = {
   TermsRoute: TermsRoute,
   UaeRoute: UaeRoute,
   UrRoute: UrRouteWithChildren,
-  AboutSalimKhanRoute: AboutSalimKhanRoute,
   CitiesSplatRoute: CitiesSplatRoute,
   GoldRatesPlaceRoute: GoldRatesPlaceRoute,
   GuidesSlugRoute: GuidesSlugRoute,

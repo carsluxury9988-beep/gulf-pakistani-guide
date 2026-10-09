@@ -1005,7 +1005,7 @@ export function guideHead(payload: GuidePayload, updated: string): { meta: any[]
         dateModified: updated,
         image: absUrl("/og.jpg"),
         description,
-        author: { "@type": "Person", name: OWNER_NAME, url: absUrl("/about/salim-khan") },
+        author: { "@type": "Organization", name: SITE_NAME, url: absUrl("/") },
         publisher: { "@type": "Organization", name: SITE_NAME, logo: { "@type": "ImageObject", url: absUrl("/logo-512.png") } },
       }),
       ld({
@@ -1038,7 +1038,7 @@ export function GuideArticle({ payload }: { payload: GuidePayload }) {
       />
       <p className="mt-4 text-sm text-muted">
         {ur ? "لکھا" : "By"}{" "}
-        <A href={h("/about/salim-khan")} className="font-semibold text-green underline">{OWNER_NAME}</A>
+        <A href={h("/about")} className="font-semibold text-green underline">{ur ? "اپنا گھر" : SITE_NAME}</A>
       </p>
       {!payload.translated ? (
         <p className="mt-3 rounded-lg bg-gold-soft px-3 py-2 text-sm">
@@ -1154,13 +1154,13 @@ export function legalHead(slug: string, locale: Locale) {
   const path = hrefFor(ur, legalPath(slug));
   const base = pageMeta({ title, description, path, locale });
   const extra =
-    slug === "about" || slug === "salim-khan"
+    slug === "about"
       ? [
           ld({
             "@context": "https://schema.org",
             "@type": "Person",
             name: OWNER_NAME,
-            url: absUrl("/about/salim-khan"),
+            url: absUrl(ur ? "/ur/about" : "/about"),
             jobTitle: "Publisher",
             email: CONTACT_EMAIL,
             address: { "@type": "PostalAddress", addressLocality: "Islamabad", addressCountry: "PK" },
@@ -1177,11 +1177,6 @@ export function LegalView({ slug, locale }: { slug: string; locale: Locale }) {
   const paragraphs = ur ? copy.ur : copy.en;
   return (
     <Page title={ur ? copy.urTitle : copy.enTitle}>
-      {slug === "contact" ? (
-        <p className="text-lg">
-          <a className="font-semibold text-green underline" href={`mailto:${CONTACT_EMAIL}`}>{CONTACT_EMAIL}</a>
-        </p>
-      ) : null}
       <div className="mt-4 grid max-w-3xl gap-3">
         {paragraphs.map((paragraph) => (
           <p key={paragraph.slice(0, 48)}><Rich text={paragraph} /></p>
