@@ -1,5 +1,7 @@
 import snapshot from "@/data/market-snapshot.json";
-import type { Market } from "@/lib/format";
+import seedGold from "@/data/local-gold.json";
+import type { DubaiGold, Market, PakistanGold } from "@/lib/format";
+import { readStoredMarket, writeStoredMarket } from "@/lib/market-store";
 
 type UsdFile = { date?: string; usd?: Record<string, number> };
 type XauFile = { date?: string; xau?: Record<string, number> };
@@ -20,6 +22,153 @@ function pickUsd(raw: Record<string, number> | undefined) {
   return usd;
 }
 
+function numEnv(name: string) {
+  const raw = process.env[name];
+  if (!raw) return null;
+  const value = Number(raw);
+  return Number.isFinite(value) && value > 0 ? value : null;
+}
+
+function seedPakistan(stale: boolean): PakistanGold {
+  return {
+    asOf: seedGold.pakistan.asOf,
+    source: seedGold.pakistan.source,
+    sourceUrl: seedGold.pakistan.sourceUrl,
+    tola24: seedGold.pakistan.tola24,
+    tola22: seedGold.pakistan.tola22,
+    stale,
+  };
+}
+
+function seedDubai(stale: boolean): DubaiGold {
+  return {
+    asOf: seedGold.dubai.asOf,
+    source: seedGold.dubai.source,
+    sourceUrl: seedGold.dubai.sourceUrl,
+    gram24: seedGold.dubai.gram24,
+    gram22: seedGold.dubai.gram22,
+    gram21: seedGold.dubai.gram21,
+    gram18: seedGold.dubai.gram18,
+    stale,
+  };
+}
+
+function adminBoards(): { pakistan: PakistanGold | null; dubai: DubaiGold | null } {
+  const tola24 = numEnv("GOLD_PK_TOLA_24");
+  const tola22 = numEnv("GOLD_PK_TOLA_22");
+  const gram24 = numEnv("GOLD_DXB_GRAM_24");
+  const gram22 = numEnv("GOLD_DXB_GRAM_22");
+  const now = new Date().toISOString();
+  return {
+    pakistan:
+      tola24 && tola22
+        ? {
+            asOf: process.env.GOLD_PK_ASOF || now,
+            source: process.env.GOLD_PK_SOURCE || "Sarafa rate entered by the editor",
+            sourceUrl: process.env.GOLD_PK_SOURCE_URL || "https://www.pakgold.net/gold-rate-cities",
+            tola24,
+            tola22,
+            stale: false,
+          }
+        : null,
+    dubai:
+      gram24 && gram22
+        ? {
+            asOf: process.env.GOLD_DXB_ASOF || now,
+            source: process.env.GOLD_DXB_SOURCE || "Dubai retail rate entered by the editor",
+            sourceUrl: process.env.GOLD_DXB_SOURCE_URL || "https://www.khaleejtimes.com/gold-forex",
+            gram24,
+            gram22,
+            gram21: numEnv("GOLD_DXB_GRAM_21") ?? (gram22 * 21) / 22,
+            gram18: numEnv("GOLD_DXB_GRAM_18") ?? gram24 * 0.75,
+            stale: false,
+          }
+        : null,
+  };
+}
+
+function parseBoardNumber(chunk: string) {
+  const match = chunk.replace(/,/g, "").match(/(\d{2,7}(?:\.\d+)?)/);
+  if (!match) return null;
+  const value = Number(match[1]);
+  return Number.isFinite(value) && value > 0 ? value : null;
+}
+
+async function fetchText(url: string) {
+  const ctrl = new AbortController();
+  const timer = setTimeout(() => ctrl.abort(), 8000);
+  try {
+    const res = await fetch(url, {
+      signal: ctrl.signal,
+      headers: { accept: "text/html,application/json", "user-agent": "ApnaGharRates/1.0" },
+    });
+    if (!res.ok) throw new Error(String(res.status));
+    return await res.text();
+  } finally {
+    clearTimeout(timer);
+  }
+}
+
+async function fetchPakistanBoard(): Promise<PakistanGold | null> {
+  try {
+    const html = await fetchText("https://www.pakgold.net/gold-rate-cities");
+    const row24 = html.match(/24K[\s\S]{0,80}?(\d{3},\d{3}|\d{6})/);
+    const row22 = html.match(/22K[\s\S]{0,80}?(\d{3},\d{3}|\d{6})/);
+    const tola24 = row24 ? parseBoardNumber(row24[1]) : null;
+    const tola22 = row22 ? parseBoardNumber(row22[1]) : null;
+    if (!tola24 || !tola22 || tola24 < 100000 || tola22 < 100000 || tola22 >= tola24) return null;
+    return {
+      asOf: new Date().toISOString(),
+      source: "Rawalpindi–Islamabad Sarafa benchmark (PakGold)",
+      sourceUrl: "https://www.pakgold.net/gold-rate-cities",
+      tola24,
+      tola22,
+      stale: false,
+    };
+  } catch {
+    return null;
+  }
+}
+
+async function fetchDubaiBoard(): Promise<DubaiGold | null> {
+  try {
+    const html = await fetchText("https://www.khaleejtimes.com/gold-forex");
+    const block = html.match(/24K[\s\S]{0,400}?22K[\s\S]{0,200}/i);
+    if (!block) return null;
+    const nums = [...block[0].matchAll(/(\d{3}(?:\.\d{1,2})?)/g)].map((item) => Number(item[1]));
+    const grams = nums.filter((value) => value > 300 && value < 800);
+    const gram24 = grams[0];
+    const gram22 = grams.find((value) => value < gram24 && value > gram24 * 0.85);
+    if (!gram24 || !gram22) return null;
+    return {
+      asOf: new Date().toISOString(),
+      source: "Khaleej Times UAE gold retail board",
+      sourceUrl: "https://www.khaleejtimes.com/gold-forex",
+      gram24,
+      gram22,
+      gram21: gram24 * (21 / 24),
+      gram18: gram24 * (18 / 24),
+      stale: false,
+    };
+  } catch {
+    return null;
+  }
+}
+
+async function resolveLocalGold(previous: Market["localGold"] | null) {
+  const admin = adminBoards();
+  const [pakistanLive, dubaiLive] = await Promise.all([
+    admin.pakistan ? Promise.resolve(admin.pakistan) : fetchPakistanBoard(),
+    admin.dubai ? Promise.resolve(admin.dubai) : fetchDubaiBoard(),
+  ]);
+  const pakistan = pakistanLive ?? previous?.pakistan ?? seedPakistan(true);
+  const dubai = dubaiLive ?? previous?.dubai ?? seedDubai(true);
+  return {
+    pakistan: pakistanLive ? pakistan : { ...pakistan, stale: true },
+    dubai: dubaiLive ? dubai : { ...dubai, stale: true },
+  };
+}
+
 function snapshotMarket(): Market {
   const history = Object.entries(snapshot.history)
     .map(([date, usd]) => ({ date, usd: pickUsd(usd)! }))
@@ -33,6 +182,7 @@ function snapshotMarket(): Market {
     usd: pickUsd(snapshot.usd)!,
     xauUsd: snapshot.xauUsd,
     history,
+    localGold: { pakistan: seedPakistan(true), dubai: seedDubai(true) },
   };
 }
 
@@ -73,11 +223,11 @@ function historyDates(today: Date) {
   return dates;
 }
 
-export async function loadMarket(): Promise<Market> {
-  if (cache && Date.now() - cache.at < TTL_MS) return cache.data;
+export async function loadMarket(opts?: { refresh?: boolean }): Promise<Market> {
+  if (!opts?.refresh && cache && Date.now() - cache.at < TTL_MS) return cache.data;
   const saved = snapshotMarket();
   try {
-    const [usdFile, xauFile] = await Promise.all([
+    const [usdFile, xauFile, stored] = await Promise.all([
       firstJson<UsdFile>([
         "https://cdn.jsdelivr.net/npm/@fawazahmed0/currency-api@latest/v1/currencies/usd.min.json",
         "https://latest.currency-api.pages.dev/v1/currencies/usd.json",
@@ -86,6 +236,7 @@ export async function loadMarket(): Promise<Market> {
         "https://cdn.jsdelivr.net/npm/@fawazahmed0/currency-api@latest/v1/currencies/xau.min.json",
         "https://latest.currency-api.pages.dev/v1/currencies/xau.json",
       ]),
+      readStoredMarket().catch(() => null),
     ]);
     const usd = pickUsd(usdFile.usd);
     const xauUsd = xauFile.xau?.usd;
@@ -107,6 +258,7 @@ export async function loadMarket(): Promise<Market> {
       }),
     );
     const history = points.filter((point): point is NonNullable<typeof point> => point !== null);
+    const localGold = await resolveLocalGold(stored?.localGold ?? null);
     const data: Market = {
       asOf: usdFile.date || xauFile.date || saved.asOf,
       fetchedAt: new Date().toISOString(),
@@ -115,10 +267,17 @@ export async function loadMarket(): Promise<Market> {
       usd,
       xauUsd,
       history: history.length >= 2 ? history : saved.history,
+      localGold,
     };
     cache = { at: Date.now(), data };
+    void writeStoredMarket(data);
     return data;
   } catch {
+    const stored = await readStoredMarket().catch(() => null);
+    if (stored?.usd && stored.xauUsd) {
+      cache = { at: Date.now(), data: stored };
+      return stored;
+    }
     return saved;
   }
 }

@@ -23,13 +23,14 @@ export const getGuide = createServerFn({ method: "GET" })
   .handler(async ({ data }): Promise<GuidePayload | null> => {
     const meta = guideBySlug(data.slug);
     if (!meta) return null;
-    const [{ bodiesA }, { bodiesB }, { bodiesC }, { urduArticles }] = await Promise.all([
+    const [{ bodiesA }, { bodiesB }, { bodiesC }, { bodiesD }, { urduArticles }] = await Promise.all([
       import("@/lib/content/bodies-a"),
       import("@/lib/content/bodies-b"),
       import("@/lib/content/bodies-c"),
+      import("@/lib/content/bodies-d"),
       import("@/lib/content/articles-ur"),
     ]);
-    const english = bodiesA[data.slug] ?? bodiesB[data.slug] ?? bodiesC[data.slug];
+    const english = bodiesA[data.slug] ?? bodiesB[data.slug] ?? bodiesC[data.slug] ?? bodiesD[data.slug];
     if (!english) return null;
     if (data.locale === "ur" && urduArticles[data.slug]) {
       return {

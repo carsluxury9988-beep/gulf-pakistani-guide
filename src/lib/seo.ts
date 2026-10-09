@@ -1,25 +1,36 @@
-import { absUrl, type Locale } from "@/lib/site";
+import { absUrl, SITE_NAME, SITE_URL, type Locale } from "@/lib/site";
 
 const GA_PATTERN = /^G-[A-Z0-9]+$/;
+
+export const MARKET_CACHE = {
+  "Cache-Control": "s-maxage=10800, stale-while-revalidate=10800",
+} as const;
 
 export function pageMeta(opts: {
   title: string;
   description: string;
   path: string;
   locale?: Locale;
+  /** When false, the Urdu URL is not advertised (untranslated guide). */
+  urAlternate?: boolean;
 }): { meta: any[]; links: any[] } {
-  const url = absUrl(opts.path);
-  const enPath = opts.path.replace(/^\/ur(?=\/|$)/, "") || "/";
+  const canonicalPath = opts.path;
+  const url = absUrl(canonicalPath);
+  const enPath = canonicalPath.replace(/^\/ur(?=\/|$)/, "") || "/";
   const urPath = enPath === "/" ? "/ur" : `/ur${enPath}`;
+  const image = absUrl("/og.jpg");
   const meta: Array<Record<string, unknown>> = [
     { title: opts.title },
     { name: "description", content: opts.description },
     { property: "og:title", content: opts.title },
     { property: "og:description", content: opts.description },
     { property: "og:type", content: "website" },
+    { property: "og:site_name", content: SITE_NAME },
+    { property: "og:image", content: image },
     { name: "twitter:card", content: "summary_large_image" },
     { name: "twitter:title", content: opts.title },
     { name: "twitter:description", content: opts.description },
+    { name: "twitter:image", content: image },
   ];
   if (url.startsWith("http")) {
     meta.push({ property: "og:url", content: url });
@@ -27,9 +38,11 @@ export function pageMeta(opts: {
   const links = [
     { rel: "canonical", href: url },
     { rel: "alternate", hrefLang: "en", href: absUrl(enPath) },
-    { rel: "alternate", hrefLang: "ur", href: absUrl(urPath) },
     { rel: "alternate", hrefLang: "x-default", href: absUrl(enPath) },
   ];
+  if (opts.urAlternate !== false) {
+    links.splice(2, 0, { rel: "alternate", hrefLang: "ur", href: absUrl(urPath) });
+  }
   return { meta, links };
 }
 
@@ -53,6 +66,10 @@ export function breadcrumbLd(items: { name: string; path: string }[]) {
 export function gaId() {
   const id = import.meta.env.VITE_GA_MEASUREMENT_ID ?? "";
   return GA_PATTERN.test(id) ? id : "";
+}
+
+export function siteOrigin() {
+  return SITE_URL || "https://apnaaghar.pk";
 }
 
 export function gscToken() {

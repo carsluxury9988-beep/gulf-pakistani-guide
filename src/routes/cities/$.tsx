@@ -1,0 +1,6 @@
+import { createFileRoute } from "@tanstack/react-router";
+import { redirectHome } from "@/lib/go-home";
+
+export const Route = createFileRoute("/cities/$")({
+  beforeLoad: redirectHome,
+});

@@ -1,8 +1,14 @@
-export const SITE_NAME = "GulfPK";
+export const SITE_NAME = "Apna Ghar";
 
-export const SITE_URL = (import.meta.env.VITE_SITE_URL ?? "").replace(/\/$/, "");
+export const SITE_TAGLINE = "Guides, rates and tools for Pakistanis in the Gulf.";
 
-export const CONTACT_EMAIL = "hello@gulfpk.guide";
+export const SITE_URL = (import.meta.env.VITE_SITE_URL || "https://apnaaghar.pk").replace(/\/$/, "");
+
+export const CONTACT_EMAIL = "salimpk742@gmail.com";
+
+export const OWNER_NAME = "Salim Khan";
+
+export const OWNER_CITY = "Islamabad, Pakistan";
 
 /** Monetisation stays off until you flip these flags. No affiliate links are shipped. */
 export const features = {
@@ -123,6 +129,7 @@ export type Pair = {
   name: string;
   countrySlug: string;
   peg: string;
+  pegUr: string;
 };
 
 export const pairs: Pair[] = [
@@ -132,6 +139,8 @@ export const pairs: Pair[] = [
     name: "UAE dirham",
     countrySlug: "uae",
     peg: "The UAE dirham is pegged to the US dollar at about 3.6725 dirhams per dollar. The dirham–rupee rate mostly follows the dollar–rupee rate.",
+    pegUr:
+      "اماراتی درہم ڈالر سے تقریباً ۳.۶۷۲۵ درہم فی ڈالر کے حساب سے جڑا ہے۔ درہم اور روپے کا ریٹ زیادہ تر ڈالر اور روپے کے ریٹ کے ساتھ چلتا ہے۔",
   },
   {
     slug: "sar-to-pkr",
@@ -139,6 +148,8 @@ export const pairs: Pair[] = [
     name: "Saudi riyal",
     countrySlug: "saudi-arabia",
     peg: "The Saudi riyal is pegged to the US dollar at 3.75 riyals per dollar. The riyal–rupee rate mostly follows the dollar–rupee rate.",
+    pegUr:
+      "سعودی ریال ڈالر سے ۳.۷۵ ریال فی ڈالر کے حساب سے جڑا ہے۔ ریال اور روپے کا ریٹ زیادہ تر ڈالر اور روپے کے ساتھ چلتا ہے۔",
   },
   {
     slug: "qar-to-pkr",
@@ -146,6 +157,8 @@ export const pairs: Pair[] = [
     name: "Qatari riyal",
     countrySlug: "qatar",
     peg: "The Qatari riyal is pegged to the US dollar at about 3.64 riyals per dollar. The riyal–rupee rate mostly follows the dollar–rupee rate.",
+    pegUr:
+      "قطری ریال ڈالر سے تقریباً ۳.۶۴ ریال فی ڈالر کے حساب سے جڑا ہے۔ ریال اور روپے کا ریٹ زیادہ تر ڈالر اور روپے کے ساتھ چلتا ہے۔",
   },
   {
     slug: "kwd-to-pkr",
@@ -153,6 +166,8 @@ export const pairs: Pair[] = [
     name: "Kuwaiti dinar",
     countrySlug: "kuwait",
     peg: "The Kuwaiti dinar is a strong currency managed against a basket, not a simple one-number dollar peg. Small daily moves against the rupee are normal.",
+    pegUr:
+      "کویتی دینار ایک ٹوکری کے مقابلے میں چلایا جاتا ہے، ایک سادہ ڈالر پیگ نہیں۔ روپے کے مقابلے میں چھوٹی روزانہ تبدیلی عام ہے۔",
   },
   {
     slug: "omr-to-pkr",
@@ -160,6 +175,7 @@ export const pairs: Pair[] = [
     name: "Omani rial",
     countrySlug: "oman",
     peg: "The Omani rial has long been pegged to the US dollar. The rial–rupee rate mostly follows the dollar–rupee rate.",
+    pegUr: "عمانی ریال عرصے سے امریکی ڈالر سے جڑا ہے۔ ریال اور روپے کا ریٹ زیادہ تر ڈالر اور روپے کے ساتھ چلتا ہے۔",
   },
   {
     slug: "bhd-to-pkr",
@@ -167,6 +183,7 @@ export const pairs: Pair[] = [
     name: "Bahraini dinar",
     countrySlug: "bahrain",
     peg: "The Bahraini dinar is pegged to the US dollar. The dinar–rupee rate mostly follows the dollar–rupee rate.",
+    pegUr: "بحرینی دینار امریکی ڈالر سے جڑا ہے۔ دینار اور روپے کا ریٹ زیادہ تر ڈالر اور روپے کے ساتھ چلتا ہے۔",
   },
 ];
 
@@ -176,6 +193,7 @@ export type GoldPlace = {
   name: string;
   countrySlug: string | null;
   note: string;
+  noteUr: string;
 };
 
 export const goldPlaces: GoldPlace[] = [
@@ -184,14 +202,17 @@ export const goldPlaces: GoldPlace[] = [
     code: "AED",
     name: "Dubai",
     countrySlug: "uae",
-    note: "This is the world spot price in dirhams, not the board price in the Gold Souk. Shops add making charges. Jewellery and investment bars are not taxed the same way. Ask for the all-in price per gram.",
+    note: "Dubai’s published retail board (22K and 24K per gram) is shown separately from the world spot price. Shops still add making charges. Ask for the all-in price per gram.",
+    noteUr:
+      "دبئی کا شائع شدہ ریٹیل بورڈ (۲۲ اور ۲۴ قیراط فی گرام) عالمی اسپاٹ سے الگ دکھایا گیا ہے۔ دکان میکنگ چارجز الگ لگاتی ہے۔ فی گرام مکمل قیمت پوچھیں۔",
   },
   {
     slug: "saudi-arabia",
     code: "SAR",
     name: "Saudi Arabia",
     countrySlug: "saudi-arabia",
-    note: "This is the world spot price in riyals. A shop price includes making charges. Compare the rupee figure with the rate in Pakistan before you buy.",
+    note: "This is the world spot price in riyals. A shop price includes making charges. Compare the rupee figure with the Pakistan Sarafa rate before you buy.",
+    noteUr: "یہ ریال میں عالمی اسپاٹ قیمت ہے۔ دکان کی قیمت میں میکنگ شامل ہوتی ہے۔ خریدنے سے پہلے پاکستان کے سرفہ ریٹ سے موازنہ کریں۔",
   },
   {
     slug: "qatar",
@@ -199,6 +220,7 @@ export const goldPlaces: GoldPlace[] = [
     name: "Qatar",
     countrySlug: "qatar",
     note: "This is the world spot price in Qatari riyals. Shop prices are higher once making charges are added.",
+    noteUr: "یہ قطری ریال میں عالمی اسپاٹ قیمت ہے۔ میکنگ چارجز کے بعد دکان کی قیمت زیادہ ہوتی ہے۔",
   },
   {
     slug: "kuwait",
@@ -206,6 +228,7 @@ export const goldPlaces: GoldPlace[] = [
     name: "Kuwait",
     countrySlug: "kuwait",
     note: "This is the world spot price in Kuwaiti dinars. Confirm the shop’s per-gram price, including making, before you compare it with Pakistan.",
+    noteUr: "یہ کویتی دینار میں عالمی اسپاٹ قیمت ہے۔ پاکستان سے موازنہ کرنے سے پہلے دکان کی فی گرام قیمت، میکنگ سمیت، پوچھیں۔",
   },
   {
     slug: "oman",
@@ -213,6 +236,7 @@ export const goldPlaces: GoldPlace[] = [
     name: "Oman",
     countrySlug: "oman",
     note: "This is the world spot price in Omani rials. Making charges are extra. The figure is indicative, not a shop quote.",
+    noteUr: "یہ عمانی ریال میں عالمی اسپاٹ قیمت ہے۔ میکنگ الگ ہے۔ یہ دکان کا کوٹ نہیں۔",
   },
   {
     slug: "bahrain",
@@ -220,13 +244,16 @@ export const goldPlaces: GoldPlace[] = [
     name: "Bahrain",
     countrySlug: "bahrain",
     note: "This is the world spot price in Bahraini dinars. Ask the shop for the full price per gram before you decide.",
+    noteUr: "یہ بحرینی دینار میں عالمی اسپاٹ قیمت ہے۔ فیصلے سے پہلے دکان سے فی گرام مکمل قیمت پوچھیں۔",
   },
   {
     slug: "pakistan",
     code: "PKR",
     name: "Pakistan",
     countrySlug: null,
-    note: "This is the world spot price in rupees. Jewellers in Pakistan add making charges, so the board price for jewellery is higher than this spot figure.",
+    note: "The Pakistan figure used for comparison is the Sarafa market rate per tola, not the world spot price converted into rupees. Jewellers still add making charges on jewellery.",
+    noteUr:
+      "موازنے کے لیے پاکستان کا ریٹ سرفہ مارکیٹ کا فی تولہ ریٹ ہے، عالمی اسپاٹ کو روپے میں بدلنا نہیں۔ زیورات پر سنار میکنگ الگ لگاتا ہے۔",
   },
 ];
 

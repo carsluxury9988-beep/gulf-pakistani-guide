@@ -1,0 +1,18 @@
+{
+  "pakistan": {
+    "asOf": "2026-10-09T18:07:00.000Z",
+    "source": "Rawalpindi–Islamabad Sarafa benchmark (PakGold board)",
+    "sourceUrl": "https://www.pakgold.net/gold-rate-cities",
+    "tola24": 432351,
+    "tola22": 396322
+  },
+  "dubai": {
+    "asOf": "2026-10-09T15:00:00.000Z",
+    "source": "Khaleej Times UAE gold retail board",
+    "sourceUrl": "https://www.khaleejtimes.com/gold-forex",
+    "gram24": 505,
+    "gram22": 467.75,
+    "gram21": 448.5,
+    "gram18": 384.25
+  }
+}

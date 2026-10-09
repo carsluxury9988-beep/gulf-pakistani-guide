@@ -6,6 +6,25 @@ export type Karat = (typeof KARATS)[number];
 const CODES = ["aed", "sar", "qar", "kwd", "omr", "bhd", "pkr"] as const;
 export type FxCode = (typeof CODES)[number];
 
+export type LocalQuote = {
+  asOf: string;
+  source: string;
+  sourceUrl: string;
+  stale: boolean;
+};
+
+export type PakistanGold = LocalQuote & {
+  tola24: number;
+  tola22: number;
+};
+
+export type DubaiGold = LocalQuote & {
+  gram24: number;
+  gram22: number;
+  gram21: number;
+  gram18: number;
+};
+
 export type Market = {
   asOf: string;
   fetchedAt: string;
@@ -14,6 +33,10 @@ export type Market = {
   usd: Record<FxCode, number>;
   xauUsd: number;
   history: { date: string; usd: Record<FxCode, number> }[];
+  localGold: {
+    pakistan: PakistanGold | null;
+    dubai: DubaiGold | null;
+  };
 };
 
 export function pkrPer(market: Market, code: string) {
@@ -101,4 +124,41 @@ export function historyFor(market: Market, code: string) {
     })
     .filter((point): point is { date: string; value: number } => point !== null)
     .sort((a, b) => a.date.localeCompare(b.date));
+}
+
+export type BoardCompare = {
+  pakistanTola22: number;
+  pakistanTola24: number;
+  dubaiGram22: number;
+  dubaiGram24: number;
+  dubaiTola22: number;
+  dubaiTola22Pkr: number;
+  dubaiTola24Pkr: number;
+  cheaper: "pakistan" | "dubai";
+  gapPkr: number;
+};
+
+/** Sarafa tola vs Dubai published retail, both in rupees. Null if either board is missing. */
+export function boardCompare(market: Market): BoardCompare | null {
+  const pk = market.localGold?.pakistan;
+  const dxb = market.localGold?.dubai;
+  if (!pk || !dxb) return null;
+  const aed = pkrPer(market, "AED");
+  if (!aed) return null;
+  const dubaiTola22 = dxb.gram22 * TOLA_GRAMS;
+  const dubaiTola24 = dxb.gram24 * TOLA_GRAMS;
+  const dubaiTola22Pkr = dubaiTola22 * aed;
+  const dubaiTola24Pkr = dubaiTola24 * aed;
+  const gapPkr = pk.tola22 - dubaiTola22Pkr;
+  return {
+    pakistanTola22: pk.tola22,
+    pakistanTola24: pk.tola24,
+    dubaiGram22: dxb.gram22,
+    dubaiGram24: dxb.gram24,
+    dubaiTola22,
+    dubaiTola22Pkr,
+    dubaiTola24Pkr,
+    cheaper: gapPkr <= 0 ? "pakistan" : "dubai",
+    gapPkr: Math.abs(gapPkr),
+  };
 }

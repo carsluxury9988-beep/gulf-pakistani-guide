@@ -137,10 +137,32 @@ export function GratuityTool({ locale }: { locale: Locale }) {
   const [years, setYears] = useState(3);
   const [days, setDays] = useState(0);
   const [resigned, setResigned] = useState(false);
+  const [error, setError] = useState("");
+
+  function setNonNegative(raw: string, apply: (value: number) => void, extra?: (value: number) => string) {
+    if (raw.trim() === "") {
+      apply(0);
+      setError("");
+      return;
+    }
+    const value = Number(raw);
+    if (!Number.isFinite(value) || value < 0) {
+      setError(ur ? "منفی عدد نہیں چل سکتا۔" : "Negative numbers are blocked.");
+      return;
+    }
+    const extraError = extra?.(value) ?? "";
+    if (extraError) {
+      setError(extraError);
+      return;
+    }
+    setError("");
+    apply(value);
+  }
+
   const service = years + days / 365;
 
   const result = useMemo(() => {
-    if (wage <= 0 || service < 0) return null;
+    if (wage <= 0 || years < 0 || days < 0 || days > 365) return null;
     if (place === "uae") {
       const daily = wage / 30;
       if (service < 1) return { total: 0, note: ur ? "ایک سال سے کم: اندازہ صفر۔" : "Under one year: the estimate is zero." };
@@ -169,13 +191,13 @@ export function GratuityTool({ locale }: { locale: Locale }) {
       total: full * factor,
       note: resigned
         ? ur
-          ? "استعفیٰ پر سعودی قانون کی کٹوتی لگی ہے: دو سال سے کم پر صفر، پانچ سے کم پر ایک تہائی، دس سے کم پر دو تہائی۔"
-          : "Resignation scale: nothing under 2 years, one third under 5, two thirds under 10, full after 10."
+          ? "استعفیٰ پر سعودی قانون کی کٹوتی لگی ہے: دو سال سے کم پر صفر، پانچ سے کم پر ایک تہائی، دس سے کم پر دو تہائی۔ آرٹیکل ۸۷ کے استثنا نیچے پڑھیں۔"
+          : "Resignation scale: nothing under 2 years, one third under 5, two thirds under 10, full after 10. Article 87 exceptions are noted below."
         : ur
           ? "آجر کی طرف سے ختم ہونے پر مکمل ایوارڈ: پہلے پانچ سال آدھا مہینہ، پھر پورا مہینہ۔"
           : "Employer-ended service: half a month for each of the first five years, then a full month.",
     };
-  }, [place, resigned, service, ur, wage]);
+  }, [days, place, resigned, service, ur, wage, years]);
 
   return (
     <div className="grid gap-6 lg:grid-cols-[1.1fr_0.9fr]">
@@ -187,16 +209,40 @@ export function GratuityTool({ locale }: { locale: Locale }) {
           </select>
         </Field>
         <Field label={place === "uae" ? (ur ? "ماہانہ بنیادی تنخواہ" : "Monthly basic wage") : ur ? "آخری ماہانہ تنخواہ" : "Last monthly wage"}>
-          <input className={`${inputClass} num`} inputMode="decimal" value={wage} onChange={(event) => setWage(Number(event.target.value))} />
+          <input
+            className={`${inputClass} num`}
+            inputMode="decimal"
+            min={0}
+            value={wage}
+            onChange={(event) => setNonNegative(event.target.value, setWage)}
+          />
         </Field>
         <div className="grid gap-3 sm:grid-cols-2">
           <Field label={ur ? "پورے سال" : "Full years"}>
-            <input className={`${inputClass} num`} inputMode="numeric" value={years} onChange={(event) => setYears(Number(event.target.value))} />
+            <input
+              className={`${inputClass} num`}
+              inputMode="numeric"
+              min={0}
+              value={years}
+              onChange={(event) => setNonNegative(event.target.value, setYears)}
+            />
           </Field>
-          <Field label={ur ? "اضافی دن" : "Extra days"}>
-            <input className={`${inputClass} num`} inputMode="numeric" value={days} onChange={(event) => setDays(Number(event.target.value))} />
+          <Field label={ur ? "اضافی دن (۰ تا ۳۶۵)" : "Extra days (0 to 365)"}>
+            <input
+              className={`${inputClass} num`}
+              inputMode="numeric"
+              min={0}
+              max={365}
+              value={days}
+              onChange={(event) =>
+                setNonNegative(event.target.value, setDays, (value) =>
+                  value > 365 ? (ur ? "اضافی دن ۳۶۵ سے زیادہ نہیں ہو سکتے۔" : "Extra days cannot be more than 365.") : "",
+                )
+              }
+            />
           </Field>
         </div>
+        {error ? <p className="rounded-lg bg-on-danger px-3 py-2 text-sm text-danger">{error}</p> : null}
         {place === "saudi" ? (
           <fieldset className="grid gap-2">
             <legend className="text-sm font-semibold">{ur ? "سروس کیسے ختم ہوئی؟" : "How did the job end?"}</legend>
@@ -208,6 +254,11 @@ export function GratuityTool({ locale }: { locale: Locale }) {
               <input type="radio" name="end" checked={resigned} onChange={() => setResigned(true)} />
               {ur ? "کارکن نے استعفیٰ دیا" : "Worker resigned"}
             </label>
+            <p className="rounded-lg border border-gold bg-gold-soft p-3 text-sm text-ink">
+              {ur
+                ? "آرٹیکل ۸۷: کچھ صورتوں میں استعفیٰ کے باوجود مکمل ایوارڈ ملتا ہے۔ زبردست مجبوری جو کارکن کے بس سے باہر ہو، یا خاتون کارکن شادی کے چھ مہینے کے اندر یا بچے کی پیدائش کے تین مہینے کے اندر عقد ختم کرے۔ یہ کیلکولیٹر وہ استثنا خود نہیں لگاتا۔"
+                : "Article 87: a full award can still be due after the worker leaves. That includes force majeure beyond the worker’s control, and a woman who ends the contract within six months of marriage or three months of giving birth. This calculator does not apply those exceptions for you."}
+            </p>
           </fieldset>
         ) : null}
         <p className="rounded-lg bg-gold-soft p-3 text-sm text-ink">
@@ -221,7 +272,7 @@ export function GratuityTool({ locale }: { locale: Locale }) {
         <p className="num mt-3 font-display text-4xl">
           {result ? formatMoney(result.total) : "—"} <span className="text-2xl">{place === "uae" ? "AED" : "SAR"}</span>
         </p>
-        <p className="mt-4 text-on-green/90">{result?.note}</p>
+        <p className="mt-4 text-on-green/90">{error || result?.note}</p>
         <p className="mt-4">
           <A href={ur ? "/ur/guides/uae-gratuity-rules" : "/guides/uae-gratuity-rules"} className="text-gold underline">
             {ur ? "یو اے ای کے قواعد پڑھیں" : "Read the UAE rules"}

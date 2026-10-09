@@ -34,6 +34,16 @@ export const S = {
   evisabh: { label: "Bahrain eVisa", href: "https://www.evisa.gov.bh" },
   lmra: { label: "Bahrain Labour Market Regulatory Authority", href: "https://www.lmra.gov.bh" },
   nusuk: { label: "Nusuk", href: "https://www.nusuk.sa" },
+  hajjPolicy: {
+    label: "Hajj Policy and Plan 2027–2030 (PDF)",
+    href: "https://www.mora.gov.pk/SiteImage/Misc/files/270726_HajjPolicy2027-30(1).pdf",
+  },
+  hajjPolicies: {
+    label: "MoRA Hajj policies",
+    href: "https://www.mora.gov.pk/Detail/N2YzYjlmM2UtZTQxNi00ZDBlLTllNjQtMTZiMDYyYzhhNzlk",
+  },
+  hajjPortal: { label: "Pak Hajj portal", href: "https://hajj.mora.gov.pk" },
+  hajMinistry: { label: "Saudi Ministry of Hajj and Umrah", href: "https://haj.gov.sa/en" },
   mora: { label: "Pakistan Ministry of Religious Affairs", href: "https://www.mora.gov.pk" },
   emirates: { label: "Emirates baggage and fares", href: "https://www.emirates.com" },
   flydubai: { label: "flydubai", href: "https://www.flydubai.com" },

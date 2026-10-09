@@ -1,3 +1,64 @@
 {
-  "installCommand": "npm install --omit=dev --no-audit --no-fund"
+  "installCommand": "npm install --omit=dev --no-audit --no-fund",
+  "crons": [
+    {
+      "path": "/api/cron/market",
+      "schedule": "0 */3 * * *"
+    }
+  ],
+  "headers": [
+    {
+      "source": "/",
+      "headers": [{ "key": "Cache-Control", "value": "s-maxage=10800, stale-while-revalidate=10800" }]
+    },
+    {
+      "source": "/ur",
+      "headers": [{ "key": "Cache-Control", "value": "s-maxage=10800, stale-while-revalidate=10800" }]
+    },
+    {
+      "source": "/rates",
+      "headers": [{ "key": "Cache-Control", "value": "s-maxage=10800, stale-while-revalidate=10800" }]
+    },
+    {
+      "source": "/rates/:path*",
+      "headers": [{ "key": "Cache-Control", "value": "s-maxage=10800, stale-while-revalidate=10800" }]
+    },
+    {
+      "source": "/ur/rates",
+      "headers": [{ "key": "Cache-Control", "value": "s-maxage=10800, stale-while-revalidate=10800" }]
+    },
+    {
+      "source": "/ur/rates/:path*",
+      "headers": [{ "key": "Cache-Control", "value": "s-maxage=10800, stale-while-revalidate=10800" }]
+    },
+    {
+      "source": "/gold-rates",
+      "headers": [{ "key": "Cache-Control", "value": "s-maxage=10800, stale-while-revalidate=10800" }]
+    },
+    {
+      "source": "/gold-rates/:path*",
+      "headers": [{ "key": "Cache-Control", "value": "s-maxage=10800, stale-while-revalidate=10800" }]
+    },
+    {
+      "source": "/ur/gold-rates",
+      "headers": [{ "key": "Cache-Control", "value": "s-maxage=10800, stale-while-revalidate=10800" }]
+    },
+    {
+      "source": "/ur/gold-rates/:path*",
+      "headers": [{ "key": "Cache-Control", "value": "s-maxage=10800, stale-while-revalidate=10800" }]
+    }
+  ],
+  "redirects": [
+    { "source": "/listings", "destination": "/", "permanent": true },
+    { "source": "/listings/:path*", "destination": "/", "permanent": true },
+    { "source": "/property", "destination": "/", "permanent": true },
+    { "source": "/property/:path*", "destination": "/", "permanent": true },
+    { "source": "/properties", "destination": "/", "permanent": true },
+    { "source": "/properties/:path*", "destination": "/", "permanent": true },
+    { "source": "/cities", "destination": "/", "permanent": true },
+    { "source": "/cities/:path*", "destination": "/", "permanent": true },
+    { "source": "/post-ad", "destination": "/", "permanent": true },
+    { "source": "/login", "destination": "/", "permanent": true },
+    { "source": "/login/:path*", "destination": "/", "permanent": true }
+  ]
 }

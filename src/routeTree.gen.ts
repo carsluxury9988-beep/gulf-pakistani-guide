@@ -16,7 +16,9 @@ import { Route as ContactRouteImport } from './routes/contact'
 import { Route as DisclaimerRouteImport } from './routes/disclaimer'
 import { Route as EditorialRouteImport } from './routes/editorial'
 import { Route as KuwaitRouteImport } from './routes/kuwait'
+import { Route as LoginRouteImport } from './routes/login'
 import { Route as OmanRouteImport } from './routes/oman'
+import { Route as PostAdRouteImport } from './routes/post-ad'
 import { Route as PrivacyRouteImport } from './routes/privacy'
 import { Route as QatarRouteImport } from './routes/qatar'
 import { Route as RobotsDottxtRouteImport } from './routes/robots[.]txt'
@@ -25,10 +27,18 @@ import { Route as SitemapDotxmlRouteImport } from './routes/sitemap[.]xml'
 import { Route as TermsRouteImport } from './routes/terms'
 import { Route as UaeRouteImport } from './routes/uae'
 import { Route as UrRouteImport } from './routes/ur'
+import { Route as CitiesIndexRouteImport } from './routes/cities/index'
+import { Route as CitiesSplatRouteImport } from './routes/cities/$'
 import { Route as GoldRatesIndexRouteImport } from './routes/gold-rates/index'
 import { Route as GoldRatesPlaceRouteImport } from './routes/gold-rates/$place'
 import { Route as GuidesIndexRouteImport } from './routes/guides/index'
 import { Route as GuidesSlugRouteImport } from './routes/guides/$slug'
+import { Route as ListingsIndexRouteImport } from './routes/listings/index'
+import { Route as ListingsSplatRouteImport } from './routes/listings/$'
+import { Route as PropertiesIndexRouteImport } from './routes/properties/index'
+import { Route as PropertiesSplatRouteImport } from './routes/properties/$'
+import { Route as PropertyIndexRouteImport } from './routes/property/index'
+import { Route as PropertySplatRouteImport } from './routes/property/$'
 import { Route as RatesIndexRouteImport } from './routes/rates/index'
 import { Route as RatesPairRouteImport } from './routes/rates/$pair'
 import { Route as ToolsFlightsRouteImport } from './routes/tools/flights'
@@ -48,6 +58,7 @@ import { Route as UrQatarRouteImport } from './routes/ur/qatar'
 import { Route as UrSaudiArabiaRouteImport } from './routes/ur/saudi-arabia'
 import { Route as UrTermsRouteImport } from './routes/ur/terms'
 import { Route as UrUaeRouteImport } from './routes/ur/uae'
+import { Route as ApiCronMarketRouteImport } from './routes/api/cron/market'
 import { Route as UrGoldRatesIndexRouteImport } from './routes/ur/gold-rates/index'
 import { Route as UrGoldRatesPlaceRouteImport } from './routes/ur/gold-rates/$place'
 import { Route as UrGuidesIndexRouteImport } from './routes/ur/guides/index'
@@ -94,9 +105,19 @@ const KuwaitRoute = KuwaitRouteImport.update({
   path: '/kuwait',
   getParentRoute: () => rootRouteImport,
 } as any)
+const LoginRoute = LoginRouteImport.update({
+  id: '/login',
+  path: '/login',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const OmanRoute = OmanRouteImport.update({
   id: '/oman',
   path: '/oman',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const PostAdRoute = PostAdRouteImport.update({
+  id: '/post-ad',
+  path: '/post-ad',
   getParentRoute: () => rootRouteImport,
 } as any)
 const PrivacyRoute = PrivacyRouteImport.update({
@@ -139,6 +160,16 @@ const UrRoute = UrRouteImport.update({
   path: '/ur',
   getParentRoute: () => rootRouteImport,
 } as any)
+const CitiesIndexRoute = CitiesIndexRouteImport.update({
+  id: '/cities/',
+  path: '/cities/',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const CitiesSplatRoute = CitiesSplatRouteImport.update({
+  id: '/cities/$',
+  path: '/cities/$',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const GoldRatesIndexRoute = GoldRatesIndexRouteImport.update({
   id: '/gold-rates/',
   path: '/gold-rates/',
@@ -157,6 +188,36 @@ const GuidesIndexRoute = GuidesIndexRouteImport.update({
 const GuidesSlugRoute = GuidesSlugRouteImport.update({
   id: '/guides/$slug',
   path: '/guides/$slug',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const ListingsIndexRoute = ListingsIndexRouteImport.update({
+  id: '/listings/',
+  path: '/listings/',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const ListingsSplatRoute = ListingsSplatRouteImport.update({
+  id: '/listings/$',
+  path: '/listings/$',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const PropertiesIndexRoute = PropertiesIndexRouteImport.update({
+  id: '/properties/',
+  path: '/properties/',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const PropertiesSplatRoute = PropertiesSplatRouteImport.update({
+  id: '/properties/$',
+  path: '/properties/$',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const PropertyIndexRoute = PropertyIndexRouteImport.update({
+  id: '/property/',
+  path: '/property/',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const PropertySplatRoute = PropertySplatRouteImport.update({
+  id: '/property/$',
+  path: '/property/$',
   getParentRoute: () => rootRouteImport,
 } as any)
 const RatesIndexRoute = RatesIndexRouteImport.update({
@@ -254,6 +315,11 @@ const UrUaeRoute = UrUaeRouteImport.update({
   path: '/uae',
   getParentRoute: () => UrRoute,
 } as any)
+const ApiCronMarketRoute = ApiCronMarketRouteImport.update({
+  id: '/api/cron/market',
+  path: '/api/cron/market',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const UrGoldRatesIndexRoute = UrGoldRatesIndexRouteImport.update({
   id: '/gold-rates/',
   path: '/gold-rates/',
@@ -314,7 +380,9 @@ export interface FileRoutesByFullPath {
   '/disclaimer': typeof DisclaimerRoute
   '/editorial': typeof EditorialRoute
   '/kuwait': typeof KuwaitRoute
+  '/login': typeof LoginRoute
   '/oman': typeof OmanRoute
+  '/post-ad': typeof PostAdRoute
   '/privacy': typeof PrivacyRoute
   '/qatar': typeof QatarRoute
   '/robots.txt': typeof RobotsDottxtRoute
@@ -323,8 +391,12 @@ export interface FileRoutesByFullPath {
   '/terms': typeof TermsRoute
   '/uae': typeof UaeRoute
   '/ur': typeof UrRouteWithChildren
+  '/cities/$': typeof CitiesSplatRoute
   '/gold-rates/$place': typeof GoldRatesPlaceRoute
   '/guides/$slug': typeof GuidesSlugRoute
+  '/listings/$': typeof ListingsSplatRoute
+  '/properties/$': typeof PropertiesSplatRoute
+  '/property/$': typeof PropertySplatRoute
   '/rates/$pair': typeof RatesPairRoute
   '/tools/flights': typeof ToolsFlightsRoute
   '/tools/gratuity-calculator': typeof ToolsGratuityCalculatorRoute
@@ -342,10 +414,15 @@ export interface FileRoutesByFullPath {
   '/ur/saudi-arabia': typeof UrSaudiArabiaRoute
   '/ur/terms': typeof UrTermsRoute
   '/ur/uae': typeof UrUaeRoute
+  '/cities/': typeof CitiesIndexRoute
   '/gold-rates/': typeof GoldRatesIndexRoute
   '/guides/': typeof GuidesIndexRoute
+  '/listings/': typeof ListingsIndexRoute
+  '/properties/': typeof PropertiesIndexRoute
+  '/property/': typeof PropertyIndexRoute
   '/rates/': typeof RatesIndexRoute
   '/ur/': typeof UrIndexRoute
+  '/api/cron/market': typeof ApiCronMarketRoute
   '/ur/gold-rates/$place': typeof UrGoldRatesPlaceRoute
   '/ur/guides/$slug': typeof UrGuidesSlugRoute
   '/ur/rates/$pair': typeof UrRatesPairRoute
@@ -365,7 +442,9 @@ export interface FileRoutesByTo {
   '/disclaimer': typeof DisclaimerRoute
   '/editorial': typeof EditorialRoute
   '/kuwait': typeof KuwaitRoute
+  '/login': typeof LoginRoute
   '/oman': typeof OmanRoute
+  '/post-ad': typeof PostAdRoute
   '/privacy': typeof PrivacyRoute
   '/qatar': typeof QatarRoute
   '/robots.txt': typeof RobotsDottxtRoute
@@ -373,8 +452,12 @@ export interface FileRoutesByTo {
   '/sitemap.xml': typeof SitemapDotxmlRoute
   '/terms': typeof TermsRoute
   '/uae': typeof UaeRoute
+  '/cities/$': typeof CitiesSplatRoute
   '/gold-rates/$place': typeof GoldRatesPlaceRoute
   '/guides/$slug': typeof GuidesSlugRoute
+  '/listings/$': typeof ListingsSplatRoute
+  '/properties/$': typeof PropertiesSplatRoute
+  '/property/$': typeof PropertySplatRoute
   '/rates/$pair': typeof RatesPairRoute
   '/tools/flights': typeof ToolsFlightsRoute
   '/tools/gratuity-calculator': typeof ToolsGratuityCalculatorRoute
@@ -392,10 +475,15 @@ export interface FileRoutesByTo {
   '/ur/saudi-arabia': typeof UrSaudiArabiaRoute
   '/ur/terms': typeof UrTermsRoute
   '/ur/uae': typeof UrUaeRoute
+  '/cities': typeof CitiesIndexRoute
   '/gold-rates': typeof GoldRatesIndexRoute
   '/guides': typeof GuidesIndexRoute
+  '/listings': typeof ListingsIndexRoute
+  '/properties': typeof PropertiesIndexRoute
+  '/property': typeof PropertyIndexRoute
   '/rates': typeof RatesIndexRoute
   '/ur': typeof UrIndexRoute
+  '/api/cron/market': typeof ApiCronMarketRoute
   '/ur/gold-rates/$place': typeof UrGoldRatesPlaceRoute
   '/ur/guides/$slug': typeof UrGuidesSlugRoute
   '/ur/rates/$pair': typeof UrRatesPairRoute
@@ -416,7 +504,9 @@ export interface FileRoutesById {
   '/disclaimer': typeof DisclaimerRoute
   '/editorial': typeof EditorialRoute
   '/kuwait': typeof KuwaitRoute
+  '/login': typeof LoginRoute
   '/oman': typeof OmanRoute
+  '/post-ad': typeof PostAdRoute
   '/privacy': typeof PrivacyRoute
   '/qatar': typeof QatarRoute
   '/robots.txt': typeof RobotsDottxtRoute
@@ -425,8 +515,12 @@ export interface FileRoutesById {
   '/terms': typeof TermsRoute
   '/uae': typeof UaeRoute
   '/ur': typeof UrRouteWithChildren
+  '/cities/$': typeof CitiesSplatRoute
   '/gold-rates/$place': typeof GoldRatesPlaceRoute
   '/guides/$slug': typeof GuidesSlugRoute
+  '/listings/$': typeof ListingsSplatRoute
+  '/properties/$': typeof PropertiesSplatRoute
+  '/property/$': typeof PropertySplatRoute
   '/rates/$pair': typeof RatesPairRoute
   '/tools/flights': typeof ToolsFlightsRoute
   '/tools/gratuity-calculator': typeof ToolsGratuityCalculatorRoute
@@ -444,10 +538,15 @@ export interface FileRoutesById {
   '/ur/saudi-arabia': typeof UrSaudiArabiaRoute
   '/ur/terms': typeof UrTermsRoute
   '/ur/uae': typeof UrUaeRoute
+  '/cities/': typeof CitiesIndexRoute
   '/gold-rates/': typeof GoldRatesIndexRoute
   '/guides/': typeof GuidesIndexRoute
+  '/listings/': typeof ListingsIndexRoute
+  '/properties/': typeof PropertiesIndexRoute
+  '/property/': typeof PropertyIndexRoute
   '/rates/': typeof RatesIndexRoute
   '/ur/': typeof UrIndexRoute
+  '/api/cron/market': typeof ApiCronMarketRoute
   '/ur/gold-rates/$place': typeof UrGoldRatesPlaceRoute
   '/ur/guides/$slug': typeof UrGuidesSlugRoute
   '/ur/rates/$pair': typeof UrRatesPairRoute
@@ -469,7 +568,9 @@ export interface FileRouteTypes {
     | '/disclaimer'
     | '/editorial'
     | '/kuwait'
+    | '/login'
     | '/oman'
+    | '/post-ad'
     | '/privacy'
     | '/qatar'
     | '/robots.txt'
@@ -478,8 +579,12 @@ export interface FileRouteTypes {
     | '/terms'
     | '/uae'
     | '/ur'
+    | '/cities/$'
     | '/gold-rates/$place'
     | '/guides/$slug'
+    | '/listings/$'
+    | '/properties/$'
+    | '/property/$'
     | '/rates/$pair'
     | '/tools/flights'
     | '/tools/gratuity-calculator'
@@ -497,10 +602,15 @@ export interface FileRouteTypes {
     | '/ur/saudi-arabia'
     | '/ur/terms'
     | '/ur/uae'
+    | '/cities/'
     | '/gold-rates/'
     | '/guides/'
+    | '/listings/'
+    | '/properties/'
+    | '/property/'
     | '/rates/'
     | '/ur/'
+    | '/api/cron/market'
     | '/ur/gold-rates/$place'
     | '/ur/guides/$slug'
     | '/ur/rates/$pair'
@@ -520,7 +630,9 @@ export interface FileRouteTypes {
     | '/disclaimer'
     | '/editorial'
     | '/kuwait'
+    | '/login'
     | '/oman'
+    | '/post-ad'
     | '/privacy'
     | '/qatar'
     | '/robots.txt'
@@ -528,8 +640,12 @@ export interface FileRouteTypes {
     | '/sitemap.xml'
     | '/terms'
     | '/uae'
+    | '/cities/$'
     | '/gold-rates/$place'
     | '/guides/$slug'
+    | '/listings/$'
+    | '/properties/$'
+    | '/property/$'
     | '/rates/$pair'
     | '/tools/flights'
     | '/tools/gratuity-calculator'
@@ -547,10 +663,15 @@ export interface FileRouteTypes {
     | '/ur/saudi-arabia'
     | '/ur/terms'
     | '/ur/uae'
+    | '/cities'
     | '/gold-rates'
     | '/guides'
+    | '/listings'
+    | '/properties'
+    | '/property'
     | '/rates'
     | '/ur'
+    | '/api/cron/market'
     | '/ur/gold-rates/$place'
     | '/ur/guides/$slug'
     | '/ur/rates/$pair'
@@ -570,7 +691,9 @@ export interface FileRouteTypes {
     | '/disclaimer'
     | '/editorial'
     | '/kuwait'
+    | '/login'
     | '/oman'
+    | '/post-ad'
     | '/privacy'
     | '/qatar'
     | '/robots.txt'
@@ -579,8 +702,12 @@ export interface FileRouteTypes {
     | '/terms'
     | '/uae'
     | '/ur'
+    | '/cities/$'
     | '/gold-rates/$place'
     | '/guides/$slug'
+    | '/listings/$'
+    | '/properties/$'
+    | '/property/$'
     | '/rates/$pair'
     | '/tools/flights'
     | '/tools/gratuity-calculator'
@@ -598,10 +725,15 @@ export interface FileRouteTypes {
     | '/ur/saudi-arabia'
     | '/ur/terms'
     | '/ur/uae'
+    | '/cities/'
     | '/gold-rates/'
     | '/guides/'
+    | '/listings/'
+    | '/properties/'
+    | '/property/'
     | '/rates/'
     | '/ur/'
+    | '/api/cron/market'
     | '/ur/gold-rates/$place'
     | '/ur/guides/$slug'
     | '/ur/rates/$pair'
@@ -622,7 +754,9 @@ export interface RootRouteChildren {
   DisclaimerRoute: typeof DisclaimerRoute
   EditorialRoute: typeof EditorialRoute
   KuwaitRoute: typeof KuwaitRoute
+  LoginRoute: typeof LoginRoute
   OmanRoute: typeof OmanRoute
+  PostAdRoute: typeof PostAdRoute
   PrivacyRoute: typeof PrivacyRoute
   QatarRoute: typeof QatarRoute
   RobotsDottxtRoute: typeof RobotsDottxtRoute
@@ -631,16 +765,25 @@ export interface RootRouteChildren {
   TermsRoute: typeof TermsRoute
   UaeRoute: typeof UaeRoute
   UrRoute: typeof UrRouteWithChildren
+  CitiesSplatRoute: typeof CitiesSplatRoute
   GoldRatesPlaceRoute: typeof GoldRatesPlaceRoute
   GuidesSlugRoute: typeof GuidesSlugRoute
+  ListingsSplatRoute: typeof ListingsSplatRoute
+  PropertiesSplatRoute: typeof PropertiesSplatRoute
+  PropertySplatRoute: typeof PropertySplatRoute
   RatesPairRoute: typeof RatesPairRoute
   ToolsFlightsRoute: typeof ToolsFlightsRoute
   ToolsGratuityCalculatorRoute: typeof ToolsGratuityCalculatorRoute
   ToolsRemittanceRoute: typeof ToolsRemittanceRoute
   ToolsSalaryConverterRoute: typeof ToolsSalaryConverterRoute
+  CitiesIndexRoute: typeof CitiesIndexRoute
   GoldRatesIndexRoute: typeof GoldRatesIndexRoute
   GuidesIndexRoute: typeof GuidesIndexRoute
+  ListingsIndexRoute: typeof ListingsIndexRoute
+  PropertiesIndexRoute: typeof PropertiesIndexRoute
+  PropertyIndexRoute: typeof PropertyIndexRoute
   RatesIndexRoute: typeof RatesIndexRoute
+  ApiCronMarketRoute: typeof ApiCronMarketRoute
 }
 
 declare module '@tanstack/react-router' {
@@ -694,11 +837,25 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof KuwaitRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/login': {
+      id: '/login'
+      path: '/login'
+      fullPath: '/login'
+      preLoaderRoute: typeof LoginRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/oman': {
       id: '/oman'
       path: '/oman'
       fullPath: '/oman'
       preLoaderRoute: typeof OmanRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/post-ad': {
+      id: '/post-ad'
+      path: '/post-ad'
+      fullPath: '/post-ad'
+      preLoaderRoute: typeof PostAdRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/privacy': {
@@ -757,6 +914,20 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof UrRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/cities/': {
+      id: '/cities/'
+      path: '/cities'
+      fullPath: '/cities/'
+      preLoaderRoute: typeof CitiesIndexRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/cities/$': {
+      id: '/cities/$'
+      path: '/cities/$'
+      fullPath: '/cities/$'
+      preLoaderRoute: typeof CitiesSplatRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/gold-rates/': {
       id: '/gold-rates/'
       path: '/gold-rates'
@@ -783,6 +954,48 @@ declare module '@tanstack/react-router' {
       path: '/guides/$slug'
       fullPath: '/guides/$slug'
       preLoaderRoute: typeof GuidesSlugRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/listings/': {
+      id: '/listings/'
+      path: '/listings'
+      fullPath: '/listings/'
+      preLoaderRoute: typeof ListingsIndexRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/listings/$': {
+      id: '/listings/$'
+      path: '/listings/$'
+      fullPath: '/listings/$'
+      preLoaderRoute: typeof ListingsSplatRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/properties/': {
+      id: '/properties/'
+      path: '/properties'
+      fullPath: '/properties/'
+      preLoaderRoute: typeof PropertiesIndexRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/properties/$': {
+      id: '/properties/$'
+      path: '/properties/$'
+      fullPath: '/properties/$'
+      preLoaderRoute: typeof PropertiesSplatRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/property/': {
+      id: '/property/'
+      path: '/property'
+      fullPath: '/property/'
+      preLoaderRoute: typeof PropertyIndexRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/property/$': {
+      id: '/property/$'
+      path: '/property/$'
+      fullPath: '/property/$'
+      preLoaderRoute: typeof PropertySplatRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/rates/': {
@@ -917,6 +1130,13 @@ declare module '@tanstack/react-router' {
       fullPath: '/ur/uae'
       preLoaderRoute: typeof UrUaeRouteImport
       parentRoute: typeof UrRoute
+    }
+    '/api/cron/market': {
+      id: '/api/cron/market'
+      path: '/api/cron/market'
+      fullPath: '/api/cron/market'
+      preLoaderRoute: typeof ApiCronMarketRouteImport
+      parentRoute: typeof rootRouteImport
     }
     '/ur/gold-rates/': {
       id: '/ur/gold-rates/'
@@ -1053,7 +1273,9 @@ const rootRouteChildren: RootRouteChildren = {
   DisclaimerRoute: DisclaimerRoute,
   EditorialRoute: EditorialRoute,
   KuwaitRoute: KuwaitRoute,
+  LoginRoute: LoginRoute,
   OmanRoute: OmanRoute,
+  PostAdRoute: PostAdRoute,
   PrivacyRoute: PrivacyRoute,
   QatarRoute: QatarRoute,
   RobotsDottxtRoute: RobotsDottxtRoute,
@@ -1062,16 +1284,25 @@ const rootRouteChildren: RootRouteChildren = {
   TermsRoute: TermsRoute,
   UaeRoute: UaeRoute,
   UrRoute: UrRouteWithChildren,
+  CitiesSplatRoute: CitiesSplatRoute,
   GoldRatesPlaceRoute: GoldRatesPlaceRoute,
   GuidesSlugRoute: GuidesSlugRoute,
+  ListingsSplatRoute: ListingsSplatRoute,
+  PropertiesSplatRoute: PropertiesSplatRoute,
+  PropertySplatRoute: PropertySplatRoute,
   RatesPairRoute: RatesPairRoute,
   ToolsFlightsRoute: ToolsFlightsRoute,
   ToolsGratuityCalculatorRoute: ToolsGratuityCalculatorRoute,
   ToolsRemittanceRoute: ToolsRemittanceRoute,
   ToolsSalaryConverterRoute: ToolsSalaryConverterRoute,
+  CitiesIndexRoute: CitiesIndexRoute,
   GoldRatesIndexRoute: GoldRatesIndexRoute,
   GuidesIndexRoute: GuidesIndexRoute,
+  ListingsIndexRoute: ListingsIndexRoute,
+  PropertiesIndexRoute: PropertiesIndexRoute,
+  PropertyIndexRoute: PropertyIndexRoute,
   RatesIndexRoute: RatesIndexRoute,
+  ApiCronMarketRoute: ApiCronMarketRoute,
 }
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)

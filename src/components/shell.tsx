@@ -45,10 +45,10 @@ export function SiteHeader() {
       <div className="mx-auto flex max-w-6xl items-center gap-3 px-4 py-3">
         <A href={ur ? "/ur" : "/"} className="flex min-h-11 items-center gap-2">
           <span className="grid h-9 w-9 place-items-center rounded-md bg-green text-on-green">
-            <span className="font-display text-lg leading-none">G</span>
+            <span className="font-display text-lg leading-none">ا</span>
           </span>
           <span className="font-display text-2xl leading-none text-green">
-            Gulf<span className="text-gold-ink">PK</span>
+            Apna <span className="text-gold-ink">Ghar</span>
           </span>
         </A>
         <nav className="ms-auto hidden items-center gap-1 lg:flex" aria-label={ur ? "مرکزی" : "Primary"}>
@@ -122,8 +122,8 @@ export function SiteFooter() {
           </p>
           <p className="mt-2 text-on-green/90">
             {ur
-              ? "خلیج میں رہنے والے پاکستانیوں کے لیے ریٹ، سونا اور عملی رہنما۔ بینک نہیں، حکومت نہیں۔"
-              : "Rates, gold and practical guides for Pakistanis in the Gulf. Not a bank. Not a government site."}
+              ? "خلیج میں پاکستانیوں کے لیے رہنما، ریٹ اور اوزار۔ بینک نہیں، حکومت نہیں۔"
+              : "Guides, rates and tools for Pakistanis in the Gulf. Not a bank. Not a government site."}
           </p>
         </div>
         <div>

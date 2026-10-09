@@ -3,12 +3,12 @@ import { useRouterState } from "@tanstack/react-router";
 import { AuthProvider } from "@/lib/auth/provider";
 import { PreviewHostBridge } from "@/components/preview-host-bridge";
 import { SiteFooter, SiteHeader } from "@/components/shell";
-import { isUrduPath, SITE_NAME } from "@/lib/site";
+import { CONTACT_EMAIL, isUrduPath, SITE_NAME, SITE_TAGLINE, SITE_URL } from "@/lib/site";
 import { gaId, gscToken, ld } from "@/lib/seo";
 import appCss from "../styles.css?url";
 
 const FONT =
-  "https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,560;9..144,650&family=Source+Sans+3:wght@400;600;700&display=swap";
+  "https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,560;9..144,650&family=Noto+Nastaliq+Urdu:wght@400;700&family=Source+Sans+3:wght@400;600;700&display=swap";
 
 export const Route = createRootRoute({
   head: () => {
@@ -18,7 +18,7 @@ export const Route = createRootRoute({
       { charSet: "utf-8" },
       { name: "viewport", content: "width=device-width, initial-scale=1" },
       { title: SITE_NAME },
-      { name: "description", content: "Rates, gold and practical guides for Pakistanis in the Gulf." },
+      { name: "description", content: SITE_TAGLINE },
       { name: "theme-color", content: "#0f3d2e" },
     ];
     if (gsc) meta.push({ name: "google-site-verification", content: gsc });
@@ -27,12 +27,16 @@ export const Route = createRootRoute({
         "@context": "https://schema.org",
         "@type": "Organization",
         name: SITE_NAME,
-        description: "Independent rates and guides for Pakistanis in the Gulf.",
+        url: SITE_URL || "https://apnaaghar.pk",
+        logo: `${SITE_URL || "https://apnaaghar.pk"}/favicon.svg`,
+        email: CONTACT_EMAIL,
+        description: SITE_TAGLINE,
       }),
       ld({
         "@context": "https://schema.org",
         "@type": "WebSite",
         name: SITE_NAME,
+        url: SITE_URL || "https://apnaaghar.pk",
         description: "Currency, gold and guides for Pakistanis in the UAE, Saudi Arabia, Qatar, Kuwait, Oman and Bahrain.",
       }),
     );

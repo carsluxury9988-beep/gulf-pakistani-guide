@@ -1,16 +1,18 @@
 import { createFileRoute } from "@tanstack/react-router";
+import { urduArticles } from "@/lib/content/articles-ur";
 import { guides } from "@/lib/content/catalog";
 import { countries, goldPlaces, pairs, SITE_URL } from "@/lib/site";
 
 function loc(path: string) {
-  if (!SITE_URL) return path;
-  return `${SITE_URL}${path}`;
+  const origin = SITE_URL || "https://apnaaghar.pk";
+  return `${origin}${path}`;
 }
 
 export const Route = createFileRoute("/sitemap.xml")({
   server: {
     handlers: {
       GET: async () => {
+        const translated = new Set(Object.keys(urduArticles));
         const paths = [
           "/",
           "/ur",
@@ -43,15 +45,15 @@ export const Route = createFileRoute("/sitemap.xml")({
           ...countries.flatMap((country) => [`/${country.slug}`, `/ur/${country.slug}`]),
           ...pairs.flatMap((pair) => [`/rates/${pair.slug}`, `/ur/rates/${pair.slug}`]),
           ...goldPlaces.flatMap((place) => [`/gold-rates/${place.slug}`, `/ur/gold-rates/${place.slug}`]),
-          ...guides.flatMap((guide) => [`/guides/${guide.slug}`, `/ur/guides/${guide.slug}`]),
+          ...guides.flatMap((guide) =>
+            translated.has(guide.slug)
+              ? [`/guides/${guide.slug}`, `/ur/guides/${guide.slug}`]
+              : [`/guides/${guide.slug}`],
+          ),
         ];
         const body = `<?xml version="1.0" encoding="UTF-8"?>
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
-${paths
-  .map(
-    (path) => `  <url><loc>${loc(path)}</loc></url>`,
-  )
-  .join("\n")}
+${paths.map((path) => `  <url><loc>${loc(path)}</loc></url>`).join("\n")}
 </urlset>`;
         return new Response(body, {
           headers: {
