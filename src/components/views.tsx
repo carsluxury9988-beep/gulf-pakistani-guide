@@ -98,7 +98,15 @@ export function HomeView({ market, locale }: { market: Market; locale: Locale })
     <main>
       <section className="hero-panel text-on-green">
         <div className="mx-auto max-w-6xl px-4 py-10 sm:py-14">
-          <div>
+          <h1 className="max-w-3xl font-display text-4xl leading-tight sm:text-5xl">
+            {ur ? "خلیج میں پاکستانیوں کے لیے سب کچھ، ایک جگہ۔" : "Everything Pakistanis in the Gulf need, in one place."}
+          </h1>
+          <p className="mt-4 max-w-2xl text-lg text-on-green/85">
+            {ur
+              ? "کرنسی ریٹ، سونا، نوکری، ویزا اور پیسے بھیجنے کے سوال۔ رہنما سرکاری صفحے بتاتی ہے، ریٹ نامزد ماخذ سے آتے ہیں۔"
+              : "Currency rates, gold, jobs, visas and the money you send home. Guides cite official pages. Rates come from the sources named on each page."}
+          </p>
+          <div className="mt-6">
             <div className="flex items-end justify-between gap-3">
               <p className="font-display text-2xl text-gold sm:text-3xl">
                 {ur ? "آج کے کرنسی ریٹ" : "Today’s currency rates"}
@@ -128,14 +136,6 @@ export function HomeView({ market, locale }: { market: Market; locale: Locale })
             </div>
             <p className="mt-2 text-xs text-on-green/75">{rateLine(market, locale)}</p>
           </div>
-          <h1 className="mt-6 max-w-3xl font-display text-4xl leading-tight sm:text-5xl">
-            {ur ? "خلیج میں پاکستانیوں کے لیے سب کچھ، ایک جگہ۔" : "Everything Pakistanis in the Gulf need, in one place."}
-          </h1>
-          <p className="mt-4 max-w-2xl text-lg text-on-green/85">
-            {ur
-              ? "کرنسی ریٹ، سونا، نوکری، ویزا اور پیسے بھیجنے کے سوال۔ رہنما سرکاری صفحے بتاتی ہے، ریٹ نامزد ماخذ سے آتے ہیں۔"
-              : "Currency rates, gold, jobs, visas and the money you send home. Guides cite official pages. Rates come from the sources named on each page."}
-          </p>
           <div className="mt-6 grid grid-cols-2 gap-2 sm:grid-cols-3 lg:grid-cols-6">
             {countries.map((country) => (
               <A
@@ -187,7 +187,7 @@ export function HomeView({ market, locale }: { market: Market; locale: Locale })
           {featured.map((guide) => (
             <A key={guide.slug} href={h(pathForGuide(guide.slug))} className="overflow-hidden rounded-2xl border border-line bg-surface shadow-sm hover:border-green">
               <img
-                src={cardImage(guide.category)}
+                src={cardImage(guide.slug, guide.category)}
                 alt=""
                 width={640}
                 height={640}
@@ -220,18 +220,14 @@ export function HomeView({ market, locale }: { market: Market; locale: Locale })
             </A>
           ))}
         </div>
-        <p className="mt-10 rounded-2xl border border-gold bg-gold-soft px-4 py-3 text-sm">
-          {ur
-            ? "ذرائع: سرکاری ویب سائٹس، باقاعدہ اپڈیٹ۔ اپنا گھر سلیم خان چلاتے ہیں، اسلام آباد۔"
-            : "Guides cite official government pages. Rates and gold come from the named sources on each page. Apna Ghar is run by Salim Khan, Islamabad."}
-        </p>
         <AdSlot />
       </section>
     </main>
   );
 }
 
-function cardImage(category: string) {
+function cardImage(slug: string, category: string) {
+  if (slug === "send-money-saudi-to-pakistan") return "/images/cards/money-saudi.webp";
   if (category === "jobs") return "/images/cards/jobs.webp";
   if (category === "visas" || category === "rights") return "/images/cards/visas.webp";
   if (category === "cost" || category === "travel") return "/images/cards/cost.webp";
