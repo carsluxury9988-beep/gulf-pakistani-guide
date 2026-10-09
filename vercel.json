@@ -9,88 +9,667 @@
   "headers": [
     {
       "source": "/",
-      "headers": [{ "key": "Cache-Control", "value": "s-maxage=10800, stale-while-revalidate=10800" }]
+      "headers": [
+        {
+          "key": "Cache-Control",
+          "value": "s-maxage=10800, stale-while-revalidate=10800"
+        }
+      ]
     },
     {
       "source": "/ur",
-      "headers": [{ "key": "Cache-Control", "value": "s-maxage=10800, stale-while-revalidate=10800" }]
+      "headers": [
+        {
+          "key": "Cache-Control",
+          "value": "s-maxage=10800, stale-while-revalidate=10800"
+        }
+      ]
     },
     {
       "source": "/rates",
-      "headers": [{ "key": "Cache-Control", "value": "s-maxage=10800, stale-while-revalidate=10800" }]
+      "headers": [
+        {
+          "key": "Cache-Control",
+          "value": "s-maxage=10800, stale-while-revalidate=10800"
+        }
+      ]
     },
     {
       "source": "/rates/:path*",
-      "headers": [{ "key": "Cache-Control", "value": "s-maxage=10800, stale-while-revalidate=10800" }]
+      "headers": [
+        {
+          "key": "Cache-Control",
+          "value": "s-maxage=10800, stale-while-revalidate=10800"
+        }
+      ]
     },
     {
       "source": "/ur/rates",
-      "headers": [{ "key": "Cache-Control", "value": "s-maxage=10800, stale-while-revalidate=10800" }]
+      "headers": [
+        {
+          "key": "Cache-Control",
+          "value": "s-maxage=10800, stale-while-revalidate=10800"
+        }
+      ]
     },
     {
       "source": "/ur/rates/:path*",
-      "headers": [{ "key": "Cache-Control", "value": "s-maxage=10800, stale-while-revalidate=10800" }]
+      "headers": [
+        {
+          "key": "Cache-Control",
+          "value": "s-maxage=10800, stale-while-revalidate=10800"
+        }
+      ]
     },
     {
       "source": "/gold-rates",
-      "headers": [{ "key": "Cache-Control", "value": "s-maxage=10800, stale-while-revalidate=10800" }]
+      "headers": [
+        {
+          "key": "Cache-Control",
+          "value": "s-maxage=10800, stale-while-revalidate=10800"
+        }
+      ]
     },
     {
       "source": "/gold-rates/:path*",
-      "headers": [{ "key": "Cache-Control", "value": "s-maxage=10800, stale-while-revalidate=10800" }]
+      "headers": [
+        {
+          "key": "Cache-Control",
+          "value": "s-maxage=10800, stale-while-revalidate=10800"
+        }
+      ]
     },
     {
       "source": "/ur/gold-rates",
-      "headers": [{ "key": "Cache-Control", "value": "s-maxage=10800, stale-while-revalidate=10800" }]
+      "headers": [
+        {
+          "key": "Cache-Control",
+          "value": "s-maxage=10800, stale-while-revalidate=10800"
+        }
+      ]
     },
     {
       "source": "/ur/gold-rates/:path*",
-      "headers": [{ "key": "Cache-Control", "value": "s-maxage=10800, stale-while-revalidate=10800" }]
+      "headers": [
+        {
+          "key": "Cache-Control",
+          "value": "s-maxage=10800, stale-while-revalidate=10800"
+        }
+      ]
+    },
+    {
+      "source": "/og.jpg",
+      "headers": [
+        {
+          "key": "Cache-Control",
+          "value": "public, max-age=31536000, immutable"
+        }
+      ]
+    },
+    {
+      "source": "/favicon.svg",
+      "headers": [
+        {
+          "key": "Cache-Control",
+          "value": "public, max-age=31536000, immutable"
+        }
+      ]
+    },
+    {
+      "source": "/logo-512.png",
+      "headers": [
+        {
+          "key": "Cache-Control",
+          "value": "public, max-age=31536000, immutable"
+        }
+      ]
+    },
+    {
+      "source": "/images/:path*",
+      "headers": [
+        {
+          "key": "Cache-Control",
+          "value": "public, max-age=31536000, immutable"
+        }
+      ]
+    },
+    {
+      "source": "/guides/(.*)",
+      "headers": [
+        {
+          "key": "Cache-Control",
+          "value": "public, s-maxage=86400, stale-while-revalidate=604800"
+        }
+      ]
+    },
+    {
+      "source": "/ur/guides/(.*)",
+      "headers": [
+        {
+          "key": "Cache-Control",
+          "value": "public, s-maxage=86400, stale-while-revalidate=604800"
+        }
+      ]
+    },
+    {
+      "source": "/jobs/(.*)",
+      "headers": [
+        {
+          "key": "Cache-Control",
+          "value": "public, s-maxage=86400, stale-while-revalidate=604800"
+        }
+      ]
+    },
+    {
+      "source": "/about",
+      "headers": [
+        {
+          "key": "Cache-Control",
+          "value": "public, s-maxage=86400, stale-while-revalidate=604800"
+        }
+      ]
+    },
+    {
+      "source": "/about/(.*)",
+      "headers": [
+        {
+          "key": "Cache-Control",
+          "value": "public, s-maxage=86400, stale-while-revalidate=604800"
+        }
+      ]
+    },
+    {
+      "source": "/ur/about",
+      "headers": [
+        {
+          "key": "Cache-Control",
+          "value": "public, s-maxage=86400, stale-while-revalidate=604800"
+        }
+      ]
+    },
+    {
+      "source": "/ur/about/(.*)",
+      "headers": [
+        {
+          "key": "Cache-Control",
+          "value": "public, s-maxage=86400, stale-while-revalidate=604800"
+        }
+      ]
+    },
+    {
+      "source": "/privacy",
+      "headers": [
+        {
+          "key": "Cache-Control",
+          "value": "public, s-maxage=86400, stale-while-revalidate=604800"
+        }
+      ]
+    },
+    {
+      "source": "/terms",
+      "headers": [
+        {
+          "key": "Cache-Control",
+          "value": "public, s-maxage=86400, stale-while-revalidate=604800"
+        }
+      ]
+    },
+    {
+      "source": "/disclaimer",
+      "headers": [
+        {
+          "key": "Cache-Control",
+          "value": "public, s-maxage=86400, stale-while-revalidate=604800"
+        }
+      ]
+    },
+    {
+      "source": "/editorial",
+      "headers": [
+        {
+          "key": "Cache-Control",
+          "value": "public, s-maxage=86400, stale-while-revalidate=604800"
+        }
+      ]
+    },
+    {
+      "source": "/contact",
+      "headers": [
+        {
+          "key": "Cache-Control",
+          "value": "public, s-maxage=86400, stale-while-revalidate=604800"
+        }
+      ]
+    },
+    {
+      "source": "/ur/privacy",
+      "headers": [
+        {
+          "key": "Cache-Control",
+          "value": "public, s-maxage=86400, stale-while-revalidate=604800"
+        }
+      ]
+    },
+    {
+      "source": "/ur/terms",
+      "headers": [
+        {
+          "key": "Cache-Control",
+          "value": "public, s-maxage=86400, stale-while-revalidate=604800"
+        }
+      ]
+    },
+    {
+      "source": "/ur/disclaimer",
+      "headers": [
+        {
+          "key": "Cache-Control",
+          "value": "public, s-maxage=86400, stale-while-revalidate=604800"
+        }
+      ]
+    },
+    {
+      "source": "/ur/editorial",
+      "headers": [
+        {
+          "key": "Cache-Control",
+          "value": "public, s-maxage=86400, stale-while-revalidate=604800"
+        }
+      ]
+    },
+    {
+      "source": "/ur/contact",
+      "headers": [
+        {
+          "key": "Cache-Control",
+          "value": "public, s-maxage=86400, stale-while-revalidate=604800"
+        }
+      ]
+    },
+    {
+      "source": "/uae",
+      "headers": [
+        {
+          "key": "Cache-Control",
+          "value": "public, s-maxage=86400, stale-while-revalidate=604800"
+        }
+      ]
+    },
+    {
+      "source": "/saudi-arabia",
+      "headers": [
+        {
+          "key": "Cache-Control",
+          "value": "public, s-maxage=86400, stale-while-revalidate=604800"
+        }
+      ]
+    },
+    {
+      "source": "/qatar",
+      "headers": [
+        {
+          "key": "Cache-Control",
+          "value": "public, s-maxage=86400, stale-while-revalidate=604800"
+        }
+      ]
+    },
+    {
+      "source": "/kuwait",
+      "headers": [
+        {
+          "key": "Cache-Control",
+          "value": "public, s-maxage=86400, stale-while-revalidate=604800"
+        }
+      ]
+    },
+    {
+      "source": "/oman",
+      "headers": [
+        {
+          "key": "Cache-Control",
+          "value": "public, s-maxage=86400, stale-while-revalidate=604800"
+        }
+      ]
+    },
+    {
+      "source": "/bahrain",
+      "headers": [
+        {
+          "key": "Cache-Control",
+          "value": "public, s-maxage=86400, stale-while-revalidate=604800"
+        }
+      ]
+    },
+    {
+      "source": "/ur/uae",
+      "headers": [
+        {
+          "key": "Cache-Control",
+          "value": "public, s-maxage=86400, stale-while-revalidate=604800"
+        }
+      ]
+    },
+    {
+      "source": "/ur/saudi-arabia",
+      "headers": [
+        {
+          "key": "Cache-Control",
+          "value": "public, s-maxage=86400, stale-while-revalidate=604800"
+        }
+      ]
+    },
+    {
+      "source": "/ur/qatar",
+      "headers": [
+        {
+          "key": "Cache-Control",
+          "value": "public, s-maxage=86400, stale-while-revalidate=604800"
+        }
+      ]
+    },
+    {
+      "source": "/ur/kuwait",
+      "headers": [
+        {
+          "key": "Cache-Control",
+          "value": "public, s-maxage=86400, stale-while-revalidate=604800"
+        }
+      ]
+    },
+    {
+      "source": "/ur/oman",
+      "headers": [
+        {
+          "key": "Cache-Control",
+          "value": "public, s-maxage=86400, stale-while-revalidate=604800"
+        }
+      ]
+    },
+    {
+      "source": "/ur/bahrain",
+      "headers": [
+        {
+          "key": "Cache-Control",
+          "value": "public, s-maxage=86400, stale-while-revalidate=604800"
+        }
+      ]
     }
   ],
   "redirects": [
-    { "source": "/listings", "destination": "/", "permanent": true },
-    { "source": "/listings/:path*", "destination": "/", "permanent": true },
-    { "source": "/property", "destination": "/", "permanent": true },
-    { "source": "/property/:path*", "destination": "/", "permanent": true },
-    { "source": "/properties", "destination": "/", "permanent": true },
-    { "source": "/properties/:path*", "destination": "/", "permanent": true },
-    { "source": "/cities", "destination": "/", "permanent": true },
-    { "source": "/cities/:path*", "destination": "/", "permanent": true },
-    { "source": "/post-ad", "destination": "/", "permanent": true },
-    { "source": "/login", "destination": "/", "permanent": true },
-    { "source": "/login/:path*", "destination": "/", "permanent": true },
-    { "source": "/search", "destination": "/", "permanent": true },
-    { "source": "/search/:path*", "destination": "/", "permanent": true },
-    { "source": "/register", "destination": "/", "permanent": true },
-    { "source": "/dashboard", "destination": "/", "permanent": true },
-    { "source": "/dashboard/:path*", "destination": "/", "permanent": true },
-    { "source": "/agents", "destination": "/", "permanent": true },
-    { "source": "/agents/:path*", "destination": "/", "permanent": true },
-    { "source": "/contact-agent", "destination": "/", "permanent": true },
-    { "source": "/signup", "destination": "/", "permanent": true },
-    { "source": "/sign-up", "destination": "/", "permanent": true },
-    { "source": "/account", "destination": "/", "permanent": true },
-    { "source": "/profile", "destination": "/", "permanent": true },
-    { "source": "/islamabad", "destination": "/", "permanent": true },
-    { "source": "/islamabad/:path*", "destination": "/", "permanent": true },
-    { "source": "/rawalpindi", "destination": "/", "permanent": true },
-    { "source": "/rawalpindi/:path*", "destination": "/", "permanent": true },
-    { "source": "/lahore", "destination": "/", "permanent": true },
-    { "source": "/lahore/:path*", "destination": "/", "permanent": true },
-    { "source": "/karachi", "destination": "/", "permanent": true },
-    { "source": "/karachi/:path*", "destination": "/", "permanent": true },
-    { "source": "/peshawar", "destination": "/", "permanent": true },
-    { "source": "/peshawar/:path*", "destination": "/", "permanent": true },
-    { "source": "/multan", "destination": "/", "permanent": true },
-    { "source": "/faisalabad", "destination": "/", "permanent": true },
-    { "source": "/quetta", "destination": "/", "permanent": true },
-    { "source": "/hyderabad", "destination": "/", "permanent": true },
-    { "source": "/sialkot", "destination": "/", "permanent": true },
-    { "source": "/gujranwala", "destination": "/", "permanent": true },
-    { "source": "/abbottabad", "destination": "/", "permanent": true },
-    { "source": "/sargodha", "destination": "/", "permanent": true },
-    { "source": "/bahawalpur", "destination": "/", "permanent": true },
-    { "source": "/sukkur", "destination": "/", "permanent": true }
+    {
+      "source": "/listings",
+      "destination": "/",
+      "permanent": true
+    },
+    {
+      "source": "/listings/:path*",
+      "destination": "/",
+      "permanent": true
+    },
+    {
+      "source": "/property",
+      "destination": "/",
+      "permanent": true
+    },
+    {
+      "source": "/property/:path*",
+      "destination": "/",
+      "permanent": true
+    },
+    {
+      "source": "/properties",
+      "destination": "/",
+      "permanent": true
+    },
+    {
+      "source": "/properties/:path*",
+      "destination": "/",
+      "permanent": true
+    },
+    {
+      "source": "/cities",
+      "destination": "/",
+      "permanent": true
+    },
+    {
+      "source": "/cities/:path*",
+      "destination": "/",
+      "permanent": true
+    },
+    {
+      "source": "/post-ad",
+      "destination": "/",
+      "permanent": true
+    },
+    {
+      "source": "/login",
+      "destination": "/",
+      "permanent": true
+    },
+    {
+      "source": "/login/:path*",
+      "destination": "/",
+      "permanent": true
+    },
+    {
+      "source": "/search",
+      "destination": "/",
+      "permanent": true
+    },
+    {
+      "source": "/search/:path*",
+      "destination": "/",
+      "permanent": true
+    },
+    {
+      "source": "/register",
+      "destination": "/",
+      "permanent": true
+    },
+    {
+      "source": "/dashboard",
+      "destination": "/",
+      "permanent": true
+    },
+    {
+      "source": "/dashboard/:path*",
+      "destination": "/",
+      "permanent": true
+    },
+    {
+      "source": "/agents",
+      "destination": "/",
+      "permanent": true
+    },
+    {
+      "source": "/agents/:path*",
+      "destination": "/",
+      "permanent": true
+    },
+    {
+      "source": "/contact-agent",
+      "destination": "/",
+      "permanent": true
+    },
+    {
+      "source": "/signup",
+      "destination": "/",
+      "permanent": true
+    },
+    {
+      "source": "/sign-up",
+      "destination": "/",
+      "permanent": true
+    },
+    {
+      "source": "/account",
+      "destination": "/",
+      "permanent": true
+    },
+    {
+      "source": "/profile",
+      "destination": "/",
+      "permanent": true
+    },
+    {
+      "source": "/islamabad",
+      "destination": "/",
+      "permanent": true
+    },
+    {
+      "source": "/islamabad/:path*",
+      "destination": "/",
+      "permanent": true
+    },
+    {
+      "source": "/rawalpindi",
+      "destination": "/",
+      "permanent": true
+    },
+    {
+      "source": "/rawalpindi/:path*",
+      "destination": "/",
+      "permanent": true
+    },
+    {
+      "source": "/lahore",
+      "destination": "/",
+      "permanent": true
+    },
+    {
+      "source": "/lahore/:path*",
+      "destination": "/",
+      "permanent": true
+    },
+    {
+      "source": "/karachi",
+      "destination": "/",
+      "permanent": true
+    },
+    {
+      "source": "/karachi/:path*",
+      "destination": "/",
+      "permanent": true
+    },
+    {
+      "source": "/peshawar",
+      "destination": "/",
+      "permanent": true
+    },
+    {
+      "source": "/peshawar/:path*",
+      "destination": "/",
+      "permanent": true
+    },
+    {
+      "source": "/multan",
+      "destination": "/",
+      "permanent": true
+    },
+    {
+      "source": "/faisalabad",
+      "destination": "/",
+      "permanent": true
+    },
+    {
+      "source": "/quetta",
+      "destination": "/",
+      "permanent": true
+    },
+    {
+      "source": "/hyderabad",
+      "destination": "/",
+      "permanent": true
+    },
+    {
+      "source": "/sialkot",
+      "destination": "/",
+      "permanent": true
+    },
+    {
+      "source": "/gujranwala",
+      "destination": "/",
+      "permanent": true
+    },
+    {
+      "source": "/abbottabad",
+      "destination": "/",
+      "permanent": true
+    },
+    {
+      "source": "/sargodha",
+      "destination": "/",
+      "permanent": true
+    },
+    {
+      "source": "/bahawalpur",
+      "destination": "/",
+      "permanent": true
+    },
+    {
+      "source": "/sukkur",
+      "destination": "/",
+      "permanent": true
+    },
+    {
+      "source": "/guides/jobs-in-dubai-for-pakistanis",
+      "destination": "/jobs/uae",
+      "permanent": true
+    },
+    {
+      "source": "/guides/jobs-in-saudi-arabia-for-pakistanis",
+      "destination": "/jobs/saudi-arabia",
+      "permanent": true
+    },
+    {
+      "source": "/guides/jobs-in-qatar-for-pakistanis",
+      "destination": "/jobs/qatar",
+      "permanent": true
+    },
+    {
+      "source": "/guides/jobs-in-kuwait-for-pakistanis",
+      "destination": "/jobs/kuwait",
+      "permanent": true
+    },
+    {
+      "source": "/guides/jobs-in-oman-for-pakistanis",
+      "destination": "/jobs/oman",
+      "permanent": true
+    },
+    {
+      "source": "/ur/guides/jobs-in-dubai-for-pakistanis",
+      "destination": "/jobs/uae",
+      "permanent": true
+    },
+    {
+      "source": "/ur/guides/jobs-in-saudi-arabia-for-pakistanis",
+      "destination": "/jobs/saudi-arabia",
+      "permanent": true
+    },
+    {
+      "source": "/ur/guides/jobs-in-qatar-for-pakistanis",
+      "destination": "/jobs/qatar",
+      "permanent": true
+    },
+    {
+      "source": "/ur/guides/jobs-in-kuwait-for-pakistanis",
+      "destination": "/jobs/kuwait",
+      "permanent": true
+    },
+    {
+      "source": "/ur/guides/jobs-in-oman-for-pakistanis",
+      "destination": "/jobs/oman",
+      "permanent": true
+    },
+    {
+      "source": "/ur/jobs/:country",
+      "destination": "/jobs/:country",
+      "permanent": true
+    },
+    {
+      "source": "/ur/questions/:country",
+      "destination": "/questions/:country",
+      "permanent": true
+    }
   ]
 }

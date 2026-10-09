@@ -1,35 +1,17 @@
 /* eslint-disable react-refresh/only-export-components */
 import { A, Crumb, Page } from "@/components/shell";
-import { breadcrumbLd, ld, pageMeta } from "@/lib/seo";
-import { countries, hrefFor, type Country, type Locale } from "@/lib/site";
-
-const CHECKED = "10 October 2026";
-
-const TITLES: Record<string, { jobs: string; questions: string }> = {
-  uae: {
-    jobs: "Jobs in UAE for Pakistanis 2026: How to Apply, Salaries, Demand",
-    questions: "Working in the UAE: 26 Questions Pakistanis Ask (2026)",
-  },
-  "saudi-arabia": {
-    jobs: "Jobs in Saudi Arabia for Pakistanis 2026: Apply, Pay, Demand",
-    questions: "Working in Saudi Arabia: 26 Questions Pakistanis Ask (2026)",
-  },
-  qatar: {
-    jobs: "Jobs in Qatar for Pakistanis 2026: How to Apply and What to Check",
-    questions: "Working in Qatar: 26 Questions Pakistanis Ask (2026)",
-  },
-  kuwait: {
-    jobs: "Jobs in Kuwait for Pakistanis 2026: How to Apply and What to Check",
-    questions: "Working in Kuwait: 26 Questions Pakistanis Ask (2026)",
-  },
-  oman: {
-    jobs: "Jobs in Oman for Pakistanis 2026: How to Apply and What to Check",
-    questions: "Working in Oman: 26 Questions Pakistanis Ask (2026)",
-  },
-  bahrain: {
-    jobs: "Jobs in Bahrain for Pakistanis 2026: How to Apply and What to Check",
-    questions: "Working in Bahrain: 26 Questions Pakistanis Ask (2026)",
-  },
+import { Rich } from "@/components/rich-text";
+import { jobSections, jobTitles } from "@/lib/content/job-hubs";
+import type { Block } from "@/lib/content/types";
+import { breadcrumbLd, pageMeta } from "@/lib/seo";
+import { countries, type Country, type Locale } from "@/lib/site";
+const QUESTION_TITLES: Record<string, string> = {
+  uae: "Working in the UAE: Questions Pakistanis Ask | Apna Ghar",
+  "saudi-arabia": "Working in Saudi Arabia: Questions Pakistanis Ask",
+  qatar: "Working in Qatar: Questions Pakistanis Ask | Apna Ghar",
+  kuwait: "Working in Kuwait: Questions Pakistanis Ask | Apna Ghar",
+  oman: "Working in Oman: Questions Pakistanis Ask | Apna Ghar",
+  bahrain: "Working in Bahrain: Questions Pakistanis Ask | Apna Ghar",
 };
 
 type Qa = { q: string; a: string };
@@ -104,7 +86,7 @@ function qa(country: Country): { heading: string; items: Qa[] }[] {
       items: [
         {
           q: "How long does a work visa take?",
-          a: `There is no official number of days that fits every file. Medical, the Protector in Pakistan, and the employer’s licence all sit in the queue. The steps are in the [[${visa}|visa guide]]. Checked on ${CHECKED}.`,
+          a: `There is no official number of days that fits every file. Medical, the Protector in Pakistan, and the employer’s licence all sit in the queue. The steps are in the [[${visa}|visa guide]].`,
         },
         {
           q: "Can I change jobs?",
@@ -151,7 +133,7 @@ function qa(country: Country): { heading: string; items: Qa[] }[] {
         {
           q: "Can I bring my family?",
           a: country.slug === "uae"
-            ? `Checked on ${CHECKED}, the UAE family page says a sponsor needs AED 4,000, or AED 3,000 plus accommodation. Read [[/guides/family-visa-uae-salary-requirement|the family visa guide]] and the government page again before you apply.`
+            ? `The UAE family page states a sponsor salary test. Read [[/guides/family-visa-uae-salary-requirement|the family visa guide]] and that government page again before you apply. This answer does not restate the figure without you opening the page.`
             : `Family residence in ${name} has its own salary and document test. It is not the same as a visit visa. Read the interior ministry page for your file. This site will not guess the threshold.`,
         },
         {
@@ -183,130 +165,121 @@ function qa(country: Country): { heading: string; items: Qa[] }[] {
   ];
 }
 
-export function jobHead(country: Country, locale: Locale) {
-  const ur = locale === "ur";
-  const path = hrefFor(ur, `/jobs/${country.slug}`);
-  const label = ur ? country.nameUr : country.short;
-  const title = ur ? `${label} میں نوکریاں ۲۰۲۶ | اپنا گھر` : TITLES[country.slug].jobs;
-  const description = ur
-    ? `${label} میں پاکستانیوں کے لیے نوکری کا راستہ: مانگ، لائسنس یافتہ او ای پی، ویزا، میڈیکل، دستاویزات اور دھوکے۔ تنخواہ وہی ہے جو تحریری معاہدے پر لکھی ہو۔`
-    : `How Pakistanis look for work in ${country.short} in 2026: demand, a licensed path from Pakistan, the visa steps, documents, and the scams to refuse. The wage is the one on the contract.`;
-  const base = pageMeta({ title, description, path, locale });
+export function jobHead(country: Country, _locale: Locale) {
+  const path = `/jobs/${country.slug}`;
+  const title = jobTitles[country.slug];
+  const description = `How Pakistanis look for work in ${country.short}: the official labour portal, a licensed path from Pakistan, and the contract lines that matter. No invented salary survey.`;
+  const base = pageMeta({ title, description, path, locale: "en", urAlternate: false });
   return {
     ...base,
     meta: [
       ...base.meta,
       breadcrumbLd([
-        { name: ur ? "ہوم" : "Home", path: ur ? "/ur" : "/" },
-        { name: label, path: hrefFor(ur, `/${country.slug}`) },
-        { name: ur ? "نوکری" : "Jobs", path },
+        { name: "Home", path: "/" },
+        { name: country.short, path: `/${country.slug}` },
+        { name: "Jobs", path },
       ]),
     ],
   };
 }
 
-export function questionHead(country: Country, locale: Locale) {
-  const ur = locale === "ur";
-  const path = hrefFor(ur, `/questions/${country.slug}`);
-  const label = ur ? country.nameUr : country.short;
-  const title = ur ? `${label}: پاکستانیوں کے سوال، ۲۰۲۶ | اپنا گھر` : TITLES[country.slug].questions;
-  const description = ur
-    ? `${label} میں کام، ویزا، پیسے، فری لانس اور خاندان کے مختصر سوال۔ جہاں عدد سرکاری صفحے پر ہے وہیں لنک ہے۔ جو عدد نظر نہیں آتا، اسے لکھا نہیں گیا۔`
-    : `Short answers Pakistanis ask before working in ${country.short}: jobs, visas, money and family. A number is stated only when an official page states it.`;
-  const groups = qa(country);
-  const base = pageMeta({ title, description, path, locale });
+export function questionHead(country: Country, _locale: Locale) {
+  const path = `/questions/${country.slug}`;
+  const title = QUESTION_TITLES[country.slug];
+  const description = `Short answers Pakistanis ask before working in ${country.short}. These pages repeat a template and are kept out of search until each answer is sourced.`;
+  const base = pageMeta({
+    title,
+    description,
+    path,
+    locale: "en",
+    urAlternate: false,
+    robots: "noindex, follow",
+  });
   return {
     ...base,
     meta: [
       ...base.meta,
       breadcrumbLd([
-        { name: "Home", path: ur ? "/ur" : "/" },
-        { name: label, path: hrefFor(ur, `/${country.slug}`) },
+        { name: "Home", path: "/" },
+        { name: country.short, path: `/${country.slug}` },
         { name: "Q&A", path },
       ]),
-      ld({
-        "@context": "https://schema.org",
-        "@type": "FAQPage",
-        mainEntity: groups.flatMap((group) =>
-          group.items.map((item) => ({
-            "@type": "Question",
-            name: item.q,
-            acceptedAnswer: { "@type": "Answer", text: item.a.replace(/\[\[([^|\]]+)\|([^\]]+)\]\]/g, "$2") },
-          })),
-        ),
-      }),
     ],
   };
 }
 
-export function JobsView({ country, locale }: { country: Country; locale: Locale }) {
-  const ur = locale === "ur";
-  const h = (path: string) => hrefFor(ur, path);
-  const visa =
-    country.slug === "uae"
-      ? "/guides/uae-work-visa-pakistan"
-      : country.slug === "saudi-arabia"
-        ? "/guides/saudi-work-visa-pakistan"
-        : `/guides/${country.slug}-visa-for-pakistanis`;
+function Blocks({ blocks }: { blocks: Block[] }) {
+  return (
+    <>
+      {blocks.map((block, index) => {
+        if (block.t === "h2") return <h2 key={index} id={block.id} className="mt-8 font-display text-2xl text-green">{block.text}</h2>;
+        if (block.t === "p") return <p key={index} className="mt-3"><Rich text={block.text} /></p>;
+        if (block.t === "note") return null;
+        if (block.t === "ul") {
+          return (
+            <ul key={index} className="mt-3 list-disc ps-5">
+              {block.items.map((item) => <li key={item} className="mt-1"><Rich text={item} /></li>)}
+            </ul>
+          );
+        }
+        if (block.t === "ol") {
+          return (
+            <ol key={index} className="mt-3 list-decimal ps-5">
+              {block.items.map((item) => <li key={item} className="mt-1"><Rich text={item} /></li>)}
+            </ol>
+          );
+        }
+        return null;
+      })}
+    </>
+  );
+}
+
+export function JobsView({ country, blocks }: { country: Country; locale: Locale; blocks: Block[] }) {
+  const sections = jobSections[country.slug] ?? [];
   return (
     <Page
       kicker={country.short}
-      title={ur ? `${country.nameUr} میں نوکریاں` : `Jobs in ${country.short} for Pakistanis`}
-      lede={ur ? "۲۰۲۶ کا راستہ: کمپنی، ویزا، دستاویز، اور فیس پہلے۔" : "The 2026 path: a named company, a visa, the papers, and no fee-first agent."}
+      title={`Jobs in ${country.short} for Pakistanis`}
+      lede="One page for this country: the labour portal, the Pakistan-side exit, and what the contract has to say. The wage is the one written down."
     >
-      <Crumb items={[{ href: h("/"), label: ur ? "ہوم" : "Home" }, { href: h(`/${country.slug}`), label: country.short }, { label: ur ? "نوکری" : "Jobs" }]} />
-      <p className="mt-4 text-sm text-muted">{ur ? "آخری جائزہ" : "Last reviewed"}: {CHECKED}</p>
-      <section className="mt-6 max-w-3xl">
-        <h2 className="font-display text-2xl text-green">{ur ? "مانگ" : "In demand"}</h2>
-        <p className="mt-2">
-          Drivers, electricians, nurses, hospitality and site trades are the roles Pakistanis are usually offered. {country.short} does not publish a Pakistani-only demand list. A vacancy on a company site you can verify is the list that counts.
+      <Crumb items={[{ href: "/", label: "Home" }, { href: `/${country.slug}`, label: country.short }, { label: "Jobs" }]} />
+      <article className="mt-6 max-w-3xl">
+        {sections.map((section) => (
+          <section key={section.heading}>
+            <h2 className="mt-8 font-display text-2xl text-green">{section.heading}</h2>
+            {section.paragraphs.map((paragraph) => (
+              <p key={paragraph.slice(0, 48)} className="mt-3"><Rich text={paragraph} /></p>
+            ))}
+          </section>
+        ))}
+        {blocks.length ? (
+          <>
+            <h2 className="mt-8 font-display text-2xl text-green">The longer note</h2>
+            <Blocks blocks={blocks} />
+          </>
+        ) : null}
+        <p className="mt-6 text-sm text-muted">
+          Fees and fines change. If a number is not on the official page linked here, treat it as unchecked.{" "}
+          <A href="/disclaimer" className="text-green underline">Disclaimer</A>.
         </p>
-        <h2 className="mt-8 font-display text-2xl text-green">{ur ? "پاکستان سے درخواست" : "How to apply from Pakistan"}</h2>
-        <ol className="mt-2 list-decimal space-y-2 ps-5">
-          <li>Look for a named employer, not a “guaranteed visa”.</li>
-          <li>If you use an agent, check the Overseas Employment Promoter on the Bureau of Emigration list. See the <A href={h("/guides/oep-licensed-agents")} className="text-green underline">licence guide</A>.</li>
-          <li>The employer files the work visa. You do not buy the file in a market office.</li>
-          <li>Employment departures pass the Protector. Read the <A href={h("/guides/protector-of-emigrants")} className="text-green underline">Protector guide</A>.</li>
-        </ol>
-        <h2 className="mt-8 font-display text-2xl text-green">{ur ? "ویزا اور میڈیکل" : "Visa and medical"}</h2>
-        <p className="mt-2">
-          Follow the <A href={h(visa)} className="text-green underline">visa guide for {country.short}</A>. If the instruction names Wafid, book only on wafid.com. A fit slip is not the visa.
-        </p>
-        <h2 className="mt-8 font-display text-2xl text-green">{ur ? "تنخواہ" : "Typical pay"}</h2>
-        <p className="mt-2">
-          This page does not print a salary survey. Basic pay, housing and overtime are lines on the contract. Put that basic wage in the <A href={h("/tools/salary-converter")} className="text-green underline">salary converter</A>. Driver, nurse and electrician notes linked from the Q&A explain how to read an offer without treating an advert as data.
-        </p>
-        <h2 className="mt-8 font-display text-2xl text-green">{ur ? "دستاویزات" : "Documents"}</h2>
-        <p className="mt-2">
-          Passport, photographs, trade or education certificates, and a police or medical paper when the file asks for them. Attestation is whatever the receiving authority currently asks. Do not pay for a stamp you cannot see on that authority’s page.
-        </p>
-        <h2 className="mt-8 font-display text-2xl text-green">{ur ? "دھوکا" : "Scams"}</h2>
-        <p className="mt-2">
-          A fee before an offer, a free email, and a company you cannot find are the usual three. Read <A href={h("/guides/fake-job-offer-dubai")} className="text-green underline">fake offers</A> and <A href={h("/guides/visa-agent-scam-pakistan")} className="text-green underline">agent scams</A>.
-        </p>
-        <p className="mt-6">
-          <A href={h(`/questions/${country.slug}`)} className="font-semibold text-green underline">{ur ? "سوالات پڑھیں" : `Questions about working in ${country.short}`}</A>
-        </p>
-      </section>
+      </article>
     </Page>
   );
 }
 
-export function QuestionsView({ country, locale }: { country: Country; locale: Locale }) {
-  const ur = locale === "ur";
-  const h = (path: string) => hrefFor(ur, path);
+export function QuestionsView({ country }: { country: Country; locale: Locale }) {
   const groups = qa(country);
   return (
     <Page
       kicker={country.short}
-      title={ur ? `${country.nameUr} کے سوال` : TITLES[country.slug].questions}
-      lede={ur ? "مختصر جواب۔ عدد صرف وہیں جہاں سرکاری صفحہ ہو۔" : "Short answers. A number appears only when an official page states it."}
+      title={QUESTION_TITLES[country.slug]}
+      lede="These answers are a shared template with the country name swapped. They stay on the site for readers, and they are marked noindex until each country has its own sourced set."
     >
-      <Crumb items={[{ href: h("/"), label: "Home" }, { href: h(`/${country.slug}`), label: country.short }, { label: "Q&A" }]} />
-      <p className="mt-4 text-sm text-muted">Last reviewed: {CHECKED}. Checked dates inside answers use the same day unless a guide says otherwise.</p>
+      <Crumb items={[{ href: "/", label: "Home" }, { href: `/${country.slug}`, label: country.short }, { label: "Q&A" }]} />
       <div className="mt-6 flex flex-wrap gap-2">
         {countries.map((item) => (
-          <A key={item.slug} href={h(`/questions/${item.slug}`)} className={`inline-flex min-h-11 items-center rounded-full px-3 text-sm ${item.slug === country.slug ? "bg-green text-on-green" : "bg-gold-soft"}`}>
+          <A key={item.slug} href={`/questions/${item.slug}`} className={`inline-flex min-h-11 items-center rounded-full px-3 text-sm ${item.slug === country.slug ? "bg-green text-on-green" : "bg-gold-soft"}`}>
             {item.short}
           </A>
         ))}
@@ -318,14 +291,14 @@ export function QuestionsView({ country, locale }: { country: Country; locale: L
             {group.items.map((item) => (
               <details key={item.q} className="rounded-xl border border-line bg-surface px-4 py-3" open>
                 <summary className="cursor-pointer font-semibold">{item.q}</summary>
-                <p className="mt-2 text-muted"><Richish text={item.a} hrefFor={h} /></p>
+                <p className="mt-2 text-muted"><Richish text={item.a} hrefFor={(path) => path} /></p>
               </details>
             ))}
           </div>
         </section>
       ))}
       <p className="mt-8">
-        <A href={h(`/jobs/${country.slug}`)} className="font-semibold text-green underline">Jobs in {country.short}</A>
+        <A href={`/jobs/${country.slug}`} className="font-semibold text-green underline">Jobs in {country.short}</A>
       </p>
     </Page>
   );

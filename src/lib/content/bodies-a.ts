@@ -1,8 +1,8 @@
 import type { ArticleBody, Block, Faq, Source } from "@/lib/content/types";
-import { S, feeNote } from "@/lib/content/sources";
+import { S } from "@/lib/content/sources";
 
 function art(blocks: Block[], faqs: Faq[], sources: Source[]): ArticleBody {
-  return { blocks: [...blocks, feeNote], faqs, sources };
+  return { blocks, faqs, sources };
 }
 
 export const bodiesA: Record<string, ArticleBody> = {
@@ -374,7 +374,7 @@ export const bodiesA: Record<string, ArticleBody> = {
       },
       {
         t: "p",
-        text: "Family residence has its own salary rule, separate from whether you can personally afford the flat. The official UAE page says: “The sponsor must have a minimum salary of AED 4,000 or AED 3,000 plus accommodation.” Checked on 9 October 2026. That page was updated on 28 September 2026. The same page says expatriate residents may bring in a spouse, unmarried daughters, sons under 25 years old, and children with special needs. Medical fitness applies to family members who have completed the age of 18. The page also says conditions can change and that you should confirm with ICP or GDRFA. Read the current line, and the longer note on [[/guides/family-visa-uae-salary-requirement|family visa salary]], before you give notice on a home in Pakistan.",
+        text: "Family residence has its own salary rule, separate from whether you can personally afford the flat. The official UAE page says: “The sponsor must have a minimum salary of AED 4,000 or AED 3,000 plus accommodation.” Checked on 9 October 2026. That page was . The same page says expatriate residents may bring in a spouse, unmarried daughters, sons under 25 years old, and children with special needs. Medical fitness applies to family members who have completed the age of 18. The page also says conditions can change and that you should confirm with ICP or GDRFA. Read the current line, and the longer note on [[/guides/family-visa-uae-salary-requirement|family visa salary]], before you give notice on a home in Pakistan.",
       },
       {
         t: "note",
@@ -413,7 +413,7 @@ export const bodiesA: Record<string, ArticleBody> = {
       },
       {
         q: "What salary do I need to sponsor my family?",
-        a: "The UAE government page, updated on 28 September 2026, says the sponsor must have a minimum salary of AED 4,000 or AED 3,000 plus accommodation. Checked on 9 October 2026. That is the sponsorship test, not your food and school budget. Confirm the current line with ICP or GDRFA, because the page says conditions can change.",
+        a: "The UAE government page says the sponsor must have a minimum salary of AED 4,000 or AED 3,000 plus accommodation. Checked on 9 October 2026. That is the sponsorship test, not your food and school budget. Confirm the current line with ICP or GDRFA, because the page says conditions can change.",
       },
       {
         q: "Who can I sponsor?",

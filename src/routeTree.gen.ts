@@ -28,6 +28,7 @@ import { Route as SitemapDotxmlRouteImport } from './routes/sitemap[.]xml'
 import { Route as TermsRouteImport } from './routes/terms'
 import { Route as UaeRouteImport } from './routes/uae'
 import { Route as UrRouteImport } from './routes/ur'
+import { Route as AboutSalimKhanRouteImport } from './routes/about/salim-khan'
 import { Route as CitiesIndexRouteImport } from './routes/cities/index'
 import { Route as CitiesSplatRouteImport } from './routes/cities/$'
 import { Route as GoldRatesIndexRouteImport } from './routes/gold-rates/index'
@@ -62,6 +63,7 @@ import { Route as UrSaudiArabiaRouteImport } from './routes/ur/saudi-arabia'
 import { Route as UrTermsRouteImport } from './routes/ur/terms'
 import { Route as UrUaeRouteImport } from './routes/ur/uae'
 import { Route as ApiCronMarketRouteImport } from './routes/api/cron/market'
+import { Route as UrAboutSalimKhanRouteImport } from './routes/ur/about/salim-khan'
 import { Route as UrGoldRatesIndexRouteImport } from './routes/ur/gold-rates/index'
 import { Route as UrGoldRatesPlaceRouteImport } from './routes/ur/gold-rates/$place'
 import { Route as UrGuidesIndexRouteImport } from './routes/ur/guides/index'
@@ -169,6 +171,11 @@ const UrRoute = UrRouteImport.update({
   id: '/ur',
   path: '/ur',
   getParentRoute: () => rootRouteImport,
+} as any)
+const AboutSalimKhanRoute = AboutSalimKhanRouteImport.update({
+  id: '/salim-khan',
+  path: '/salim-khan',
+  getParentRoute: () => AboutRoute,
 } as any)
 const CitiesIndexRoute = CitiesIndexRouteImport.update({
   id: '/cities/',
@@ -340,6 +347,11 @@ const ApiCronMarketRoute = ApiCronMarketRouteImport.update({
   path: '/api/cron/market',
   getParentRoute: () => rootRouteImport,
 } as any)
+const UrAboutSalimKhanRoute = UrAboutSalimKhanRouteImport.update({
+  id: '/salim-khan',
+  path: '/salim-khan',
+  getParentRoute: () => UrAboutRoute,
+} as any)
 const UrGoldRatesIndexRoute = UrGoldRatesIndexRouteImport.update({
   id: '/gold-rates/',
   path: '/gold-rates/',
@@ -405,7 +417,7 @@ const UrToolsSalaryConverterRoute = UrToolsSalaryConverterRouteImport.update({
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
   '/$': typeof SplatRoute
-  '/about': typeof AboutRoute
+  '/about': typeof AboutRouteWithChildren
   '/bahrain': typeof BahrainRoute
   '/contact': typeof ContactRoute
   '/disclaimer': typeof DisclaimerRoute
@@ -422,6 +434,7 @@ export interface FileRoutesByFullPath {
   '/terms': typeof TermsRoute
   '/uae': typeof UaeRoute
   '/ur': typeof UrRouteWithChildren
+  '/about/salim-khan': typeof AboutSalimKhanRoute
   '/cities/$': typeof CitiesSplatRoute
   '/gold-rates/$place': typeof GoldRatesPlaceRoute
   '/guides/$slug': typeof GuidesSlugRoute
@@ -435,7 +448,7 @@ export interface FileRoutesByFullPath {
   '/tools/gratuity-calculator': typeof ToolsGratuityCalculatorRoute
   '/tools/remittance': typeof ToolsRemittanceRoute
   '/tools/salary-converter': typeof ToolsSalaryConverterRoute
-  '/ur/about': typeof UrAboutRoute
+  '/ur/about': typeof UrAboutRouteWithChildren
   '/ur/bahrain': typeof UrBahrainRoute
   '/ur/contact': typeof UrContactRoute
   '/ur/disclaimer': typeof UrDisclaimerRoute
@@ -456,6 +469,7 @@ export interface FileRoutesByFullPath {
   '/rates/': typeof RatesIndexRoute
   '/ur/': typeof UrIndexRoute
   '/api/cron/market': typeof ApiCronMarketRoute
+  '/ur/about/salim-khan': typeof UrAboutSalimKhanRoute
   '/ur/gold-rates/$place': typeof UrGoldRatesPlaceRoute
   '/ur/guides/$slug': typeof UrGuidesSlugRoute
   '/ur/jobs/$country': typeof UrJobsCountryRoute
@@ -472,7 +486,7 @@ export interface FileRoutesByFullPath {
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
   '/$': typeof SplatRoute
-  '/about': typeof AboutRoute
+  '/about': typeof AboutRouteWithChildren
   '/bahrain': typeof BahrainRoute
   '/contact': typeof ContactRoute
   '/disclaimer': typeof DisclaimerRoute
@@ -488,6 +502,7 @@ export interface FileRoutesByTo {
   '/sitemap.xml': typeof SitemapDotxmlRoute
   '/terms': typeof TermsRoute
   '/uae': typeof UaeRoute
+  '/about/salim-khan': typeof AboutSalimKhanRoute
   '/cities/$': typeof CitiesSplatRoute
   '/gold-rates/$place': typeof GoldRatesPlaceRoute
   '/guides/$slug': typeof GuidesSlugRoute
@@ -501,7 +516,7 @@ export interface FileRoutesByTo {
   '/tools/gratuity-calculator': typeof ToolsGratuityCalculatorRoute
   '/tools/remittance': typeof ToolsRemittanceRoute
   '/tools/salary-converter': typeof ToolsSalaryConverterRoute
-  '/ur/about': typeof UrAboutRoute
+  '/ur/about': typeof UrAboutRouteWithChildren
   '/ur/bahrain': typeof UrBahrainRoute
   '/ur/contact': typeof UrContactRoute
   '/ur/disclaimer': typeof UrDisclaimerRoute
@@ -522,6 +537,7 @@ export interface FileRoutesByTo {
   '/rates': typeof RatesIndexRoute
   '/ur': typeof UrIndexRoute
   '/api/cron/market': typeof ApiCronMarketRoute
+  '/ur/about/salim-khan': typeof UrAboutSalimKhanRoute
   '/ur/gold-rates/$place': typeof UrGoldRatesPlaceRoute
   '/ur/guides/$slug': typeof UrGuidesSlugRoute
   '/ur/jobs/$country': typeof UrJobsCountryRoute
@@ -539,7 +555,7 @@ export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/': typeof IndexRoute
   '/$': typeof SplatRoute
-  '/about': typeof AboutRoute
+  '/about': typeof AboutRouteWithChildren
   '/bahrain': typeof BahrainRoute
   '/contact': typeof ContactRoute
   '/disclaimer': typeof DisclaimerRoute
@@ -556,6 +572,7 @@ export interface FileRoutesById {
   '/terms': typeof TermsRoute
   '/uae': typeof UaeRoute
   '/ur': typeof UrRouteWithChildren
+  '/about/salim-khan': typeof AboutSalimKhanRoute
   '/cities/$': typeof CitiesSplatRoute
   '/gold-rates/$place': typeof GoldRatesPlaceRoute
   '/guides/$slug': typeof GuidesSlugRoute
@@ -569,7 +586,7 @@ export interface FileRoutesById {
   '/tools/gratuity-calculator': typeof ToolsGratuityCalculatorRoute
   '/tools/remittance': typeof ToolsRemittanceRoute
   '/tools/salary-converter': typeof ToolsSalaryConverterRoute
-  '/ur/about': typeof UrAboutRoute
+  '/ur/about': typeof UrAboutRouteWithChildren
   '/ur/bahrain': typeof UrBahrainRoute
   '/ur/contact': typeof UrContactRoute
   '/ur/disclaimer': typeof UrDisclaimerRoute
@@ -590,6 +607,7 @@ export interface FileRoutesById {
   '/rates/': typeof RatesIndexRoute
   '/ur/': typeof UrIndexRoute
   '/api/cron/market': typeof ApiCronMarketRoute
+  '/ur/about/salim-khan': typeof UrAboutSalimKhanRoute
   '/ur/gold-rates/$place': typeof UrGoldRatesPlaceRoute
   '/ur/guides/$slug': typeof UrGuidesSlugRoute
   '/ur/jobs/$country': typeof UrJobsCountryRoute
@@ -625,6 +643,7 @@ export interface FileRouteTypes {
     | '/terms'
     | '/uae'
     | '/ur'
+    | '/about/salim-khan'
     | '/cities/$'
     | '/gold-rates/$place'
     | '/guides/$slug'
@@ -659,6 +678,7 @@ export interface FileRouteTypes {
     | '/rates/'
     | '/ur/'
     | '/api/cron/market'
+    | '/ur/about/salim-khan'
     | '/ur/gold-rates/$place'
     | '/ur/guides/$slug'
     | '/ur/jobs/$country'
@@ -691,6 +711,7 @@ export interface FileRouteTypes {
     | '/sitemap.xml'
     | '/terms'
     | '/uae'
+    | '/about/salim-khan'
     | '/cities/$'
     | '/gold-rates/$place'
     | '/guides/$slug'
@@ -725,6 +746,7 @@ export interface FileRouteTypes {
     | '/rates'
     | '/ur'
     | '/api/cron/market'
+    | '/ur/about/salim-khan'
     | '/ur/gold-rates/$place'
     | '/ur/guides/$slug'
     | '/ur/jobs/$country'
@@ -758,6 +780,7 @@ export interface FileRouteTypes {
     | '/terms'
     | '/uae'
     | '/ur'
+    | '/about/salim-khan'
     | '/cities/$'
     | '/gold-rates/$place'
     | '/guides/$slug'
@@ -792,6 +815,7 @@ export interface FileRouteTypes {
     | '/rates/'
     | '/ur/'
     | '/api/cron/market'
+    | '/ur/about/salim-khan'
     | '/ur/gold-rates/$place'
     | '/ur/guides/$slug'
     | '/ur/jobs/$country'
@@ -809,7 +833,7 @@ export interface FileRouteTypes {
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
   SplatRoute: typeof SplatRoute
-  AboutRoute: typeof AboutRoute
+  AboutRoute: typeof AboutRouteWithChildren
   BahrainRoute: typeof BahrainRoute
   ContactRoute: typeof ContactRoute
   DisclaimerRoute: typeof DisclaimerRoute
@@ -983,6 +1007,13 @@ declare module '@tanstack/react-router' {
       fullPath: '/ur'
       preLoaderRoute: typeof UrRouteImport
       parentRoute: typeof rootRouteImport
+    }
+    '/about/salim-khan': {
+      id: '/about/salim-khan'
+      path: '/salim-khan'
+      fullPath: '/about/salim-khan'
+      preLoaderRoute: typeof AboutSalimKhanRouteImport
+      parentRoute: typeof AboutRoute
     }
     '/cities/': {
       id: '/cities/'
@@ -1222,6 +1253,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof ApiCronMarketRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/ur/about/salim-khan': {
+      id: '/ur/about/salim-khan'
+      path: '/salim-khan'
+      fullPath: '/ur/about/salim-khan'
+      preLoaderRoute: typeof UrAboutSalimKhanRouteImport
+      parentRoute: typeof UrAboutRoute
+    }
     '/ur/gold-rates/': {
       id: '/ur/gold-rates/'
       path: '/gold-rates'
@@ -1309,8 +1347,29 @@ declare module '@tanstack/react-router' {
   }
 }
 
+interface AboutRouteChildren {
+  AboutSalimKhanRoute: typeof AboutSalimKhanRoute
+}
+
+const AboutRouteChildren: AboutRouteChildren = {
+  AboutSalimKhanRoute: AboutSalimKhanRoute,
+}
+
+const AboutRouteWithChildren = AboutRoute._addFileChildren(AboutRouteChildren)
+
+interface UrAboutRouteChildren {
+  UrAboutSalimKhanRoute: typeof UrAboutSalimKhanRoute
+}
+
+const UrAboutRouteChildren: UrAboutRouteChildren = {
+  UrAboutSalimKhanRoute: UrAboutSalimKhanRoute,
+}
+
+const UrAboutRouteWithChildren =
+  UrAboutRoute._addFileChildren(UrAboutRouteChildren)
+
 interface UrRouteChildren {
-  UrAboutRoute: typeof UrAboutRoute
+  UrAboutRoute: typeof UrAboutRouteWithChildren
   UrBahrainRoute: typeof UrBahrainRoute
   UrContactRoute: typeof UrContactRoute
   UrDisclaimerRoute: typeof UrDisclaimerRoute
@@ -1338,7 +1397,7 @@ interface UrRouteChildren {
 }
 
 const UrRouteChildren: UrRouteChildren = {
-  UrAboutRoute: UrAboutRoute,
+  UrAboutRoute: UrAboutRouteWithChildren,
   UrBahrainRoute: UrBahrainRoute,
   UrContactRoute: UrContactRoute,
   UrDisclaimerRoute: UrDisclaimerRoute,
@@ -1370,7 +1429,7 @@ const UrRouteWithChildren = UrRoute._addFileChildren(UrRouteChildren)
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
   SplatRoute: SplatRoute,
-  AboutRoute: AboutRoute,
+  AboutRoute: AboutRouteWithChildren,
   BahrainRoute: BahrainRoute,
   ContactRoute: ContactRoute,
   DisclaimerRoute: DisclaimerRoute,

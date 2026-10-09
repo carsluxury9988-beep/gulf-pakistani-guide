@@ -4,7 +4,7 @@ import { useEffect, useState } from "react";
 import { categories, countries, hrefFor, isUrduPath, SITE_NAME, switchPath } from "@/lib/site";
 
 const nav = [
-  { href: "/rates", en: "Rates", ur: "ریٹس" },
+  { href: "/rates", en: "Currency rates", ur: "کرنسی ریٹ" },
   { href: "/gold-rates", en: "Gold", ur: "سونا" },
   { href: "/jobs/uae", en: "Jobs", ur: "نوکری" },
   { href: "/questions/uae", en: "Q&A", ur: "سوال" },
@@ -163,8 +163,8 @@ export function SiteFooter() {
       </div>
       <p className="border-t border-gold/40 px-4 py-4 text-center text-sm text-on-green/80">
         {ur
-          ? "ریٹ اشاراتی ہیں۔ لین دین سے پہلے اپنے بینک یا ایکسچینج سے تصدیق کریں۔"
-          : "Rates are indicative. Check your bank or exchange before you send money or buy gold."}
+          ? "ریٹ اشاراتی ہیں۔ اشتہار اور الحاقی لنک ابھی بند ہیں۔ جب آئیں گے تو نشان لگے گا، اور وہ ریٹ یا قانونی وضاحت نہیں بدلیں گے۔"
+          : "Rates are indicative. Advertising and affiliate links are off. If they are added later, they will be labelled and will not change a rate or a legal explanation."}
       </p>
     </footer>
   );

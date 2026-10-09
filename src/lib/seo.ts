@@ -11,8 +11,10 @@ export function pageMeta(opts: {
   description: string;
   path: string;
   locale?: Locale;
-  /** When false, the Urdu URL is not advertised (untranslated guide). */
+  /** When false, the Urdu URL is not advertised (untranslated or noindexed twin). */
   urAlternate?: boolean;
+  /** e.g. "noindex, follow" for templated pages that must stay out of search. */
+  robots?: string;
 }): { meta: any[]; links: any[] } {
   const canonicalPath = opts.path;
   const url = absUrl(canonicalPath);
@@ -32,6 +34,7 @@ export function pageMeta(opts: {
     { name: "twitter:description", content: opts.description },
     { name: "twitter:image", content: image },
   ];
+  if (opts.robots) meta.push({ name: "robots", content: opts.robots });
   if (url.startsWith("http")) {
     meta.push({ property: "og:url", content: url });
   }

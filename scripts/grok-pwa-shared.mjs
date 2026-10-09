@@ -209,7 +209,13 @@ export function readGrokProjectId() {
 
 export function readGrokExtensionsEnabled() {
   const fromProcess = typeof process !== "undefined" ? process.env?.VITE_GROK_EXTENSIONS : "";
-  return String(fromProcess ?? "").trim() !== "0";
+  const flag = String(fromProcess ?? "").trim();
+  if (flag === "0") return false;
+  if (flag === "1") return true;
+  // Live Vercel HTML must not load grok.com/extensions.js (third-party cookies, AdSense review).
+  const env = typeof process !== "undefined" ? process.env ?? {} : {};
+  if (env.VERCEL === "1" || env.VERCEL_ENV) return false;
+  return true;
 }
 
 export function readXCreator() {

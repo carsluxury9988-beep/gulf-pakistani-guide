@@ -36,7 +36,7 @@ export const S = {
   nusuk: { label: "Nusuk", href: "https://www.nusuk.sa" },
   hajjPolicy: {
     label: "Hajj Policy and Plan 2027–2030 (PDF)",
-    href: "https://www.mora.gov.pk/SiteImage/Misc/files/270726_HajjPolicy2027-30(1).pdf",
+    href: "https://www.mora.gov.pk/SiteImage/Misc/files/270726_HajjPolicy2027-30%281%29.pdf",
   },
   hajjPolicies: {
     label: "MoRA Hajj policies",
@@ -52,8 +52,3 @@ export const S = {
   saudia: { label: "Saudia", href: "https://www.saudia.com" },
   airblue: { label: "airblue", href: "https://www.airblue.com" },
 } satisfies Record<string, Source>;
-
-export const feeNote = {
-  t: "note" as const,
-  text: "Fees, fines and salary thresholds change. If a number is not written on the official page linked below, treat a WhatsApp figure as unchecked.",
-};

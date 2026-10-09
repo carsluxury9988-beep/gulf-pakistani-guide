@@ -85,10 +85,20 @@ async function blobSet(store: Store) {
   }
 }
 
-export async function readStoredMarket(): Promise<Market | null> {
+export async function readStoredRecord(): Promise<Store | null> {
   const stored = (await kvGet()) ?? (await blobGet());
-  if (!stored?.market?.usd || !stored.market.xauUsd) return null;
-  return { ...stored.market, stale: true, source: `${stored.market.source} · last saved ${stored.savedAt.slice(0, 16)}Z` };
+  if (!stored?.market?.usd || !stored.market.xauUsd || !stored.savedAt) return null;
+  return stored;
+}
+
+export async function readStoredMarket(): Promise<Market | null> {
+  const stored = await readStoredRecord();
+  if (!stored) return null;
+  return {
+    ...stored.market,
+    stale: true,
+    source: `${stored.market.source} · last saved ${stored.savedAt.slice(0, 16)}Z`,
+  };
 }
 
 export async function writeStoredMarket(market: Market) {

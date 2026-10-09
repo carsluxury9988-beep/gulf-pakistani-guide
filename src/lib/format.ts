@@ -110,7 +110,7 @@ export function gramLines(market: Market, placeSlug: string, code: string): Gram
       21: board.gram21,
       18: board.gram18,
     };
-    return KARATS.map((karat) => line(karat, published[karat]));
+    return KARATS.filter((karat) => published[karat] > 0).map((karat) => line(karat, published[karat]));
   }
   if (placeSlug === "pakistan" && market.localGold?.pakistan) {
     const board = market.localGold.pakistan;
@@ -158,6 +158,14 @@ export function historyFor(market: Market, code: string) {
     })
     .filter((point): point is { date: string; value: number } => point !== null)
     .sort((a, b) => a.date.localeCompare(b.date));
+}
+
+export function rateMove(market: Market, code: string) {
+  const points = historyFor(market, code);
+  if (points.length < 2) return null;
+  const previous = points[points.length - 2];
+  const latest = points[points.length - 1];
+  return { delta: latest.value - previous.value, versus: previous.date };
 }
 
 export type BoardCompare = {

@@ -7,6 +7,8 @@ import { FlightNotes, GratuityTool, RemittanceTool, SalaryTool } from "@/compone
 import { guides, guideBySlug } from "@/lib/content/catalog";
 import { guideSeo } from "@/lib/content/seo-copy";
 import type { GuidePayload } from "@/lib/content.fn";
+import { countryNotes } from "@/lib/content/country-notes";
+import { legalPages, legalPath } from "@/lib/content/legal-pages";
 import {
   boardCompare,
   formatDay,
@@ -16,6 +18,7 @@ import {
   gramLines,
   historyFor,
   pkrPer,
+  rateMove,
   type Market,
 } from "@/lib/format";
 import { breadcrumbLd, ld, pageMeta } from "@/lib/seo";
@@ -26,11 +29,10 @@ import {
   countries,
   goldPlaces,
   hrefFor,
-  OWNER_CITY,
   OWNER_NAME,
   pairs,
+  pathForGuide,
   SITE_NAME,
-  SITE_TAGLINE,
   absUrl,
   type Country,
   type GoldPlace,
@@ -92,25 +94,47 @@ export function HomeView({ market, locale }: { market: Market; locale: Locale })
   const dubaiLines = gramLines(market, "dubai", "AED");
   const gram24 = dubaiLines.find((line) => line.karat === 24);
   const gram22 = dubaiLines.find((line) => line.karat === 22);
-  const move = (code: string) => {
-    const points = historyFor(market, code);
-    if (points.length < 2) return 0;
-    return points[points.length - 1].value - points[points.length - 2].value;
-  };
   return (
     <main>
       <section className="hero-panel text-on-green">
         <div className="mx-auto max-w-6xl px-4 py-10 sm:py-14">
-          <p className="text-sm font-semibold text-gold">
-            {ur ? "آج کا ڈیسک" : "Today’s desk"} · <span className="num">{formatWhen(market.fetchedAt, locale)}</span>
-          </p>
-          <h1 className="mt-3 max-w-3xl font-display text-4xl leading-tight sm:text-5xl">
+          <div>
+            <div className="flex items-end justify-between gap-3">
+              <p className="font-display text-2xl text-gold sm:text-3xl">
+                {ur ? "آج کے کرنسی ریٹ" : "Today’s currency rates"}
+              </p>
+              <p className="text-xs text-on-green/80">{market.stale ? (ur ? "تاخیر ہو سکتی ہے" : "May be delayed") : ur ? "تازہ" : "Updated"}</p>
+            </div>
+            <div className="mt-3 grid grid-cols-2 gap-2 sm:grid-cols-3 lg:grid-cols-6">
+              {pairs.map((pair) => {
+                const move = rateMove(market, pair.code);
+                const delta = move?.delta ?? 0;
+                return (
+                  <A
+                    key={pair.slug}
+                    href={h(`/rates/${pair.slug}`)}
+                    className="rounded-xl bg-white/10 px-3 py-2.5 backdrop-blur hover:bg-white/15"
+                  >
+                    <p className="text-xs font-semibold text-gold">{pair.code} → PKR</p>
+                    <p className="num mt-0.5 text-2xl font-semibold leading-none">{formatRate(pkrPer(market, pair.code))}</p>
+                    <p className="num mt-1 text-xs text-on-green/80">
+                      {move
+                        ? `${delta > 0 ? "▲" : delta < 0 ? "▼" : "—"} ${delta === 0 ? "" : formatMoney(Math.abs(delta), 2)} ${ur ? "بمقابلہ" : "vs"} ${formatDay(move.versus)}`
+                        : "—"}
+                    </p>
+                  </A>
+                );
+              })}
+            </div>
+            <p className="mt-2 text-xs text-on-green/75">{rateLine(market, locale)}</p>
+          </div>
+          <h1 className="mt-6 max-w-3xl font-display text-4xl leading-tight sm:text-5xl">
             {ur ? "خلیج میں پاکستانیوں کے لیے سب کچھ، ایک جگہ۔" : "Everything Pakistanis in the Gulf need, in one place."}
           </h1>
           <p className="mt-4 max-w-2xl text-lg text-on-green/85">
             {ur
-              ? "ریٹ، سونا، نوکری، ویزا اور پیسے بھیجنے کے سوال۔ ذرائع سرکاری صفحے ہیں، اندازے نہیں۔"
-              : "Rates, gold, jobs, visas and the money you send home. Sources are official pages, not guesses."}
+              ? "کرنسی ریٹ، سونا، نوکری، ویزا اور پیسے بھیجنے کے سوال۔ رہنما سرکاری صفحے بتاتی ہے، ریٹ نامزد ماخذ سے آتے ہیں۔"
+              : "Currency rates, gold, jobs, visas and the money you send home. Guides cite official pages. Rates come from the sources named on each page."}
           </p>
           <div className="mt-6 grid grid-cols-2 gap-2 sm:grid-cols-3 lg:grid-cols-6">
             {countries.map((country) => (
@@ -129,22 +153,7 @@ export function HomeView({ market, locale }: { market: Market; locale: Locale })
       <section className="mx-auto max-w-6xl px-4 py-8">
         {staleNote(market, locale)}
         <div className="mt-2 flex items-end justify-between gap-3">
-          <h2 className="font-display text-3xl text-green">{ur ? "آج کے ریٹ" : "Today’s rates"}</h2>
-          <p className="text-sm text-muted">{market.stale ? (ur ? "تاخیر ہو سکتی ہے" : "May be delayed") : ur ? "تازہ" : "Updated"}</p>
-        </div>
-        <div className="mt-4 grid grid-cols-2 gap-3 lg:grid-cols-3">
-          {pairs.map((pair) => {
-            const delta = move(pair.code);
-            return (
-              <A key={pair.slug} href={h(`/rates/${pair.slug}`)} className="rounded-2xl border border-line bg-surface p-4 shadow-sm transition hover:-translate-y-0.5 hover:border-green">
-                <p className="text-sm text-muted">{pair.code} → PKR</p>
-                <p className="num mt-1 text-3xl font-semibold text-green">{formatRate(pkrPer(market, pair.code))}</p>
-                <p className={`num text-sm ${delta < 0 ? "text-danger" : "text-green-2"}`}>
-                  {delta === 0 ? "—" : `${delta > 0 ? "▲" : "▼"} ${formatMoney(Math.abs(delta), 2)}`}
-                </p>
-              </A>
-            );
-          })}
+          <h2 className="font-display text-3xl text-green">{ur ? "سونا" : "Gold"}</h2>
         </div>
         <div className="mt-4 grid gap-3 sm:grid-cols-2">
           <A href={h("/gold-rates/dubai")} className="rounded-2xl border border-line bg-surface p-4 shadow-sm">
@@ -156,7 +165,7 @@ export function HomeView({ market, locale }: { market: Market; locale: Locale })
           <A href={h("/gold-rates/pakistan")} className="rounded-2xl border border-line bg-surface p-4 shadow-sm">
             <p className="text-sm text-muted">{ur ? "پاکستان سرفہ" : "Pakistan Sarafa"}</p>
             <p className="num mt-1 text-2xl font-semibold">22K Rs {board ? formatMoney(board.pakistanTola22, 0) : "—"}</p>
-            <p className="text-sm text-muted">{ur ? "فی تولہ" : "per tola"} · {board ? formatWhen(market.localGold.pakistan?.asOf || market.fetchedAt, locale) : ""}</p>
+            <p className="text-sm text-muted">{ur ? "فی تولہ" : "per tola"} · {board ? formatWhen(market.localGold.pakistan?.asOf || market.fetchedAt, locale) : ""}{market.localGold.pakistan?.stale ? (ur ? " · تاخیر ہو سکتی ہے" : " · may be delayed") : ""}</p>
           </A>
         </div>
         <h2 className="mt-10 font-display text-3xl text-green">{ur ? "اوزار" : "Tools"}</h2>
@@ -176,9 +185,18 @@ export function HomeView({ market, locale }: { market: Market; locale: Locale })
         <h2 className="mt-10 font-display text-3xl text-green">{ur ? "مشہور رہنما" : "Popular guides"}</h2>
         <div className="mt-4 grid gap-3 sm:grid-cols-2">
           {featured.map((guide) => (
-            <A key={guide.slug} href={h(`/guides/${guide.slug}`)} className="rounded-2xl border border-line bg-surface p-4 shadow-sm hover:border-green">
-              <p className="text-sm font-semibold text-gold-ink">{ur ? categoryBySlug(guide.category)?.ur : categoryBySlug(guide.category)?.en}</p>
-              <p className="mt-1 text-lg font-semibold">{ur && guide.urTitle ? guide.urTitle : guide.title}</p>
+            <A key={guide.slug} href={h(pathForGuide(guide.slug))} className="overflow-hidden rounded-2xl border border-line bg-surface shadow-sm hover:border-green">
+              <img
+                src={cardImage(guide.category)}
+                alt=""
+                width={640}
+                height={640}
+                className="aspect-square w-full object-cover"
+              />
+              <div className="p-4">
+                <p className="text-sm font-semibold text-gold-ink">{ur ? categoryBySlug(guide.category)?.ur : categoryBySlug(guide.category)?.en}</p>
+                <p className="mt-1 text-lg font-semibold">{ur && guide.urTitle ? guide.urTitle : guide.title}</p>
+              </div>
             </A>
           ))}
         </div>
@@ -205,12 +223,29 @@ export function HomeView({ market, locale }: { market: Market; locale: Locale })
         <p className="mt-10 rounded-2xl border border-gold bg-gold-soft px-4 py-3 text-sm">
           {ur
             ? "ذرائع: سرکاری ویب سائٹس، باقاعدہ اپڈیٹ۔ اپنا گھر سلیم خان چلاتے ہیں، اسلام آباد۔"
-            : "Sources: official government websites, updated regularly. Apna Ghar is run by Salim Khan, Islamabad."}
+            : "Guides cite official government pages. Rates and gold come from the named sources on each page. Apna Ghar is run by Salim Khan, Islamabad."}
         </p>
         <AdSlot />
       </section>
     </main>
   );
+}
+
+function cardImage(category: string) {
+  if (category === "jobs") return "/images/cards/jobs.webp";
+  if (category === "visas" || category === "rights") return "/images/cards/visas.webp";
+  if (category === "cost" || category === "travel") return "/images/cards/cost.webp";
+  if (category === "gold") return "/images/cards/gold.webp";
+  return "/images/cards/money.webp";
+}
+
+function rateLine(market: Market, locale: Locale) {
+  const ur = locale === "ur";
+  const rateDate = formatDay(market.asOf);
+  const checked = formatWhen(market.fetchedAt, locale);
+  return ur
+    ? `ریٹ کی تاریخ: ${rateDate} (ماخذ روزانہ) · جانچ: ${checked}`
+    : `Rate date: ${rateDate} (source updates daily) · Checked: ${checked}`;
 }
 
 function dxbNote(market: Market, ur: boolean) {
@@ -276,7 +311,9 @@ export function countryHead(country: Country, locale: Locale) {
 export function CountryView({ country, market, locale }: { country: Country; market: Market; locale: Locale }) {
   const ur = locale === "ur";
   const h = (path: string) => hrefFor(ur, path);
-  const list = guides.filter((guide) => guide.countries.includes(country.slug)).slice(0, 8);
+  const list = guides
+    .filter((guide) => guide.countries.includes(country.slug) && pathForGuide(guide.slug).startsWith("/guides"))
+    .slice(0, 8);
   const gold = gramLines(market, country.goldSlug, country.currency).find((row) => row.karat === 22);
   return (
     <Page
@@ -291,6 +328,7 @@ export function CountryView({ country, market, locale }: { country: Country; mar
         ]}
       />
       {staleNote(market, locale)}
+      <CountryNoteBlock slug={country.slug} />
       <div className="mt-4 grid gap-3 sm:grid-cols-3">
         <A href={h(`/rates/${country.currency.toLowerCase()}-to-pkr`)} className="rounded-xl border border-line bg-surface p-4">
           <p className="text-sm text-muted">1 {country.currency}</p>
@@ -317,7 +355,7 @@ export function CountryView({ country, market, locale }: { country: Country; mar
       <ul className="mt-3 divide-y divide-line rounded-xl border border-line bg-surface">
         {list.map((guide) => (
           <li key={guide.slug}>
-            <A href={h(`/guides/${guide.slug}`)} className="block px-4 py-3 font-semibold">
+            <A href={h(pathForGuide(guide.slug))} className="block px-4 py-3 font-semibold">
               {ur && guide.urTitle ? guide.urTitle : guide.title}
             </A>
           </li>
@@ -341,7 +379,7 @@ export function ratesHead(locale: Locale) {
       ...base.meta,
       breadcrumbLd([
         { name: ur ? "ہوم" : "Home", path: ur ? "/ur" : "/" },
-        { name: ur ? "ریٹس" : "Rates", path },
+        { name: ur ? "کرنسی ریٹ" : "Currency rates", path },
       ]),
     ],
   };
@@ -362,7 +400,7 @@ export function RatesIndex({ market, locale }: { market: Market; locale: Locale 
     >
       {staleNote(market, locale)}
       <p className="mt-3 text-sm text-muted">
-        {ur ? "آخری جانچ" : "Last checked"}: <span className="num">{formatWhen(market.fetchedAt, locale)}</span>
+        {ur ? "آخری جانچ" : "Checked"}: <span className="num">{rateLine(market, locale)}</span>
         {" · "}
         {market.source}
       </p>
@@ -444,7 +482,7 @@ export function pairHead(pair: Pair, locale: Locale, rate = 0): { meta: any[]; l
       ...base.meta,
       breadcrumbLd([
         { name: ur ? "ہوم" : "Home", path: ur ? "/ur" : "/" },
-        { name: ur ? "ریٹس" : "Rates", path: hrefFor(ur, "/rates") },
+        { name: ur ? "کرنسی ریٹ" : "Currency rates", path: hrefFor(ur, "/rates") },
         { name: `${pair.code} to PKR`, path },
       ]),
       ld({
@@ -476,7 +514,7 @@ export function PairView({ pair, market, locale }: { pair: Pair; market: Market;
       <Crumb
         items={[
           { href: h("/"), label: ur ? "ہوم" : "Home" },
-          { href: h("/rates"), label: ur ? "ریٹس" : "Rates" },
+          { href: h("/rates"), label: ur ? "کرنسی ریٹ" : "Currency rates" },
           { label: `${pair.code} / PKR` },
         ]}
       />
@@ -485,7 +523,7 @@ export function PairView({ pair, market, locale }: { pair: Pair; market: Market;
         <p className="mt-4 num font-display text-5xl text-green">{formatRate(rate)}</p>
         <p className="text-muted">{ur ? "روپے فی 1" : "Pakistani rupees for 1"} {pair.code}</p>
         <p className="mt-2 text-sm text-muted">
-          {ur ? "آخری جانچ" : "Last updated"}: <span className="num">{formatWhen(market.fetchedAt, locale)}</span>
+          {ur ? "آخری جانچ" : "Checked"}: <span className="num">{rateLine(market, locale)}</span>
           {market.stale ? (ur ? " · محفوظ شدہ" : " · saved copy") : ""}
         </p>
         <p className="num mt-2 text-sm">1,000 PKR = {rate ? formatRate(1000 / rate) : "—"} {pair.code}</p>
@@ -553,11 +591,11 @@ export function PairView({ pair, market, locale }: { pair: Pair; market: Market;
 
 const goldTitles: Record<string, string> = {
   dubai: "Gold Rate Today in Dubai: 24K, 22K, 21K, 18K per Gram (AED)",
-  "saudi-arabia": "Gold Rate Today in Saudi Arabia per Gram (SAR)",
-  qatar: "Gold Rate Today in Qatar per Gram in Riyals (QAR)",
-  kuwait: "Gold Rate Today in Kuwait per Gram in Dinars (KWD)",
-  oman: "Gold Rate Today in Oman per Gram in Rials (OMR)",
-  bahrain: "Gold Rate Today in Bahrain per Gram in Dinars (BHD)",
+  "saudi-arabia": "Gold Rate Today in Saudi Arabia: 24K and 22K per Gram (SAR)",
+  qatar: "Gold Rate Today in Qatar: 24K, 22K and 21K per Gram (QAR)",
+  kuwait: "Gold Rate Today in Kuwait: 24K, 22K, 21K per Gram (KWD)",
+  oman: "Gold Rate Today in Oman: 24K, 22K and 21K per Gram (OMR)",
+  bahrain: "Gold Rate Today in Bahrain: 24K and 22K per Gram (BHD)",
   pakistan: "Pakistan Gold Rate Today: Sarafa per Gram and Tola",
 };
 
@@ -894,7 +932,9 @@ export function GuidesIndex({ locale, category }: { locale: Locale; category: st
   const ur = locale === "ur";
   const h = (path: string) => hrefFor(ur, path);
   const active = categories.some((item) => item.slug === category) ? category : "";
-  const list = active ? guides.filter((guide) => guide.category === active) : guides;
+  const list = (active ? guides.filter((guide) => guide.category === active) : guides).filter((guide) =>
+    pathForGuide(guide.slug).startsWith("/guides"),
+  );
   return (
     <Page
       kicker={SITE_NAME}
@@ -918,7 +958,7 @@ export function GuidesIndex({ locale, category }: { locale: Locale; category: st
       <ul className="mt-6 divide-y divide-line rounded-xl border border-line bg-surface">
         {list.map((guide) => (
           <li key={guide.slug}>
-            <A href={h(`/guides/${guide.slug}`)} className="block px-4 py-4">
+            <A href={h(pathForGuide(guide.slug))} className="block px-4 py-4">
               <p className="text-sm font-semibold text-gold-ink">{ur ? categoryBySlug(guide.category)?.ur : categoryBySlug(guide.category)?.en}</p>
               <p className="text-lg font-semibold">{ur && guide.urTitle ? guide.urTitle : guide.title}</p>
               <p className="text-sm text-muted">{ur && guide.urDescription ? guide.urDescription : guide.description}</p>
@@ -965,10 +1005,12 @@ export function guideHead(payload: GuidePayload, updated: string): { meta: any[]
         "@context": "https://schema.org",
         "@type": "Article",
         headline: payload.title,
+        datePublished: "2026-10-09",
         dateModified: updated,
+        image: absUrl("/og.jpg"),
         description,
-        author: { "@type": "Person", name: OWNER_NAME },
-        publisher: { "@type": "Organization", name: SITE_NAME },
+        author: { "@type": "Person", name: OWNER_NAME, url: absUrl("/about/salim-khan") },
+        publisher: { "@type": "Organization", name: SITE_NAME, logo: { "@type": "ImageObject", url: absUrl("/logo-512.png") } },
       }),
       ld({
         "@context": "https://schema.org",
@@ -999,7 +1041,8 @@ export function GuideArticle({ payload }: { payload: GuidePayload }) {
         ]}
       />
       <p className="mt-4 text-sm text-muted">
-        {ur ? "آخری جائزہ" : "Last reviewed"}: <time dateTime={meta.updated}>{formatDay(meta.updated)}</time>
+        {ur ? "لکھا" : "By"}{" "}
+        <A href={h("/about/salim-khan")} className="font-semibold text-green underline">{OWNER_NAME}</A>
       </p>
       {!payload.translated ? (
         <p className="mt-3 rounded-lg bg-gold-soft px-3 py-2 text-sm">
@@ -1059,6 +1102,11 @@ export function GuideArticle({ payload }: { payload: GuidePayload }) {
             </li>
           ))}
         </ul>
+      <p className="mt-4 text-sm text-muted">
+          <A href={h("/disclaimer")} className="text-green underline">
+            {ur ? "فیس اور جرمانے بدلتے ہیں۔ عدد صرف سرکاری صفحے پر ہو تو مانیں۔ دستبرداری پڑھیں۔" : "Fees and fines change. If a number is not on the official page linked above, treat it as unchecked. Read the disclaimer."}
+          </A>
+        </p>
       </section>
       <aside className="mt-8 grid gap-3 rounded-xl bg-green p-4 text-on-green sm:grid-cols-2">
         <A href={h(meta.toolHref)} className="font-display text-2xl text-gold">
@@ -1071,7 +1119,7 @@ export function GuideArticle({ payload }: { payload: GuidePayload }) {
               const related = guideBySlug(slug);
               return (
                 <li key={slug}>
-                  <A href={h(`/guides/${slug}`)} className="inline-flex min-h-11 items-center underline">
+                  <A href={h(pathForGuide(slug))} className="inline-flex min-h-11 items-center underline">
                     {related ? (ur && related.urTitle ? related.urTitle : related.title) : slug}
                   </A>
                 </li>
@@ -1084,150 +1132,43 @@ export function GuideArticle({ payload }: { payload: GuidePayload }) {
   );
 }
 
-const legalCopy: Record<string, { enTitle: string; urTitle: string; en: string[]; ur: string[] }> = {
-  about: {
-    enTitle: "About Apna Ghar: Practical Rates, Tools and Guides",
-    urTitle: "اپنا گھر کے بارے میں: ریٹ، اوزار اور رہنما",
-    en: [
-      "Apna Ghar is run by Salim Khan, based in Islamabad, Pakistan.",
-      "The mission is practical, sourced guides for Pakistanis working in the UAE, Saudi Arabia, Qatar, Kuwait, Oman and Bahrain: currency and gold boards, calculators, and the official page behind a fee or a visa rule.",
-      `${SITE_TAGLINE} It is not a government, not a bank, not an exchange house, and not a recruitment agency.`,
-    ],
-    ur: [
-      "اپنا گھر سلیم خان چلاتے ہیں، جو اسلام آباد، پاکستان میں مقیم ہیں۔",
-      "مقصد متحدہ عرب امارات، سعودی عرب، قطر، کویت، عمان اور بحرین میں کام کرنے والے پاکستانیوں کے لیے عملی، ماخذ کے ساتھ رہنما ہے۔",
-      "یہ حکومت، بینک، ایکسچینج یا بھرتی ایجنسی نہیں۔",
-    ],
-  },
-  contact: {
-    enTitle: "Contact Apna Ghar for Gulf Rate and Visa Questions",
-    urTitle: "اپنا گھر سے رابطہ: ریٹ اور ویزا کے سوال",
-    en: [`Email ${CONTACT_EMAIL}. Salim Khan reads corrections and source notes at that address.`, "There is no account and no form that stores your message on a server."],
-    ur: [`ای میل ${CONTACT_EMAIL}۔ سلیم خان اسی پتے پر درستی اور ذرائع پڑھتے ہیں۔`, "نہ اکاؤنٹ ہے، نہ ایسا فارم جو پیغام سرور پر محفوظ کرے۔"],
-  },
-  privacy: {
-    enTitle: "Privacy Policy for Apna Ghar Readers, Rates and Tools",
-    urTitle: "اپنا گھر کی رازداری: ریٹ، اوزار اور قارئین",
-    en: [
-      "Apna Ghar does not ask you to create an account. Calculators run in your browser.",
-      "Currency and gold figures are fetched on the server from public rate feeds. We do not attach your name to that request.",
-      "If a Google Analytics ID is configured, the site may send ordinary page-view data to Google. If it is empty, that tag is not added. Search Console verification is only a meta tag.",
-    ],
-    ur: [
-      "اکاؤنٹ نہیں بنتا۔ کیلکولیٹر براؤزر میں چلتے ہیں۔",
-      "ریٹ سرور پر عوامی فیڈز سے آتے ہیں۔ آپ کا نام اس درخواست کے ساتھ نہیں جاتا۔",
-      "اگر گوگل اینالٹکس کی آئی ڈی لگائی گئی ہو تو صفحے کے عام اعداد جا سکتے ہیں۔ خالی ہو تو ٹیگ نہیں لگتا۔",
-    ],
-  },
-  terms: {
-    enTitle: "Terms of Use for Apna Ghar Rates, Tools and Guides",
-    urTitle: "اپنا گھر کے استعمال کی شرائط اور رہنما",
-    en: [
-      "You may read Apna Ghar for personal information. Do not copy the guides onto another site and present them as your own.",
-      "Calculators are estimates. They are not a contract, a court ruling, or a promise of a visa.",
-    ],
-    ur: [
-      "ذاتی معلومات کے لیے پڑھ سکتے ہیں۔ رہنما نقل کر کے اپنی سائٹ پر اپنی تحریروں کے طور پر نہ لگائیں۔",
-      "کیلکولیٹر اندازہ ہیں۔ یہ معاہدہ، عدالتی فیصلہ یا ویزے کا وعدہ نہیں۔",
-    ],
-  },
-  disclaimer: {
-    enTitle: "Disclaimer: Apna Ghar Rates and Gold Are Indicative",
-    urTitle: "دستبرداری: اپنا گھر کے ریٹ اشاراتی ہیں",
-    en: [
-      "Rates and gold prices are indicative. A Sarafa or Dubai board is not a rate your bank, exchange or jeweller must honour.",
-      "Labour, visa and customs rules change. Where a fee is not printed on the official page linked in a guide, do not treat a number from social media as fact.",
-      "Check with your bank, exchange, MOHRE, HRSD, ICP, Absher or Pakistan Customs before you act.",
-    ],
-    ur: [
-      "ریٹ اور سونا اشاراتی ہیں۔ سرفہ یا دبئی کا بورڈ آپ کے بینک یا سنار کا سودا نہیں۔",
-      "قواعد بدلتے ہیں۔ جہاں فیس سرکاری صفحے پر نہ ہو، سوشل میڈیا کے عدد کو حقیقت نہ سمجھیں۔",
-      "عمل سے پہلے اپنے بینک، محرہ، ایچ آر ایس ڈی، آئی سی پی، ابشر یا پاکستان کسٹمز سے تصدیق کریں۔",
-    ],
-  },
-  editorial: {
-    enTitle: "Editorial Policy of Apna Ghar Guides, Rates and Tools",
-    urTitle: "اپنا گھر کی اداری پالیسی: رہنما اور ریٹ",
-    en: [
-      "Guides are written in plain language and linked to official sources. We do not invent visa fees, fines or salary averages.",
-      "If a rule is uncertain, the page says so and points to the authority that publishes it.",
-      "Affiliate offers for remittance, flights and display ads exist in the code and stay switched off until a human turns them on. They must never change a rate or a legal explanation.",
-      `Corrections: email ${CONTACT_EMAIL} with the page link and the source.`,
-    ],
-    ur: [
-      "رہنما سادہ زبان میں ہیں اور سرکاری ذرائع سے جڑے ہیں۔ ہم ویزا فیس، جرمانے یا اوسط تنخواہ نہیں گھڑتے۔",
-      "قاعدہ غیر یقینی ہو تو صفحہ یہی کہتا ہے اور اتھارٹی کا لنک دیتا ہے۔",
-      "اشتہار اور الحاق کوڈ میں ہیں اور بند ہیں۔ انہیں ریٹ یا قانونی وضاحت نہیں بدلنی چاہیے۔",
-      `درستی کے لیے ${CONTACT_EMAIL} پر صفحے کا لنک بھیجیں۔`,
-    ],
-  },
-};
-
-const legalDescriptions: Record<string, { en: string; ur: string }> = {
-  about:
-    {
-      en: "Apna Ghar is run by Salim Khan in Islamabad. Practical, sourced guides for Pakistanis working in the UAE, Saudi Arabia, Qatar, Kuwait, Oman and Bahrain.",
-      ur: "اپنا گھر سلیم خان چلاتے ہیں، اسلام آباد سے۔ خلیج کے چھ ممالک میں کام کرنے والے پاکستانیوں کے لیے عملی رہنما۔",
-    },
-  contact: {
-    en: "Email Salim Khan at salimpk742@gmail.com about a rate, a guide, or a correction. Apna Ghar has no login and stores no messages on a server. Write.",
-    ur: "ریٹ، رہنما یا درستی کے لیے salimpk742@gmail.com پر سلیم خان کو لکھیں۔ اپنا گھر پر لاگ ان نہیں اور پیغام محفوظ نہیں ہوتا۔",
-  },
-  privacy: {
-    en: "Apna Ghar does not ask for an account. Calculators stay in your browser, and currency requests are not tied to your name, email or phone number.",
-    ur: "اپنا گھر اکاؤنٹ نہیں مانگتا۔ کیلکولیٹر براؤزر میں رہتے ہیں اور ریٹ کی درخواست آپ کے نام سے نہیں جڑتی۔",
-  },
-  terms: {
-    en: "Personal use of Apna Ghar is welcome. The guides are not a visa, a contract or a court ruling, and every calculator on the site stays an estimate.",
-    ur: "اپنا گھر ذاتی استعمال کے لیے ہے۔ رہنما ویزا، معاہدہ یا وعدہ نہیں، اور اندازہ اندازہ ہی رہتا ہے۔",
-  },
-  disclaimer: {
-    en: "Apna Ghar rates and gold boards are indicative only. Confirm the figure with your bank, exchange, jeweller, or the official authority before you act.",
-    ur: "اپنا گھر کے ریٹ اور سونے کے بورڈ اشاراتی ہیں۔ رسید اپنے بینک، ایکسچینج، سنار یا سرکاری ادارے سے دیکھیں۔",
-  },
-  editorial: {
-    en: "Apna Ghar links official sources and does not invent visa fees or fines. Affiliate slots stay switched off, and corrections go to the contact email.",
-    ur: "اپنا گھر سرکاری ذرائع سے جوڑتا ہے اور ویزا فیس نہیں گھڑتا۔ الحاق بند ہیں، درستی رابطہ ای میل پر بھیجیں۔",
-  },
-};
+function CountryNoteBlock({ slug }: { slug: string }) {
+  const note = countryNotes[slug];
+  if (!note) return null;
+  return (
+    <section className="mt-6 max-w-3xl">
+      {note.paragraphs.map((paragraph) => (
+        <p key={paragraph.slice(0, 40)} className="mt-3"><Rich text={paragraph} /></p>
+      ))}
+      <h2 className="mt-6 font-display text-2xl text-green">First week</h2>
+      <ul className="mt-2 list-disc ps-5">
+        {note.checklist.map((item) => (
+          <li key={item} className="mt-1">{item}</li>
+        ))}
+      </ul>
+    </section>
+  );
+}
 
 export function legalHead(slug: string, locale: Locale) {
-  const copy = legalCopy[slug];
+  const copy = legalPages[slug];
   const ur = locale === "ur";
   const title = ur ? copy.urTitle : copy.enTitle;
-  const description = ur ? legalDescriptions[slug].ur : legalDescriptions[slug].en;
-  const path = hrefFor(ur, `/${slug}`);
+  const description = ur ? copy.urDescription : copy.enDescription;
+  const path = hrefFor(ur, legalPath(slug));
   const base = pageMeta({ title, description, path, locale });
   const extra =
-    slug === "about"
+    slug === "about" || slug === "salim-khan"
       ? [
           ld({
             "@context": "https://schema.org",
             "@type": "Person",
             name: OWNER_NAME,
+            url: absUrl("/about/salim-khan"),
             jobTitle: "Publisher",
             email: CONTACT_EMAIL,
-            address: {
-              "@type": "PostalAddress",
-              addressLocality: "Islamabad",
-              addressCountry: "PK",
-            },
-            worksFor: {
-              "@type": "Organization",
-              name: SITE_NAME,
-              url: "https://apnaaghar.pk",
-            },
-          }),
-          ld({
-            "@context": "https://schema.org",
-            "@type": "Organization",
-            name: SITE_NAME,
-            url: "https://apnaaghar.pk",
-            email: CONTACT_EMAIL,
-            logo: "https://apnaaghar.pk/logo-512.png",
-            founder: { "@type": "Person", name: OWNER_NAME },
             address: { "@type": "PostalAddress", addressLocality: "Islamabad", addressCountry: "PK" },
-            description: `Apna Ghar is run by ${OWNER_NAME}, based in ${OWNER_CITY}. ${SITE_TAGLINE}`,
+            worksFor: { "@type": "Organization", name: SITE_NAME, url: "https://apnaaghar.pk" },
           }),
         ]
       : [];
@@ -1235,7 +1176,7 @@ export function legalHead(slug: string, locale: Locale) {
 }
 
 export function LegalView({ slug, locale }: { slug: string; locale: Locale }) {
-  const copy = legalCopy[slug];
+  const copy = legalPages[slug];
   const ur = locale === "ur";
   const paragraphs = ur ? copy.ur : copy.en;
   return (
@@ -1247,7 +1188,7 @@ export function LegalView({ slug, locale }: { slug: string; locale: Locale }) {
       ) : null}
       <div className="mt-4 grid max-w-3xl gap-3">
         {paragraphs.map((paragraph) => (
-          <p key={paragraph}>{paragraph}</p>
+          <p key={paragraph.slice(0, 48)}><Rich text={paragraph} /></p>
         ))}
       </div>
     </Page>

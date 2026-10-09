@@ -471,6 +471,19 @@ export function hrefFor(ur: boolean, path: string) {
   return ur ? urduPath(path) : path;
 }
 
+/** Job guides that now live on the country jobs hub. */
+export const movedJobGuides: Record<string, string> = {
+  "jobs-in-dubai-for-pakistanis": "/jobs/uae",
+  "jobs-in-saudi-arabia-for-pakistanis": "/jobs/saudi-arabia",
+  "jobs-in-qatar-for-pakistanis": "/jobs/qatar",
+  "jobs-in-kuwait-for-pakistanis": "/jobs/kuwait",
+  "jobs-in-oman-for-pakistanis": "/jobs/oman",
+};
+
+export function pathForGuide(slug: string) {
+  return movedJobGuides[slug] ?? `/guides/${slug}`;
+}
+
 export function switchPath(pathname: string) {
   return isUrduPath(pathname) ? englishPath(pathname) : urduPath(pathname);
 }

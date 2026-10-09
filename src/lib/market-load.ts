@@ -1,7 +1,7 @@
 import snapshot from "@/data/market-snapshot.json";
 import seedGold from "@/data/local-gold.json";
 import type { DubaiGold, Market, PakistanGold } from "@/lib/format";
-import { readStoredMarket, writeStoredMarket } from "@/lib/market-store";
+import { readStoredMarket, readStoredRecord, writeStoredMarket } from "@/lib/market-store";
 
 type UsdFile = { date?: string; usd?: Record<string, number> };
 type XauFile = { date?: string; xau?: Record<string, number> };
@@ -189,8 +189,8 @@ async function fetchDubaiBoard(): Promise<DubaiGold | null> {
       sourceUrl: "https://www.khaleejtimes.com/gold-forex",
       gram24,
       gram22,
-      gram21: gram21 ?? gram24 * (21 / 24),
-      gram18: gram18 ?? gram24 * (18 / 24),
+      gram21: gram21 ?? 0,
+      gram18: gram18 ?? 0,
       stale: false,
     };
   } catch (error) {
@@ -278,6 +278,14 @@ export async function loadMarket(opts?: { refresh?: boolean }): Promise<Market> 
 
 async function loadFresh(opts?: { refresh?: boolean }): Promise<Market> {
   if (!opts?.refresh && cache && Date.now() - cache.at < TTL_MS) return cache.data;
+  if (!opts?.refresh) {
+    const stored = await readStoredRecord().catch(() => null);
+    const savedAt = stored ? Date.parse(stored.savedAt) : Number.NaN;
+    if (stored && Number.isFinite(savedAt) && Date.now() - savedAt < TTL_MS) {
+      cache = { at: Date.now(), data: stored.market };
+      return stored.market;
+    }
+  }
   const saved = snapshotMarket();
   try {
     const [usdFile, xauFile, stored] = await Promise.all([

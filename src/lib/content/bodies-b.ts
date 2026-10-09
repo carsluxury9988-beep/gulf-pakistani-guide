@@ -1,8 +1,8 @@
 import type { ArticleBody, Block, Faq, Source } from "@/lib/content/types";
-import { S, feeNote } from "@/lib/content/sources";
+import { S } from "@/lib/content/sources";
 
 function art(blocks: Block[], faqs: Faq[], sources: Source[]): ArticleBody {
-  return { blocks: [...blocks, feeNote], faqs, sources };
+  return { blocks, faqs, sources };
 }
 
 const five = (faqs: Faq[]) => faqs;
@@ -68,7 +68,7 @@ export const bodiesB: Record<string, ArticleBody> = {
       },
       {
         t: "p",
-        text: "A job and a family residence visa are different files. Checked on 9 October 2026, the u.ae family residence page, which itself shows an update of 28 September 2026, says a sponsor needs a salary of AED 4,000 a month, or AED 3,000 plus accommodation, to sponsor a spouse, unmarried daughters, sons under 25, and children with special needs. That line is for those relatives. It is not a parent rule. Parent sponsorship in Dubai is a separate, higher emirate rule. This guide does not state a dirham or rupee figure for parents. Read GDRFA Dubai for a parent file, and read [[/guides/family-visa-uae-salary-requirement|family sponsorship]] before you promise tickets to anyone at home.",
+        text: "A job and a family residence visa are different files. Checked on 9 October 2026, the u.ae family residence page says a sponsor needs a salary of AED 4,000 a month, or AED 3,000 plus accommodation, to sponsor a spouse, unmarried daughters, sons under 25, and children with special needs. That line is for those relatives. It is not a parent rule. Parent sponsorship in Dubai is a separate, higher emirate rule. This guide does not state a dirham or rupee figure for parents. Read GDRFA Dubai for a parent file, and read [[/guides/family-visa-uae-salary-requirement|family sponsorship]] before you promise tickets to anyone at home.",
       },
       {
         t: "note",
@@ -156,7 +156,7 @@ export const bodiesB: Record<string, ArticleBody> = {
       },
       {
         t: "p",
-        text: "A family visit lets relatives come for a visit if that product is open to them. A family residence visa lets them live with you, and it has a salary test. Checked on 9 October 2026, the u.ae family residence page, updated on that site on 28 September 2026, says the sponsor needs AED 4,000 a month, or AED 3,000 plus accommodation, for a spouse, unmarried daughters, sons under 25, and children with special needs. That is the spouse and child rule. Parent sponsorship in Dubai is a separate, higher emirate rule. Do not use the spouse figure as a parent figure, and do not convert it into rupees and call the rupee number the rule. Read [[/guides/family-visa-uae-salary-requirement|family sponsorship]] and read GDRFA Dubai for a parent file.",
+        text: "A family visit lets relatives come for a visit if that product is open to them. A family residence visa lets them live with you, and it has a salary test. Checked on 9 October 2026, the u.ae family residence page says the sponsor needs AED 4,000 a month, or AED 3,000 plus accommodation, for a spouse, unmarried daughters, sons under 25, and children with special needs. That is the spouse and child rule. Parent sponsorship in Dubai is a separate, higher emirate rule. Do not use the spouse figure as a parent figure, and do not convert it into rupees and call the rupee number the rule. Read [[/guides/family-visa-uae-salary-requirement|family sponsorship]] and read GDRFA Dubai for a parent file.",
       },
       {
         t: "note",
@@ -332,7 +332,7 @@ export const bodiesB: Record<string, ArticleBody> = {
       },
       {
         t: "p",
-        text: "A family visit is still a visit. Family residence is a different visa, with a salary test for the sponsor. Checked on 9 October 2026, the u.ae family residence page, updated on 28 September 2026, says the sponsor needs AED 4,000 a month, or AED 3,000 plus accommodation, for a spouse, unmarried daughters, sons under 25, and children with special needs. Do not use that line to guess a parent file. Parent sponsorship in Dubai is a separate, higher emirate rule, and this page states no dirham or rupee figure for parents. Read GDRFA Dubai, and read [[/guides/family-visa-uae-salary-requirement|family sponsorship]]. If someone says come on a visit and we will fix the work visa later, read [[/guides/uae-visit-visa-vs-work-visa|visit visa versus work visa]] before you pay.",
+        text: "A family visit is still a visit. Family residence is a different visa, with a salary test for the sponsor. Checked on 9 October 2026, the u.ae family residence page says the sponsor needs AED 4,000 a month, or AED 3,000 plus accommodation, for a spouse, unmarried daughters, sons under 25, and children with special needs. Do not use that line to guess a parent file. Parent sponsorship in Dubai is a separate, higher emirate rule, and this page states no dirham or rupee figure for parents. Read GDRFA Dubai, and read [[/guides/family-visa-uae-salary-requirement|family sponsorship]]. If someone says come on a visit and we will fix the work visa later, read [[/guides/uae-visit-visa-vs-work-visa|visit visa versus work visa]] before you pay.",
       },
       {
         t: "note",
@@ -421,7 +421,7 @@ export const bodiesB: Record<string, ArticleBody> = {
       },
       {
         t: "p",
-        text: "A work residence does not automatically bring your family. Checked on 9 October 2026, the u.ae family residence page, updated on 28 September 2026, says a sponsor needs AED 4,000 a month, or AED 3,000 plus accommodation, for a spouse, unmarried daughters, sons under 25, and children with special needs. Read [[/guides/family-visa-uae-salary-requirement|family sponsorship]] and compare that test with the basic salary and accommodation line in your own contract. Parent sponsorship in Dubai is a separate, higher emirate rule. This guide states no dirham or rupee figure for parents. Read GDRFA Dubai for a parent file.",
+        text: "A work residence does not automatically bring your family. Checked on 9 October 2026, the u.ae family residence page says a sponsor needs AED 4,000 a month, or AED 3,000 plus accommodation, for a spouse, unmarried daughters, sons under 25, and children with special needs. Read [[/guides/family-visa-uae-salary-requirement|family sponsorship]] and compare that test with the basic salary and accommodation line in your own contract. Parent sponsorship in Dubai is a separate, higher emirate rule. This guide states no dirham or rupee figure for parents. Read GDRFA Dubai for a parent file.",
       },
       {
         t: "note",
@@ -509,7 +509,7 @@ export const bodiesB: Record<string, ArticleBody> = {
       },
       {
         t: "p",
-        text: "Each family member has an expiry date. Renew them on those dates. If a family file is refused, check whether the sponsor still meets the residence rule. Checked on 9 October 2026, the u.ae family residence page, updated on 28 September 2026, says the sponsor needs AED 4,000 a month, or AED 3,000 plus accommodation, for a spouse, unmarried daughters, sons under 25, and children with special needs. Read [[/guides/family-visa-uae-salary-requirement|family sponsorship]] and compare it with the wage in the contract, using the [[/tools/salary-converter|salary converter]] so allowances are not mixed up with basic pay. Parent sponsorship in Dubai is a separate, higher emirate rule. Do not quote the spouse figure as a parent figure. Read GDRFA Dubai for parents.",
+        text: "Each family member has an expiry date. Renew them on those dates. If a family file is refused, check whether the sponsor still meets the residence rule. Checked on 9 October 2026, the u.ae family residence page says the sponsor needs AED 4,000 a month, or AED 3,000 plus accommodation, for a spouse, unmarried daughters, sons under 25, and children with special needs. Read [[/guides/family-visa-uae-salary-requirement|family sponsorship]] and compare it with the wage in the contract, using the [[/tools/salary-converter|salary converter]] so allowances are not mixed up with basic pay. Parent sponsorship in Dubai is a separate, higher emirate rule. Do not quote the spouse figure as a parent figure. Read GDRFA Dubai for parents.",
       },
       {
         t: "note",

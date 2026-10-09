@@ -32,7 +32,8 @@ export const getGuide = createServerFn({ method: "GET" })
     ]);
     const english = bodiesA[data.slug] ?? bodiesB[data.slug] ?? bodiesC[data.slug] ?? bodiesD[data.slug];
     if (!english) return null;
-    if (data.locale === "ur" && urduArticles[data.slug]) {
+    const hasUrdu = Boolean(urduArticles[data.slug]);
+    if (data.locale === "ur" && hasUrdu) {
       return {
         slug: data.slug,
         locale: "ur",
@@ -45,7 +46,7 @@ export const getGuide = createServerFn({ method: "GET" })
     return {
       slug: data.slug,
       locale: data.locale,
-      translated: data.locale !== "ur",
+      translated: hasUrdu,
       title: meta.title,
       description: meta.description,
       body: english,

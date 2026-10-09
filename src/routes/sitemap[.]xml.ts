@@ -1,71 +1,87 @@
 import { createFileRoute } from "@tanstack/react-router";
 import { urduArticles } from "@/lib/content/articles-ur";
 import { guides } from "@/lib/content/catalog";
-import { countries, goldPlaces, pairs, SITE_URL } from "@/lib/site";
+import { countries, goldPlaces, movedJobGuides, pairs, SITE_URL } from "@/lib/site";
+import { loadMarket } from "@/lib/market-load";
 
 function loc(path: string) {
   const origin = SITE_URL || "https://apnaaghar.pk";
   return `${origin}${path}`;
 }
 
+const PUBLISHED = "2026-10-09";
+const LEGAL_EDIT = "2026-10-10";
+
 export const Route = createFileRoute("/sitemap.xml")({
   server: {
     handlers: {
       GET: async () => {
         const translated = new Set(Object.keys(urduArticles));
-        const today = "2026-10-10";
+        const moved = new Set(Object.keys(movedJobGuides));
+        let rateDate = PUBLISHED;
+        let goldDate = PUBLISHED;
+        try {
+          const market = await loadMarket();
+          if (/^\d{4}-\d{2}-\d{2}/.test(market.asOf)) rateDate = market.asOf.slice(0, 10);
+          const pk = market.localGold?.pakistan?.asOf;
+          if (pk && /^\d{4}-\d{2}-\d{2}/.test(pk)) goldDate = pk.slice(0, 10);
+          else if (pk) goldDate = pk.slice(0, 10);
+        } catch {
+          /* keep the publish date if the feed is down */
+        }
         const entries: { path: string; lastmod: string }[] = [
-          ["/", today],
-          ["/ur", today],
-          ["/rates", today],
-          ["/ur/rates", today],
-          ["/gold-rates", today],
-          ["/ur/gold-rates", today],
-          ["/guides", today],
-          ["/ur/guides", today],
-          ["/tools/salary-converter", today],
-          ["/ur/tools/salary-converter", today],
-          ["/tools/gratuity-calculator", today],
-          ["/ur/tools/gratuity-calculator", today],
-          ["/tools/remittance", today],
-          ["/ur/tools/remittance", today],
-          ["/tools/flights", today],
-          ["/ur/tools/flights", today],
-          ["/about", today],
-          ["/ur/about", today],
-          ["/contact", today],
-          ["/ur/contact", today],
-          ["/privacy", today],
-          ["/ur/privacy", today],
-          ["/terms", today],
-          ["/ur/terms", today],
-          ["/disclaimer", today],
-          ["/ur/disclaimer", today],
-          ["/editorial", today],
-          ["/ur/editorial", today],
+          ["/", rateDate],
+          ["/ur", rateDate],
+          ["/rates", rateDate],
+          ["/ur/rates", rateDate],
+          ["/gold-rates", goldDate],
+          ["/ur/gold-rates", goldDate],
+          ["/guides", PUBLISHED],
+          ["/ur/guides", PUBLISHED],
+          ["/tools/salary-converter", PUBLISHED],
+          ["/ur/tools/salary-converter", PUBLISHED],
+          ["/tools/gratuity-calculator", PUBLISHED],
+          ["/ur/tools/gratuity-calculator", PUBLISHED],
+          ["/tools/remittance", PUBLISHED],
+          ["/ur/tools/remittance", PUBLISHED],
+          ["/tools/flights", PUBLISHED],
+          ["/ur/tools/flights", PUBLISHED],
+          ["/about", LEGAL_EDIT],
+          ["/about/salim-khan", LEGAL_EDIT],
+          ["/ur/about", LEGAL_EDIT],
+          ["/ur/about/salim-khan", LEGAL_EDIT],
+          ["/contact", LEGAL_EDIT],
+          ["/ur/contact", LEGAL_EDIT],
+          ["/privacy", LEGAL_EDIT],
+          ["/ur/privacy", LEGAL_EDIT],
+          ["/terms", LEGAL_EDIT],
+          ["/ur/terms", LEGAL_EDIT],
+          ["/disclaimer", LEGAL_EDIT],
+          ["/ur/disclaimer", LEGAL_EDIT],
+          ["/editorial", LEGAL_EDIT],
+          ["/ur/editorial", LEGAL_EDIT],
           ...countries.flatMap((country) => [
-            [`/${country.slug}`, today],
-            [`/ur/${country.slug}`, today],
-            [`/jobs/${country.slug}`, today],
-            [`/ur/jobs/${country.slug}`, today],
-            [`/questions/${country.slug}`, today],
-            [`/ur/questions/${country.slug}`, today],
+            [`/${country.slug}`, LEGAL_EDIT],
+            [`/ur/${country.slug}`, LEGAL_EDIT],
+            [`/jobs/${country.slug}`, LEGAL_EDIT],
           ]),
           ...pairs.flatMap((pair) => [
-            [`/rates/${pair.slug}`, today],
-            [`/ur/rates/${pair.slug}`, today],
+            [`/rates/${pair.slug}`, rateDate],
+            [`/ur/rates/${pair.slug}`, rateDate],
           ]),
           ...goldPlaces.flatMap((place) => [
-            [`/gold-rates/${place.slug}`, today],
-            [`/ur/gold-rates/${place.slug}`, today],
+            [`/gold-rates/${place.slug}`, goldDate],
+            [`/ur/gold-rates/${place.slug}`, goldDate],
           ]),
-          ...guides.flatMap((guide) =>
-            (translated.has(guide.slug)
-              ? [`/guides/${guide.slug}`, `/ur/guides/${guide.slug}`]
-              : [`/guides/${guide.slug}`]
-            ).map((path) => [path, guide.updated]),
-          ),
-        ].map(([path, lastmod]) => ({ path, lastmod }));
+          ...guides
+            .filter((guide) => !moved.has(guide.slug))
+            .flatMap((guide) =>
+              (translated.has(guide.slug)
+                ? [`/guides/${guide.slug}`, `/ur/guides/${guide.slug}`]
+                : [`/guides/${guide.slug}`]
+              ).map((path) => [path, guide.updated]),
+            ),
+        ].map(([path, lastmod]) => ({ path, lastmod: String(lastmod).slice(0, 10) }));
         const body = `<?xml version="1.0" encoding="UTF-8"?>
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
 ${entries

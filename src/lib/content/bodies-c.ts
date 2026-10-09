@@ -1,8 +1,8 @@
 import type { ArticleBody, Block, Faq, Source } from "@/lib/content/types";
-import { S, feeNote } from "@/lib/content/sources";
+import { S } from "@/lib/content/sources";
 
 function art(blocks: Block[], faqs: Faq[], sources: Source[]): ArticleBody {
-  return { blocks: [...blocks, feeNote], faqs, sources };
+  return { blocks, faqs, sources };
 }
 
 export const bodiesC: Record<string, ArticleBody> = {
@@ -346,7 +346,7 @@ export const bodiesC: Record<string, ArticleBody> = {
     [
       {
         t: "p",
-        text: "The UAE family visa salary requirement is a published rule, not a rumour in a building lobby. Checked on 9 October 2026, the UAE government page on a residence visa for family members, updated 28 September 2026, says the sponsor must have a minimum salary of AED 4,000, or AED 3,000 plus accommodation. That page is the [residence visa for family members](https://u.ae/en/information-and-services/visa-and-emirates-id/Types-of-visas/Residence-visa/residence-visa-for-family-members). It is the figure for the relatives it names. It is not a figure Apna Ghar has guessed, and it is not the rule for sponsoring parents. Read the page again on the day you apply, because this threshold has changed before and the official wording wins if it changes again.",
+        text: "The UAE family visa salary requirement is a published rule, not a rumour in a building lobby. Checked on 9 October 2026, the UAE government page on a residence visa for family members says the sponsor must have a minimum salary of AED 4,000, or AED 3,000 plus accommodation. That page is the [residence visa for family members](https://u.ae/en/information-and-services/visa-and-emirates-id/Types-of-visas/Residence-visa/residence-visa-for-family-members). It is the figure for the relatives it names. It is not a figure Apna Ghar has guessed, and it is not the rule for sponsoring parents. Read the page again on the day you apply, because this threshold has changed before and the official wording wins if it changes again.",
       },
       {
         t: "h2",
@@ -424,7 +424,7 @@ export const bodiesC: Record<string, ArticleBody> = {
     [
       {
         q: "What is the minimum salary for a UAE family visa?",
-        a: "Checked on 9 October 2026, the UAE government page updated on 28 September 2026 says the sponsor must have a minimum salary of AED 4,000, or AED 3,000 plus accommodation. Read that page again before you apply. The figure is for the relatives it lists. It is not the parent rule.",
+        a: "Checked on 9 October 2026, the UAE government page says the sponsor must have a minimum salary of AED 4,000, or AED 3,000 plus accommodation. Read that page again before you apply. The figure is for the relatives it lists. It is not the parent rule.",
       },
       {
         q: "Does a housing allowance count?",
@@ -2048,7 +2048,7 @@ export const bodiesC: Record<string, ArticleBody> = {
           "Air Arabia publishes its rules on its [baggage page](https://www.airarabia.com/en/baggage). Many low fares are hand baggage only until you add a bag. The fare you are buying is the fare that counts.",
           "PIA’s site is [piac.com.pk](https://www.piac.com.pk). Some fares have included a suitcase and some have not. Read the flight you hold. This guide will not print a PIA kilogram number.",
           "Saudia publishes [baggage allowances](https://www.saudia.com/before-flying/baggage/baggage-allowances). Check them with your ticket number. Brands differ between a light fare and a flexible one.",
-          "airblue publishes baggage with the booking flow at [its baggage page](https://www.airblue.com/bookings/baggage.asp). Use that page, not a travel agent’s memory of a 30 kg habit.",
+          "airblue publishes baggage with the booking flow at [its baggage page](https://www.airblue.com/services/deals). Use that page, not a travel agent’s memory of a 30 kg habit.",
           "If a travel agent says the bag is included, ask them to show that line inside the booking before you pay. A spoken “it is included” is not an allowance.",
           "Extra-bag prices are usually lower online, before the airport. The price on the day is the airline’s price. This page does not copy it.",
           "Infants, sports kit and wheelchairs have their own lines on each airline’s page. Do not assume they share the adult suitcase.",
@@ -2121,7 +2121,7 @@ export const bodiesC: Record<string, ArticleBody> = {
       },
       {
         label: "airblue baggage",
-        href: "https://www.airblue.com/bookings/baggage.asp",
+        href: "https://www.airblue.com/services/deals",
       },
     ],
   ),

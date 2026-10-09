@@ -1,8 +1,8 @@
 import type { ArticleBody, Block, Faq, Source } from "@/lib/content/types";
-import { S, feeNote } from "@/lib/content/sources";
+import { S } from "@/lib/content/sources";
 
 function art(blocks: Block[], faqs: Faq[], sources: Source[]): ArticleBody {
-  return { blocks: [...blocks, feeNote], faqs, sources };
+  return { blocks, faqs, sources };
 }
 
 export const bodiesD: Record<string, ArticleBody> = {
@@ -19,7 +19,7 @@ export const bodiesD: Record<string, ArticleBody> = {
       },
       {
         t: "p",
-        text: "Checked on 9 October 2026, the ministry’s [Hajj Policy and Plan 2027–2030](https://www.mora.gov.pk/SiteImage/Misc/files/270726_HajjPolicy2027-30(1).pdf) is a 16-page framework, not a price list for your seat. It covers Hajj 2027 through 2030, corresponding to 1448–1451 AH. The same file is linked from the ministry’s [Hajj policies page](https://www.mora.gov.pk/Detail/N2YzYjlmM2UtZTQxNi00ZDBlLTllNjQtMTZiMDYyYzhhNzlk). The introduction says this is the first multi-year framework, so that registration, contracts and a waiting list can last more than one season, subject to Saudi rules. It also says the government intends to move gradually toward regulating private operators rather than running every seat itself. None of that sentence is a promise that you, sitting in Sharjah or Dammam, already have a seat.",
+        text: "Checked on 9 October 2026, the ministry’s [Hajj Policy and Plan 2027–2030](https://www.mora.gov.pk/SiteImage/Misc/files/270726_HajjPolicy2027-30%281%29.pdf) is a 16-page framework, not a price list for your seat. It covers Hajj 2027 through 2030, corresponding to 1448–1451 AH. The same file is linked from the ministry’s [Hajj policies page](https://www.mora.gov.pk/Detail/N2YzYjlmM2UtZTQxNi00ZDBlLTllNjQtMTZiMDYyYzhhNzlk). The introduction says this is the first multi-year framework, so that registration, contracts and a waiting list can last more than one season, subject to Saudi rules. It also says the government intends to move gradually toward regulating private operators rather than running every seat itself. None of that sentence is a promise that you, sitting in Sharjah or Dammam, already have a seat.",
       },
       {
         t: "p",
@@ -142,7 +142,7 @@ export const bodiesD: Record<string, ArticleBody> = {
       },
       {
         t: "p",
-        text: "Pakistan’s [Hajj Policy and Plan 2027–2030](https://www.mora.gov.pk/SiteImage/Misc/files/270726_HajjPolicy2027-30(1).pdf) mentions Nusuk Masar as the system through which Saudi service contracts are handled. That sentence is about Pakistan’s Hajj operation inside Saudi Arabia. It does not mean your Umrah from Dubai is booked on hajj.mora.gov.pk. Keep the two logins apart. The Pakistan portal takes rupees for the government Hajj scheme, as [[/guides/pakistan-government-hajj-scheme|that guide]] explains. Nusuk takes the Umrah booking under Saudi rules. Using one password on both, or paying one agent for both, is how people discover in Ramadan that they bought neither.",
+        text: "Pakistan’s [Hajj Policy and Plan 2027–2030](https://www.mora.gov.pk/SiteImage/Misc/files/270726_HajjPolicy2027-30%281%29.pdf) mentions Nusuk Masar as the system through which Saudi service contracts are handled. That sentence is about Pakistan’s Hajj operation inside Saudi Arabia. It does not mean your Umrah from Dubai is booked on hajj.mora.gov.pk. Keep the two logins apart. The Pakistan portal takes rupees for the government Hajj scheme, as [[/guides/pakistan-government-hajj-scheme|that guide]] explains. Nusuk takes the Umrah booking under Saudi rules. Using one password on both, or paying one agent for both, is how people discover in Ramadan that they bought neither.",
       },
       {
         t: "h2",
