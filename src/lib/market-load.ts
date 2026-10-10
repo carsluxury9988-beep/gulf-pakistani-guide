@@ -135,11 +135,17 @@ function dubaiStamp(label: string) {
   )).toISOString();
 }
 
+/** Latest published slot for a karat row: evening, then afternoon, then morning. */
 function dubaiKarat(html: string, karat: string) {
-  const match = html.match(new RegExp(`"type"\\s*:\\s*"${karat}"[\\s\\S]{0,240}?"evening"\\s*:\\s*"([\\d.]+)"`));
-  if (!match) return null;
-  const value = Number(match[1]);
-  return Number.isFinite(value) && value > 200 && value < 900 ? value : null;
+  const row = html.match(new RegExp(`\\{"type"\\s*:\\s*"${karat}"[^{}]*\\}`));
+  if (!row) return null;
+  for (const slot of ["evening", "afternoon", "morning"]) {
+    const match = row[0].match(new RegExp(`"${slot}"\\s*:\\s*"([\\d.,]*)"`));
+    if (!match || !match[1]) continue;
+    const value = Number(match[1].replace(/,/g, ""));
+    return Number.isFinite(value) && value > 200 && value < 900 ? value : null;
+  }
+  return null;
 }
 
 async function fetchPakistanBoard(): Promise<PakistanGold | null> {
@@ -179,7 +185,7 @@ async function fetchDubaiBoard(): Promise<DubaiGold | null> {
     const gram21 = dubaiKarat(html, "21K");
     const gram18 = dubaiKarat(html, "18K");
     if (!gram24 || !gram22 || gram22 >= gram24) {
-      console.error("[gold] Dubai board parse missed published 24K/22K evening grams");
+      console.error("[gold] Dubai board parse missed published 24K/22K grams");
       return null;
     }
     const dated = html.match(/goldRates"\s*:\s*\{\s*"date"\s*:\s*"([^"]+)"/);
@@ -259,7 +265,8 @@ async function firstJson<T>(urls: string[]) {
 
 function historyDates(today: Date) {
   const dates: string[] = [];
-  for (let days = 30; days >= 0; days -= 6) {
+  // Six-day steps for the trend chart, plus yesterday so the day-on-day move has a previous rate day.
+  for (const days of [30, 24, 18, 12, 6, 1, 0]) {
     const d = new Date(today);
     d.setUTCDate(d.getUTCDate() - days);
     dates.push(d.toISOString().slice(0, 10));
@@ -318,7 +325,9 @@ async function loadFresh(opts?: { refresh?: boolean }): Promise<Market> {
         }
       }),
     );
-    const history = points.filter((point): point is NonNullable<typeof point> => point !== null);
+    const byDate = new Map<string, NonNullable<(typeof points)[number]>>();
+    for (const point of points) if (point) byDate.set(point.date, point);
+    const history = [...byDate.values()].sort((a, b) => a.date.localeCompare(b.date));
     const localGold = await resolveLocalGold(stored?.localGold ?? null);
     const data: Market = {
       asOf: usdFile.date || xauFile.date || saved.asOf,
