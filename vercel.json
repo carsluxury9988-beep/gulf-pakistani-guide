@@ -396,6 +396,8 @@
     }
   ],
   "redirects": [
+    { "source": "/about/salim-khan", "destination": "/about", "permanent": true },
+    { "source": "/ur/about/salim-khan", "destination": "/ur/about", "permanent": true },
     {
       "source": "/listings",
       "destination": "/",
